@@ -1,0 +1,22 @@
+﻿Build started 2015/8/8 17:08:28.
+     1>Project "D:\SRC\GLive\GLive\3rd_party\json\libjson.vcxproj" on node 2 (Build target(s)).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(357,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+     1>ClCompile:
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I.\jsoncpp\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _VC80_UPGRADE=0x0710 /D _UNICODE /D UNICODE /GF /Gm /EHsc /RTC1 /MTd /GS /Gy /fp:precise /Za /Zc:wchar_t /Zc:forScope- /GR /Fo".\debug\json_reader1.obj" /Fd".\debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt jsoncpp\src\lib_json\json_reader.cpp
+         json_reader.cpp
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I.\jsoncpp\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _VC80_UPGRADE=0x0710 /D _UNICODE /D UNICODE /GF /Gm /EHsc /RTC1 /MTd /GS /Gy /fp:precise /Za /Zc:wchar_t /Zc:forScope- /GR /Fo".\debug\json_value1.obj" /Fd".\debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt jsoncpp\src\lib_json\json_value.cpp
+         json_value.cpp
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I.\jsoncpp\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _VC80_UPGRADE=0x0710 /D _UNICODE /D UNICODE /GF /Gm /EHsc /RTC1 /MTd /GS /Gy /fp:precise /Za /Zc:wchar_t /Zc:forScope- /GR /Fo".\debug\json_writer1.obj" /Fd".\debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt jsoncpp\src\lib_json\json_writer.cpp
+         json_writer.cpp
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(1354,5): warning MSB8012: TargetPath(D:\SRC\GLive\GLive\3rd_party\json\.\lib\libjson.lib) does not match the Library's OutputFile property value (D:\SRC\GLive\GLive\3rd_party\json\lib\libjson_mtd.lib). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Lib.OutputFile).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(1356,5): warning MSB8012: TargetName(libjson) does not match the Library's OutputFile property value (libjson_mtd). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Lib.OutputFile).
+       Lib:
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:".\lib\libjson_mtd.lib" /NOLOGO .\debug\json_reader1.obj
+         .\debug\json_value1.obj
+         .\debug\json_writer1.obj
+         libjson.vcxproj -> D:\SRC\GLive\GLive\3rd_party\json\.\lib\libjson.lib
+     1>Done Building Project "D:\SRC\GLive\GLive\3rd_party\json\libjson.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.41
