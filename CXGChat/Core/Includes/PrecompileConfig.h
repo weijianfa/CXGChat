@@ -9,8 +9,8 @@
 #include <iostream>
 
 //third party
-#include "../third_party/json/include/json/json.h"
-#include "../third_party/zlib/include/zlib.h"
+#include "json.h"
+#include "zlib.h"
 
 //for all
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)

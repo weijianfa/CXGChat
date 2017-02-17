@@ -140,7 +140,7 @@ bool CRawLink::Open(const char* pIP, unsigned short nPort)
 	m_tOutTime.tv_sec += m_tTodayTime.tv_usec / nNum;
 	m_tOutTime.tv_sec %= nNum;
 
-	sem_timedwait(&m_semConnect, &m_tOutTime);
+	//sem_timedwait(&m_semConnect, &m_tOutTime);
 #endif
 
 	pthread_mutex_unlock(&m_SynchMutex);

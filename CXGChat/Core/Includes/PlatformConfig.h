@@ -10,7 +10,7 @@
 #define CC_PLATFORM_MAC                5
 
 // Determine target platform by compile environment macro.
-#define CC_TARGET_PLATFORM         CC_PLATFORM_UNKNOWN
+#define CC_TARGET_PLATFORM         CC_PLATFORM_IOS
 
 // iphone
 #if defined(IPHONE)

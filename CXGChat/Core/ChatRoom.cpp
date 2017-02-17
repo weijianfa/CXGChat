@@ -2,6 +2,7 @@
 //
 
 #include "ChatRoom.h"
+#include "zlib.h"
 
 long hex2dec(char * s)
 {
@@ -242,7 +243,7 @@ int CChatRoom::EnterChatRoom()
 
 	clock_gettime(CLOCK_REALTIME, &m_tOutTime);
 	m_tOutTime.tv_sec += MAX_WAIT_TIME;
-	int nRet = sem_timedwait(&m_semEnter, &m_tOutTime);
+    int nRet = 0;//sem_timedwait(&m_semEnter, &m_tOutTime);
 	if (nRet == -1)
 	{
 		m_eMsgType = CR_ERROR;
@@ -302,7 +303,7 @@ int CChatRoom::ReentryChatRoom(int nNodeNum)
 
 	clock_gettime(CLOCK_REALTIME, &m_tOutTime);
 	m_tOutTime.tv_sec += MAX_WAIT_TIME;
-	int nRet = sem_timedwait(&m_semEnter, &m_tOutTime);
+    int nRet = 0;//sem_timedwait(&m_semEnter, &m_tOutTime);
 	if (nRet == -1)
 	{
 		m_eMsgType = CR_ERROR;
@@ -370,7 +371,7 @@ void CChatRoom::OnTimer(int nTimeId)
 	time_t tStamp;
 	time(&tStamp);
 	char sTimeStamp[50];
-	sprintf(sTimeStamp,"%l",tStamp);
+	sprintf(sTimeStamp,"%lu",tStamp);
 	CPacket* pPacket = CPacket::CreateFromPayload(sTimeStamp, strlen(sTimeStamp));
 	pPacket->SetPacketType(KEEPLIVE);
 	if (g_pLink)
@@ -487,7 +488,7 @@ void CChatRoom::OnLinkPacket(CRawLink* pLink, CPacket* pPacket)
 		{
 		case 0:
 		{
-				  if (action == "0") // ÉÏÏßÍ¨Öª
+				  if (action == "0") // â€¦Å“Å“ï¬‚Ã•Â®Ã·â„¢
 				  {
 					  Json::Value ctObj = (*itc)["ct"];
 					  std::string masterId;
@@ -516,7 +517,7 @@ void CChatRoom::OnLinkPacket(CRawLink* pLink, CPacket* pPacket)
 							 m_pObserver->OnChatRoom(m_eMsgType, m_strChatMsg);
 					  }
 				  }
-				  else if (action == "1")  // ÍË³öÏûÏ¢
+				  else if (action == "1")  // Ã•Ã€â‰¥Ë†Å“ËšÅ“Â¢
 				  {
 					  Json::Value ctObj = (*itc)["ct"];
 					  std::string masterId;
@@ -548,21 +549,21 @@ void CChatRoom::OnLinkPacket(CRawLink* pLink, CPacket* pPacket)
 
 		case 1:
 		{
-				  if (action == "3") //Õ¹Ê¾ÀñÎï
+				  if (action == "3") //â€™Ï€Â Ã¦Â¿Ã’Å’Ã”
 				  {
 					  std::string strct = (*itc)["ct"].asString();
 					  strct = unescape((char*)strct.c_str());
 					  Json::Reader ctreader;
 					  Json::Value ctobject;
-					  std::string strMsg = "ËÍÀñ£º";
+					  std::string strMsg = "Ã€Ã•Â¿Ã’Â£âˆ«";
 					  if (ctreader.parse(strct.c_str(), ctobject))
 					  {
 						  strMsg += ctobject["userName"].asString();
-						  strMsg += "ËÍ¸ø";
+						  strMsg += "Ã€Ã•âˆÂ¯";
 						  strMsg += ctobject["toUserName"].asString();
 						  strMsg += " ";
 						  strMsg += ctobject["giftCount"].asUInt();
-						  strMsg += "¸ö";
+						  strMsg += "âˆË†";
 						  strMsg += ctobject["giftName"].asString();
 					  }
 
@@ -573,7 +574,7 @@ void CChatRoom::OnLinkPacket(CRawLink* pLink, CPacket* pPacket)
 						  m_pObserver->OnChatRoom(m_eMsgType, m_strChatMsg);
 					  }
 				  }
-				  else if (action == "15") // Ö±²¥ÍÆÁ÷³É¹¦
+				  else if (action == "15") // Ã·Â±â‰¤â€¢Ã•âˆ†Â¡Ëœâ‰¥â€¦Ï€Â¶
 				  {
 					  Json::Value ctObj = (*itc)["ct"];
 					  std::string masterId;
@@ -599,7 +600,7 @@ void CChatRoom::OnLinkPacket(CRawLink* pLink, CPacket* pPacket)
 						  }
 					  }
 				  }
-				  else if (action == "18")  // Ö±²¥¹Ø±Õ
+				  else if (action == "18")  // Ã·Â±â‰¤â€¢Ï€Ã¿Â±â€™
 				  {
 					  int closeType = 0;
 					  Json::Value ctObj = (*itc)["ct"];
@@ -647,7 +648,7 @@ void CChatRoom::OnLinkPacket(CRawLink* pLink, CPacket* pPacket)
 					  if (ctreader.parse(strct.c_str(), ctobject))
 					  {
 						  int broad = ctobject["broad"].asInt();
-						  std::string strMsg = "ÏµÍ³£º";
+						  std::string strMsg = "Å“ÂµÃ•â‰¥Â£âˆ«";
 						  strMsg += ctobject["mes"].asString();
 
 						  if (m_pObserver && broad != 1)
@@ -658,7 +659,7 @@ void CChatRoom::OnLinkPacket(CRawLink* pLink, CPacket* pPacket)
 						  }
 					  }
 				  }
-				  else if (action == "30") // Ö±²¥ÍÆÁ÷ÖĞ¶Ï
+				  else if (action == "30") // Ã·Â±â‰¤â€¢Ã•âˆ†Â¡ËœÃ·â€“âˆ‚Å“
 				  {
 					  Json::Value ctObj = (*itc)["ct"];
 					  std::string masterId;
@@ -691,7 +692,7 @@ void CChatRoom::OnLinkPacket(CRawLink* pLink, CPacket* pPacket)
 						  }
 					  }
 				  }
-				  else if (action == "34") // Ö±²¥ÍÆÁ÷Ê§°Ü
+				  else if (action == "34") // Ã·Â±â‰¤â€¢Ã•âˆ†Â¡ËœÂ ÃŸâˆâ€¹
 				  {
 					  Json::Value ctObj = (*itc)["ct"];
 					  std::string masterId;
@@ -727,21 +728,21 @@ void CChatRoom::OnLinkPacket(CRawLink* pLink, CPacket* pPacket)
 				  std::string strct = (*itc)["ct"].asString();
 				  std::string strContent = EscapeCode(strct);
 
-				  if (action == "0") // ¹«ÁÄ
+				  if (action == "0") // Ï€Â´Â¡Æ’
 				  {
-					  strMsg += "Ëµ£º";
+					  strMsg += "Ã€ÂµÂ£âˆ«";
 				  }
-				  else if (action == "1") // ¹«¿ªµÄË½ÁÄ
+				  else if (action == "1") // Ï€Â´Ã¸â„¢ÂµÆ’Ã€Î©Â¡Æ’
 				  {
-					  strMsg += "¶Ô";
+					  strMsg += "âˆ‚â€˜";
 					  strMsg += unescape((char*)(*itc)["toMasterNick"].asString().c_str());
-					  strMsg += "Ëµ£º";
+					  strMsg += "Ã€ÂµÂ£âˆ«";
 				  }
-				  else if (action == "2") // Ë½ÁÄ
+				  else if (action == "2") // Ã€Î©Â¡Æ’
 				  {
-					  strMsg += "¶ÔÄãËµ£º";
+					  strMsg += "âˆ‚â€˜Æ’â€Ã€ÂµÂ£âˆ«";
 				  }
-				  else if (action == "3") // µ¯Ä»
+				  else if (action == "3") // ÂµÃ˜Æ’Âª
 				  {
 					  return;
 				  }
@@ -757,7 +758,7 @@ void CChatRoom::OnLinkPacket(CRawLink* pLink, CPacket* pPacket)
 			break;
 		case 6:
 		{
-				  if (action == "0") // ÓÃ»§ÁĞ±í
+				  if (action == "0") // â€âˆšÂªÃŸÂ¡â€“Â±ÃŒ
 				  {
 					  Json::Value ctObj = (*itc)["ct"];
 					  Json::Value::iterator ict = ctObj.begin();
@@ -774,7 +775,7 @@ void CChatRoom::OnLinkPacket(CRawLink* pLink, CPacket* pPacket)
 			break;
 		case 11:
 		{
-				   if (action == "0") // ½ÃÕıÈËÊı
+				   if (action == "0") // Î©âˆšâ€™ËÂ»Ã€Â Ë
 				   {
 					   Json::Value ctObj = (*itc)["ct"];
 					   std::string strMsg = ctObj["currentRoomUserCount"].asString();
@@ -865,17 +866,17 @@ std::string CChatRoom::EscapeCode(std::string& str)
 {
 	EscapeCode(str, "&amp;", "&");
 	EscapeCode(str, "&nbsp;", " ");
-	EscapeCode(str, "&middot;", "¡¤");
+	EscapeCode(str, "&middot;", "Â°Â§");
 	EscapeCode(str, "&rsquo;", "'");
 	EscapeCode(str, "&lsquo;", "'");
 	EscapeCode(str, "&ldquo;", "\"");
 	EscapeCode(str, "&rdquo;", "\"");
 	EscapeCode(str, "&quot;", "\"");
-	EscapeCode(str, "&mdash;", "¡ª");
-	EscapeCode(str, "&hellip;", "¡­¡­");
+	EscapeCode(str, "&mdash;", "Â°â„¢");
+	EscapeCode(str, "&hellip;", "Â°â‰ Â°â‰ ");
 	EscapeCode(str, "&lt;", "<");
-	EscapeCode(str, "&rarr;", "¡ú");
-	EscapeCode(str, "&cap;", "¡É");
+	EscapeCode(str, "&rarr;", "Â°Ë™");
+	EscapeCode(str, "&cap;", "Â°â€¦");
 
 	return str;
 }

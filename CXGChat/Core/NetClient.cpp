@@ -113,8 +113,10 @@ bool CNetPeer::SendData(const char* pData, int nLen)
 
 #if(CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	m_nRetCode = send(m_socket, pData, nLen, 0);
-#else
-	m_nRetCode = send(m_socket, pData, nLen, MSG_NOSIGNAL);
+#elif(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	m_nRetCode = send(m_socket, pData, nLen, SO_NOSIGPIPE);
+#else 
+    m_nRetCode = send(m_socket, pData, nLen, MSG_NOSIGNAL);
 #endif
 
 	if (m_nRetCode < 0)
