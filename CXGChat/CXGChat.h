@@ -17,3 +17,28 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
 // In this header, you should import all the public headers of your framework using statements like #import <CXGChat/PublicHeader.h>
 
 
+
+
+
+@interface ChatInterface : NSObject {
+    long mUid;    // user id
+    NSString* mToken;  // login key
+    long mRid;    // room id
+    NSString* mUname;  // nick name
+    int mPort;
+    
+    NSString* mHost;    // server config
+}
+
+- (void) setHost:(NSString *)host;
+- (void) setPort:(int) port;
+- (void) setUid:(long )uid;
+- (void) setToken:(NSString *)token;
+- (void) setRid:(long)rid;
+- (void) setUname:(NSString *) uname;
+
+- (int) enterRoom;
+
+@end
+
+
