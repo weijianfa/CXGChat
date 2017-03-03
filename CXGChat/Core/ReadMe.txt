@@ -1,0 +1,1 @@
+g++ -Wformat=0 Timer.cpp network.cpp NetClient.cpp RefCount.cpp Packet.cpp RawLink.cpp cxgChatRoom.cpp ChatRoom.cpp MainWnd.cpp main.cpp -static -Lthird_party/json/lib -ljson -lz -o cxgChatRoom -lpthread -finput-charset=GBK
