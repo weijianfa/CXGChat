@@ -106,8 +106,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		32220E471E66D1E300937996 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
-		32220E491E66D20100937996 /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
 		3222151D1E696C1700937996 /* ChatInterface.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ChatInterface.mm; sourceTree = "<group>"; };
 		3222151E1E696C1700937996 /* ChatManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ChatManager.hpp; sourceTree = "<group>"; };
 		3222151F1E696C1700937996 /* ChatManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ChatManager.mm; sourceTree = "<group>"; };
@@ -410,15 +408,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		32220E461E66D1E300937996 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				32220E491E66D20100937996 /* libstdc++.6.0.9.tbd */,
-				32220E471E66D1E300937996 /* libc++.tbd */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		322215201E696C1700937996 /* Core */ = {
 			isa = PBXGroup;
 			children = (
@@ -1040,7 +1029,6 @@
 				32EB098D1E56C4E000652D2D /* CXGChat */,
 				32EB09981E56C4E100652D2D /* CXGChatTests */,
 				32EB098C1E56C4E000652D2D /* Products */,
-				32220E461E66D1E300937996 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
