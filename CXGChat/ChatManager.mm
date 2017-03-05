@@ -58,20 +58,20 @@ void ChatManager::setUser(const char *uid, const char *rid,const char *token) {
 
 void ChatManager::OnMsg(PtlBase* ptl) {
     printf("OnMsg ChatRoomMsg= %s  \n", ptl->getDisplayMsg().c_str());
-    if(listener) {
-        [listener OnMsg: getMessage(ptl)];
+    if(mController) {
+        [mController doOnMessage: getMessage(ptl)];
     }
 }
 
 void ChatManager::OnError(int errcode, char* msg) {
     printf("OnMsg OnError= (%d)%s  \n", errcode, msg);
-    if(listener) {
-        [listener OnError:errcode Msg:[NSString stringWithUTF8String:msg]];
+    if(mController) {
+        [mController doOnError:errcode Msg:[NSString stringWithUTF8String:msg]];
     }
 }
 
-void ChatManager::setListner(MsgListener* listener) {
-    this->listener = listener;
+void ChatManager::setController(ChatControl* listener) {
+    this->mController = listener;
 }
 
 

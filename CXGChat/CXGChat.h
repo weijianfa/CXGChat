@@ -34,13 +34,28 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
 
 
 
-
-@interface MsgListener : NSObject
-
--(void) OnMsg:(Message*) pkg;
--(void) OnError:(int) errorCode Msg:(NSString*) msg;
-
+@protocol OnChatDelegate <NSObject>
+- (void)onMessage:(Message*) pkg;
+- (void)onError:(int) errorCode Msg:(NSString*) msg;
 @end
+
+
+
+@interface ChatControl : NSObject
+//遵循协议的一个代理变量定义
+@property (nonatomic, weak) id<OnChatDelegate> delegate;
+- (void) doOnMessage:(Message*) pkg;
+- (void) doOnError:(int) errorCode Msg:(NSString*) msg;
+@end
+
+//
+//
+//@interface MsgListener : NSObject
+//
+//-(void) OnMsg:(Message*) pkg;
+//-(void) OnError:(int) errorCode Msg:(NSString*) msg;
+//
+//@end
 
 
 
@@ -53,7 +68,7 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
     
     NSString* mHost;    // server config
     
-    MsgListener* mListener; //
+    ChatControl* mController; //
 }
 
 - (void) setHost:(NSString *)host;
@@ -62,7 +77,7 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
 - (void) setToken:(NSString *)token;
 - (void) setRid:(NSString *)rid;
 - (void) setUname:(NSString *) uname;
-- (void) setListener:(MsgListener*) listener;
+- (void) setController:(ChatControl*) control;
 
 - (int) enterRoom;
 

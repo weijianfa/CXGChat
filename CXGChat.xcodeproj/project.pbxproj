@@ -89,9 +89,9 @@
 		322218861E696C1900937996 /* zutil.h in Headers */ = {isa = PBXBuildFile; fileRef = 322216641E696C1800937996 /* zutil.h */; };
 		322218871E696C1900937996 /* Timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 322216651E696C1800937996 /* Timer.cpp */; };
 		322218881E696C1900937996 /* Timer.h in Headers */ = {isa = PBXBuildFile; fileRef = 322216661E696C1800937996 /* Timer.h */; };
-		322218891E696C1900937996 /* CXGChat.h in Headers */ = {isa = PBXBuildFile; fileRef = 322216671E696C1800937996 /* CXGChat.h */; };
+		322218891E696C1900937996 /* CXGChat.h in Headers */ = {isa = PBXBuildFile; fileRef = 322216671E696C1800937996 /* CXGChat.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		32A5BF211E69705D001BAE04 /* infback.c in Sources */ = {isa = PBXBuildFile; fileRef = 322219751E696E4E00937996 /* infback.c */; };
-		32EB09951E56C4E100652D2D /* CXGChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32EB098B1E56C4E000652D2D /* CXGChat.framework */; };
+		32A5BF261E6C29DD001BAE04 /* MessageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A5BF251E6C29DD001BAE04 /* MessageControl.m */; };
 		32EB099A1E56C4E100652D2D /* CXGChatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32EB09991E56C4E100652D2D /* CXGChatTests.m */; };
 /* End PBXBuildFile section */
 
@@ -383,6 +383,7 @@
 		322216671E696C1800937996 /* CXGChat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CXGChat.h; sourceTree = "<group>"; };
 		322216681E696C1800937996 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		322219751E696E4E00937996 /* infback.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = infback.c; sourceTree = "<group>"; };
+		32A5BF251E6C29DD001BAE04 /* MessageControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageControl.m; sourceTree = "<group>"; };
 		32EB098B1E56C4E000652D2D /* CXGChat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CXGChat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		32EB09941E56C4E100652D2D /* CXGChatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CXGChatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		32EB09991E56C4E100652D2D /* CXGChatTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CXGChatTests.m; sourceTree = "<group>"; };
@@ -401,7 +402,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				32EB09951E56C4E100652D2D /* CXGChat.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1050,6 +1050,7 @@
 				322215201E696C1700937996 /* Core */,
 				322216671E696C1800937996 /* CXGChat.h */,
 				322216681E696C1800937996 /* Info.plist */,
+				32A5BF251E6C29DD001BAE04 /* MessageControl.m */,
 			);
 			path = CXGChat;
 			sourceTree = "<group>";
@@ -1070,6 +1071,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				322218891E696C1900937996 /* CXGChat.h in Headers */,
 				322218481E696C1800937996 /* zconf.h in Headers */,
 				322217A91E696C1800937996 /* json.h in Headers */,
 				322218581E696C1800937996 /* deflate.h in Headers */,
@@ -1102,7 +1104,6 @@
 				322217C11E696C1800937996 /* json_batchallocator.h in Headers */,
 				322217A81E696C1800937996 /* forwards.h in Headers */,
 				322217961E696C1800937996 /* reader.h in Headers */,
-				322218891E696C1900937996 /* CXGChat.h in Headers */,
 				322217BE1E696C1800937996 /* reader.h in Headers */,
 				322217791E696C1800937996 /* PrecompileConfig.h in Headers */,
 				322217781E696C1800937996 /* PlatformConfig.h in Headers */,
@@ -1249,6 +1250,7 @@
 				3222178A1E696C1800937996 /* PtlSysMsg.cpp in Sources */,
 				3222178F1E696C1800937996 /* RefCount.cpp in Sources */,
 				3222185D1E696C1900937996 /* inffast.c in Sources */,
+				32A5BF261E6C29DD001BAE04 /* MessageControl.m in Sources */,
 				322217841E696C1800937996 /* Packet.cpp in Sources */,
 				322218871E696C1900937996 /* Timer.cpp in Sources */,
 				3222185A1E696C1800937996 /* gzio.c in Sources */,
@@ -1389,14 +1391,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/CXGChat/zlib/lib",
-					"$(PROJECT_DIR)/CXGChat/json/lib",
-					"$(PROJECT_DIR)/CXGChat/third_party/json/lib",
-					"$(PROJECT_DIR)/CXGChat/third_party/zlib/lib",
-					"$(PROJECT_DIR)/CXGChat/Core/Includes/lib",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				LINK_WITH_STANDARD_LIBRARIES = NO;
 				MACH_O_TYPE = staticlib;
 				ONLY_ACTIVE_ARCH = NO;
@@ -1423,14 +1418,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/CXGChat/zlib/lib",
-					"$(PROJECT_DIR)/CXGChat/json/lib",
-					"$(PROJECT_DIR)/CXGChat/third_party/json/lib",
-					"$(PROJECT_DIR)/CXGChat/third_party/zlib/lib",
-					"$(PROJECT_DIR)/CXGChat/Core/Includes/lib",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				LINK_WITH_STANDARD_LIBRARIES = NO;
 				MACH_O_TYPE = staticlib;
 				PRODUCT_BUNDLE_IDENTIFIER = milu.deer.CXGChat;

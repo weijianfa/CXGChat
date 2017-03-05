@@ -30,11 +30,11 @@ public:
     
     
     void setUser(const char *uid,const char *rid,const char *token);
-    void setListner(MsgListener* listener);
+    void setController(ChatControl* listener);
 private:
     ChatRoom::ChatRoomInfo m_RoomInfo;
     ChatRoom::IChatRoom*  m_pChatRoom = 0;
-    MsgListener* listener;
+    ChatControl* mController;
 };
 
 #endif /* ChatManager_hpp */

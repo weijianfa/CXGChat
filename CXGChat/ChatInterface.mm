@@ -34,16 +34,6 @@
 
 @end
 
-@implementation MsgListener
--(void) OnMsg:(Message*) pkg {
-    
-}
--(void) OnError:(int) errorCode Msg:(NSString*) msg {
-    
-}
-
-@end
-
 
 @implementation ChatInterface
 
@@ -75,15 +65,15 @@
     
     ChatManager* manager = new ChatManager([mHost UTF8String], mPort);
     manager->setUser([mUid UTF8String], [mRid UTF8String], [mToken UTF8String]);
-    manager->setListner(mListener);
+    manager->setController(mController);
     manager->Enter();
 
 
     return 1;
 }
 
-- (void) setListener:(MsgListener *)listener {
-    mListener = listener;
+- (void) setController:(ChatControl *)listener {
+    mController = listener;
 }
 
 @end
