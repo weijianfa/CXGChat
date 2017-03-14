@@ -100,8 +100,8 @@ CChatRoom::CChatRoom(IChatRoomObserver* pObserver)
 	m_bEnter = false;
 	m_bConnect = false;
 	m_nKeepLiveTimer = 0;
-	m_nMasterId = 0;
-	m_nRoomId = 0;
+	m_nMasterId = "";
+	m_nRoomId = "";
 	m_nRoomPort = 0;
 
 	m_strToken.clear();
@@ -142,14 +142,17 @@ void CChatRoom::SetToken(std::string strToken)
 
 void CChatRoom::SetChatRoomInfo(ChatRoomInfo RoomInfo)
 {
-	m_nRoomId	= RoomInfo.nRoomId.c_str();
+	m_nRoomId	= RoomInfo.nRoomId;
 	m_nRoomPort = RoomInfo.nPort;
-	m_nMasterId = RoomInfo.nMasterId.c_str();
+	m_nMasterId = RoomInfo.nMasterId;
 	
 	for (int i = 0; i < MAX_CHAT_NODE; i++)
 	{
 		m_strRoomIp[i] = RoomInfo.strIp[i];
 	}
+    
+    
+    printf("##### %s,%s", m_nRoomId.c_str(), m_nMasterId.c_str());
 }
 
 void CChatRoom::OpenTCPLink(int nNodeNum)
@@ -221,8 +224,9 @@ int CChatRoom::EnterChatRoom()
 		//jsonEnter += "\",\"md5\":\"RTYUI\",\"majorType\":\"0\",\"terminal\":\"2\"}";
         jsonEnter += "\",\"md5\":\"RTYUI\",\"majorType\":\"0\"}";
 
-		CPacket* pPacket = CPacket::CreateFromPayload((char*)jsonEnter.c_str(), jsonEnter.length());
+		CPacket* pPacket = CPacket::CreateFromPayload((char*)jsonEnter.c_str(), (int)jsonEnter.length());
 		pPacket->SetPacketType(0);
+        pPacket->SetPacketAction(0);
 		m_pLink->SendPacket(pPacket);
 
 		pthread_mutex_unlock(&m_SynchMutex);
@@ -253,17 +257,72 @@ int CChatRoom::EnterChatRoom()
 		return 0;
 	}
 
-	signal(SIGALRM, CChatRoom::OnTimer);
-	alarm(KEEPLIVE_INTERVAL);
+	//signal(SIGALRM, CChatRoom::OnTimer);
+	//alarm(KEEPLIVE_INTERVAL);
 #endif
 
 	m_bEnter = true;
 	return nNodeNum;
 }
 
+int CChatRoom::Speak(std::string words, std::string uid, bool ispublic) {
+    pthread_mutex_lock(&m_SynchMutex);
+    
+    if(uid == "0") {  //to all the room users; ispublic is to all
+        std::string jsonSpeaker = "{\"_method_\":\"SendPubMsg\",\"toMasterId\":\"";
+        //jsonSpeaker += uid;
+        jsonSpeaker += "\",\"toMasterNick\":\"\"";
+        jsonSpeaker += ",\"ct\":\"" ;
+        jsonSpeaker += words;
+        jsonSpeaker += "\"}";
+        
+        CPacket* pPacket = CPacket::CreateFromPayload((char*)jsonSpeaker.c_str(), (int)jsonSpeaker.length());
+        pPacket->SetPacketAction(0);
+        pPacket->SetPacketType(2);
+        m_pLink->SendPacket(pPacket);
+        
+        
+    }else {      // to somebody
+        if(ispublic) {  //
+            std::string jsonSpeaker = "{\"_method_\":\"SendPubMsg\",\"toMasterId\":\"";
+            //jsonSpeaker += uid;
+            jsonSpeaker += "\",\"toMasterNick\":\"\"";
+            jsonSpeaker += ",\"ct\":\"" ;
+            jsonSpeaker += words;
+            jsonSpeaker += "\"}";
+            
+            
+            
+            CPacket* pPacket = CPacket::CreateFromPayload((char*)jsonSpeaker.c_str(), (int)jsonSpeaker.length());
+            printf("%s,%s,%s", m_nRoomId.c_str(),m_nMasterId.c_str(),jsonSpeaker.c_str());
+            pPacket->SetPacketAction(0);
+            pPacket->SetPacketType(2);
+            m_pLink->SendPacket(pPacket);
+        } else {
+            std::string jsonSpeaker = "{\"_method_\":\"SendPubMsg\",\"toMasterId\":\"";
+            jsonSpeaker += uid;
+            jsonSpeaker += "\",\"toMasterNick\":\"\",\"rid\":\"";
+            jsonSpeaker += m_nRoomId;
+            jsonSpeaker += "\",\"uid\":\"";
+            jsonSpeaker += m_nMasterId;
+            jsonSpeaker += "\",\"ct\":\"" ;
+            jsonSpeaker += words;
+            jsonSpeaker += "\",\"pub\":\"0\",\"key\":\"\",\"code\":\"\",\"checksum\":\"\",\"v\",\"0\"}";
+            
+            CPacket* pPacket = CPacket::CreateFromPayload((char*)jsonSpeaker.c_str(), (int)jsonSpeaker.length());
+            pPacket->SetPacketAction(0);
+            pPacket->SetPacketType(2);
+            m_pLink->SendPacket(pPacket);
+        }
+    }
+    pthread_mutex_unlock(&m_SynchMutex);
+
+    return 1;
+}
+
 int CChatRoom::ReentryChatRoom(int nNodeNum)
 {
-	if (m_bEnter)
+    if (m_bEnter)
 	{
 		return nNodeNum;
 	}
@@ -284,6 +343,7 @@ int CChatRoom::ReentryChatRoom(int nNodeNum)
         jsonEnter += "\",\"md5\":\"RTYUI\",\"majorType\":\"0\"}";
 
 		CPacket* pPacket = CPacket::CreateFromPayload((char*)jsonEnter.c_str(), jsonEnter.length());
+        pPacket->SetPacketAction(0);
 		pPacket->SetPacketType(0);
 		m_pLink->SendPacket(pPacket);
 
@@ -314,8 +374,8 @@ int CChatRoom::ReentryChatRoom(int nNodeNum)
 		return nNodeNum;
 	}
 
-	signal(SIGALRM, CChatRoom::OnTimer);
-	alarm(KEEPLIVE_INTERVAL);
+	//signal(SIGALRM, CChatRoom::OnTimer);
+	//alarm(KEEPLIVE_INTERVAL);
 #endif
 
 	m_bEnter = true;
@@ -354,7 +414,8 @@ bool CChatRoom::OnTimer(int nTimeID)
 		char sTimeStamp[50];
 		ctime_s(sTimeStamp, 50, &tStamp);
 		CPacket* pPacket = CPacket::CreateFromPayload(sTimeStamp, strlen(sTimeStamp));
-		pPacket->SetPacketType(KEEPLIVE);
+        pPacket->SetPacketAction(3);
+		pPacket->SetPacketType(0);
 		if (m_pLink)
 		{
 			m_pLink->SendPacket(pPacket);
@@ -375,11 +436,12 @@ void CChatRoom::OnTimer(int nTimeId)
 	char sTimeStamp[50];
 	sprintf(sTimeStamp,"%lu",tStamp);
 	CPacket* pPacket = CPacket::CreateFromPayload(sTimeStamp, strlen(sTimeStamp));
-	pPacket->SetPacketType(KEEPLIVE);
+    pPacket->SetPacketAction(3);
+	pPacket->SetPacketType(0);
 	if (g_pLink)
 		g_pLink->SendPacket(pPacket);
 
-	alarm(KEEPLIVE_INTERVAL);
+	//alarm(KEEPLIVE_INTERVAL);
 }
 #endif
 
@@ -416,7 +478,7 @@ void CChatRoom::OnLinkPacket(CRawLink* pLink, CPacket* pPacket)
 		return;
 	}
 
-	if (pPacket->GetPacketType() == KEEPLIVE)
+	if (pPacket->GetPacketType() == ((3<<8) + 0))
 	{
         printf("receive 3,0\n");
 		return;
@@ -460,7 +522,8 @@ void CChatRoom::OnLinkPacket(CRawLink* pLink, CPacket* pPacket)
             break;
         case 401002:
             break;
-        case 401005:
+        case 401005:  // invalid roomid
+            m_pObserver->OnError(401005, "");
             break;
         case 401007:
             break;

@@ -10,7 +10,9 @@ typedef unsigned char PACKET_TYPE;
 struct PACKET_HADER
 {
 	int packetSize;
-    int packetType;
+    char packetAction;
+    char packetType;
+    short packetBaoliu;
 };
 
 #pragma pack(pop)
@@ -30,6 +32,7 @@ public:
 	int GetPayloadSize() const;
 	char* GetTotal() const;
 	int GetTotalSize() const;
+    void SetPacketAction(int ptAction);
 
 protected:
 	CPacket();

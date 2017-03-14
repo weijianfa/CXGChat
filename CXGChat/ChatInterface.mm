@@ -63,12 +63,19 @@
 
 - (int) enterRoom {
     
-    ChatManager* manager = new ChatManager([mHost UTF8String], mPort);
+    ChatManager* manager = ChatManager::GetInstance();
+    manager->setHost([mHost UTF8String], mPort);
     manager->setUser([mUid UTF8String], [mRid UTF8String], [mToken UTF8String]);
     manager->setController(mController);
     manager->Enter();
 
 
+    return 1;
+}
+
+- (int) speak:(NSString*) message to:(NSString*)uid ispublic:(bool)isall {
+    ChatManager* manager = ChatManager::GetInstance();
+    manager->Speak([message UTF8String], [uid UTF8String], isall);
     return 1;
 }
 

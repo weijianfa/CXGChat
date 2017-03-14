@@ -44,17 +44,18 @@ public:
 	virtual std::string __stdcall GetErrMsg(void);
 #else
 
-	virtual bool __attribute__((__stdcall__)) IsEntered(void);
-	virtual bool __attribute__((__stdcall__)) IsConnect(void);
+	virtual bool IsEntered(void);
+	virtual bool IsConnect(void);
 
-	virtual int  __attribute__((__stdcall__)) EnterChatRoom(void);
-	virtual int  __attribute__((__stdcall__)) ReentryChatRoom(int nNodeNum = 0);
-	virtual void __attribute__((__stdcall__)) ExitChatRoom(void);
+	virtual int EnterChatRoom(void);
+	virtual int ReentryChatRoom(int nNodeNum = 0);
+    virtual int Speak(std::string words, std::string uid, bool ispublic);
+	virtual void ExitChatRoom(void);
 
-	virtual void __attribute__((__stdcall__)) SetToken(std::string strToken);
-	virtual void __attribute__((__stdcall__)) SetChatRoomInfo(ChatRoomInfo RoomInfo);
+	virtual void SetToken(std::string strToken);
+	virtual void SetChatRoomInfo(ChatRoomInfo RoomInfo);
 
-	virtual std::string __attribute__((__stdcall__)) GetErrMsg(void);
+	virtual std::string GetErrMsg(void);
 #endif
 
 private:
@@ -69,12 +70,12 @@ private:
 	bool OnTimer(int nTimeId);
 #else
 
-	virtual long __attribute__((__stdcall__)) AddRef();
-	virtual long __attribute__((__stdcall__)) Release();
-	virtual void __attribute__((__stdcall__)) OnLinkPacket(CRawLink* pLink, CPacket* pPacket);
-	virtual void __attribute__((__stdcall__)) OnLinkErr(CRawLink* pLink);
+	virtual long __attribute__((__stdcall__))  AddRef();
+	virtual long __attribute__((__stdcall__))  Release();
+	virtual void __attribute__((__stdcall__))  OnLinkPacket(CRawLink* pLink, CPacket* pPacket);
+	virtual void __attribute__((__stdcall__))  OnLinkErr(CRawLink* pLink);
 
-	static void OnTimer(int nTimeId);
+	static void __attribute__((__stdcall__))  OnTimer(int nTimeId);
 #endif
 
 	void OpenTCPLink(int nNodeNum);
@@ -89,8 +90,8 @@ private:
 	bool m_bEnter;
 	bool m_bConnect;
 
-	const char* m_nMasterId;
-	const char* m_nRoomId;
+	std::string m_nMasterId;
+	std::string m_nRoomId;
 	unsigned int   m_nKeepLiveTimer;
 
 	int		m_nRoomPort;

@@ -16,6 +16,11 @@ Message* getMessage(PtlBase* ptl) {
     return message;
 }
 
+ChatManager * ChatManager::m_pInstance;
+
+ChatManager::ChatManager() {
+    
+}
 
 ChatManager::~ChatManager() {
     
@@ -39,7 +44,13 @@ void ChatManager::Enter() {
     }
 }
 
-ChatManager::ChatManager(const char *ip, int port) {
+void ChatManager::Speak(const char *message, const char *uid, bool isall) {
+    if(m_pChatRoom->IsEntered()) {
+        m_pChatRoom->Speak(message, uid, isall);
+    }
+}
+
+void ChatManager::setHost(const char *ip, int port) {
     m_RoomInfo.strIp[0] = ip;
     m_RoomInfo.strIp[1] = ip;
     m_RoomInfo.strIp[2] = ip;
@@ -49,7 +60,6 @@ ChatManager::ChatManager(const char *ip, int port) {
 }
 
 void ChatManager::setUser(const char *uid, const char *rid,const char *token) {
-    
     m_RoomInfo.nMasterId = uid;
     m_RoomInfo.nRoomId = rid;
     this->token = token;
@@ -72,6 +82,12 @@ void ChatManager::OnError(int errcode, char* msg) {
 
 void ChatManager::setController(ChatControl* listener) {
     this->mController = listener;
+}
+
+ChatManager *ChatManager::GetInstance() {
+    if(m_pInstance == NULL)  //判断是否第一次调用
+        m_pInstance = new ChatManager();
+    return m_pInstance;
 }
 
 

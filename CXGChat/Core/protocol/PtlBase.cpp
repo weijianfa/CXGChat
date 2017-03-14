@@ -9,9 +9,9 @@
 #include "PtlBase.hpp"
 #include "json.h"
 
-const int USER_MSG = (0<<16) + 2;
-const int SYST_MSG = (24<<16) + 1;
-const int GIFT_MSG = (3<<16) + 1;
+const int USER_MSG = (0<<8) + 2;
+const int SYST_MSG = (24<<8) + 1;
+const int GIFT_MSG = (3<<8) + 1;
 const int LOGN_RET = 0;
 
 int PtlBase::getRetCode() {
@@ -39,9 +39,12 @@ PtlBase* PtlBase::getProtocol(char* buf) {
         return NULL;
     }
     
+    std::string retcode = object["retcode"].asString();
+    int ncode = atoi(retcode.c_str());
+    
     Json::Value msgObj = object["msg"];
     if (msgObj.empty()) {
-        return NULL;
+        return new PtlBase(ncode, 0);
     }
     
     Json::Value::iterator itc = msgObj.begin();
@@ -50,12 +53,9 @@ PtlBase* PtlBase::getProtocol(char* buf) {
     int nMsgType = atoi(msgtype.c_str());
     int nAction = atoi(action.c_str());
     
-    std::string retcode = object["retcode"].asString();
-    int ncode = atoi(retcode.c_str());
-    
     printf("receive %d,%d:  %d\n", nAction, nMsgType, ncode);
     
-    switch((nAction<<16)+ nMsgType) {
+    switch((nAction<<8)+ nMsgType) {
         case USER_MSG:
             return new PtlUserMsg(ncode, object["msg"]);
         case SYST_MSG:

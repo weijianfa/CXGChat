@@ -48,19 +48,21 @@ CPacket::~CPacket()
 	}
 }
 
+void CPacket::SetPacketAction(int ptAction)
+{
+    unsigned char c = (unsigned char) ptAction;
+    m_pHeader->packetAction = c;
+}
 void CPacket::SetPacketType(int ptType)
 {
-    int nPacketType = htonl(ptType);
-    char* pPacketType = (char*)&nPacketType;
-    memcpy(&m_pHeader->packetType, pPacketType, 4);
+    unsigned char c = (unsigned char) ptType;
+    m_pHeader->packetType = c;
 }
 
 int CPacket::GetPacketType() const
 {
     int nPacketType = 0;
-    char* pPacketType = (char*)&nPacketType;
-    memcpy(pPacketType, &m_pHeader->packetType, 4);
-    nPacketType = ntohl(nPacketType);
+    nPacketType = (m_pHeader->packetAction<<8) + m_pHeader->packetType;
 
     return nPacketType;
 }

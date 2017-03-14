@@ -79,7 +79,10 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
 - (void) setUname:(NSString *) uname;
 - (void) setController:(ChatControl*) control;
 
-- (int) enterRoom;
+- (int) enterRoom; // enter the room
+- (int) speak:(NSString*) message to:(NSString*)uid ispublic:(bool)isall;     // speak in the room, include
+
+
 
 @end
 

@@ -79,9 +79,9 @@ namespace ChatRoom
 		virtual void __stdcall OnChatRoom(ChatRoomMsg crMsg, const char* strMsg) = 0;
 #else
         // 消息的回调
-        virtual void __attribute__((__stdcall__)) OnMsg(PtlBase* ptl) = 0;
+        virtual void OnMsg(PtlBase* ptl) = 0;
         // 错误的回调
-        virtual void __attribute__((__stdcall__)) OnError(int errcode, char* msg) = 0;
+        virtual void OnError(int errcode, char* msg) = 0;
 #endif
 	};
 
@@ -104,17 +104,18 @@ namespace ChatRoom
 		virtual std::string __stdcall GetErrMsg(void) = 0;
 #else
 
-		virtual bool __attribute__((__stdcall__)) IsEntered(void) = 0;
-		virtual bool __attribute__((__stdcall__)) IsConnect(void) = 0;
+		virtual bool IsEntered(void) = 0;
+		virtual bool IsConnect(void) = 0;
 
-		virtual int  __attribute__((__stdcall__)) EnterChatRoom(void) = 0;
-		virtual int  __attribute__((__stdcall__)) ReentryChatRoom(int nNodeNum = 0) = 0;
-		virtual void __attribute__((__stdcall__)) ExitChatRoom(void) = 0;
+		virtual int  EnterChatRoom(void) = 0;
+		virtual int  ReentryChatRoom(int nNodeNum = 0) = 0;
+		virtual void ExitChatRoom(void) = 0;
+        virtual int Speak(std::string words, std::string uid, bool ispublic) = 0;
 
-		virtual void __attribute__((__stdcall__)) SetToken(std::string strToken) = 0;
-		virtual void __attribute__((__stdcall__)) SetChatRoomInfo(ChatRoomInfo RoomInfo) = 0;
+		virtual void SetToken(std::string strToken) = 0;
+		virtual void SetChatRoomInfo(ChatRoomInfo RoomInfo) = 0;
 
-		virtual std::string __attribute__((__stdcall__)) GetErrMsg(void) = 0;
+		virtual std::string GetErrMsg(void) = 0;
 #endif
 	};
 

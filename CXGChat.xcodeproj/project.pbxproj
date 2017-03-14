@@ -64,7 +64,6 @@
 		322218481E696C1800937996 /* zconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 3222161A1E696C1800937996 /* zconf.h */; };
 		322218491E696C1800937996 /* zlib.h in Headers */ = {isa = PBXBuildFile; fileRef = 3222161B1E696C1800937996 /* zlib.h */; };
 		3222184A1E696C1800937996 /* adler32.c in Sources */ = {isa = PBXBuildFile; fileRef = 3222161E1E696C1800937996 /* adler32.c */; };
-		322218511E696C1800937996 /* zlib.inc in Sources */ = {isa = PBXBuildFile; fileRef = 322216271E696C1800937996 /* zlib.inc */; };
 		322218531E696C1800937996 /* compress.c in Sources */ = {isa = PBXBuildFile; fileRef = 322216291E696C1800937996 /* compress.c */; };
 		322218551E696C1800937996 /* crc32.c in Sources */ = {isa = PBXBuildFile; fileRef = 3222162B1E696C1800937996 /* crc32.c */; };
 		322218561E696C1800937996 /* crc32.h in Headers */ = {isa = PBXBuildFile; fileRef = 3222162C1E696C1800937996 /* crc32.h */; };
@@ -78,7 +77,6 @@
 		322218611E696C1900937996 /* inflate.h in Headers */ = {isa = PBXBuildFile; fileRef = 322216381E696C1800937996 /* inflate.h */; };
 		322218621E696C1900937996 /* inftrees.c in Sources */ = {isa = PBXBuildFile; fileRef = 322216391E696C1800937996 /* inftrees.c */; };
 		322218631E696C1900937996 /* inftrees.h in Headers */ = {isa = PBXBuildFile; fileRef = 3222163A1E696C1800937996 /* inftrees.h */; };
-		322218651E696C1900937996 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 3222163C1E696C1800937996 /* Makefile */; };
 		322218761E696C1900937996 /* trees.c in Sources */ = {isa = PBXBuildFile; fileRef = 322216531E696C1800937996 /* trees.c */; };
 		322218771E696C1900937996 /* trees.h in Headers */ = {isa = PBXBuildFile; fileRef = 322216541E696C1800937996 /* trees.h */; };
 		322218781E696C1900937996 /* uncompr.c in Sources */ = {isa = PBXBuildFile; fileRef = 322216551E696C1800937996 /* uncompr.c */; };
@@ -322,10 +320,6 @@
 		3222161F1E696C1800937996 /* algorithm.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = algorithm.txt; sourceTree = "<group>"; };
 		322216211E696C1800937996 /* Makefile.pup */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.pup; sourceTree = "<group>"; };
 		322216221E696C1800937996 /* Makefile.sas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.sas; sourceTree = "<group>"; };
-		322216241E696C1800937996 /* bndsrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bndsrc; sourceTree = "<group>"; };
-		322216251E696C1800937996 /* compile.clp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = compile.clp; sourceTree = "<group>"; };
-		322216261E696C1800937996 /* readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme.txt; sourceTree = "<group>"; };
-		322216271E696C1800937996 /* zlib.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = zlib.inc; sourceTree = "<group>"; };
 		322216281E696C1800937996 /* ChangeLog */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ChangeLog; sourceTree = "<group>"; };
 		322216291E696C1800937996 /* compress.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = compress.c; sourceTree = "<group>"; };
 		3222162A1E696C1800937996 /* configure */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = configure; sourceTree = "<group>"; };
@@ -344,8 +338,6 @@
 		322216391E696C1800937996 /* inftrees.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = inftrees.c; sourceTree = "<group>"; };
 		3222163A1E696C1800937996 /* inftrees.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = inftrees.h; sourceTree = "<group>"; };
 		3222163B1E696C1800937996 /* make_vms.com */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = make_vms.com; sourceTree = "<group>"; };
-		3222163C1E696C1800937996 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		3222163D1E696C1800937996 /* Makefile.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.in; sourceTree = "<group>"; };
 		3222163F1E696C1800937996 /* Makefile.bor */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.bor; sourceTree = "<group>"; };
 		322216401E696C1800937996 /* Makefile.dj2 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.dj2; sourceTree = "<group>"; };
 		322216411E696C1800937996 /* Makefile.emx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.emx; sourceTree = "<group>"; };
@@ -882,7 +874,6 @@
 				3222161E1E696C1800937996 /* adler32.c */,
 				3222161F1E696C1800937996 /* algorithm.txt */,
 				322216201E696C1800937996 /* amiga */,
-				322216231E696C1800937996 /* as400 */,
 				322216281E696C1800937996 /* ChangeLog */,
 				322216291E696C1800937996 /* compress.c */,
 				3222162A1E696C1800937996 /* configure */,
@@ -902,8 +893,6 @@
 				322216391E696C1800937996 /* inftrees.c */,
 				3222163A1E696C1800937996 /* inftrees.h */,
 				3222163B1E696C1800937996 /* make_vms.com */,
-				3222163C1E696C1800937996 /* Makefile */,
-				3222163D1E696C1800937996 /* Makefile.in */,
 				3222163E1E696C1800937996 /* msdos */,
 				322216441E696C1800937996 /* old */,
 				3222164D1E696C1800937996 /* projects */,
@@ -930,17 +919,6 @@
 				322216221E696C1800937996 /* Makefile.sas */,
 			);
 			path = amiga;
-			sourceTree = "<group>";
-		};
-		322216231E696C1800937996 /* as400 */ = {
-			isa = PBXGroup;
-			children = (
-				322216241E696C1800937996 /* bndsrc */,
-				322216251E696C1800937996 /* compile.clp */,
-				322216261E696C1800937996 /* readme.txt */,
-				322216271E696C1800937996 /* zlib.inc */,
-			);
-			path = as400;
 			sourceTree = "<group>";
 		};
 		3222162F1E696C1800937996 /* examples */ = {
@@ -1227,7 +1205,6 @@
 				32A5BF211E69705D001BAE04 /* infback.c in Sources */,
 				3222176E1E696C1800937996 /* ChatInterface.mm in Sources */,
 				3222178B1E696C1800937996 /* PtlUserMsg.cpp in Sources */,
-				322218511E696C1800937996 /* zlib.inc in Sources */,
 				322218851E696C1900937996 /* zutil.c in Sources */,
 				322218571E696C1800937996 /* deflate.c in Sources */,
 				322218761E696C1900937996 /* trees.c in Sources */,
@@ -1255,7 +1232,6 @@
 				322218871E696C1900937996 /* Timer.cpp in Sources */,
 				3222185A1E696C1800937996 /* gzio.c in Sources */,
 				322217861E696C1800937996 /* PtlBase.cpp in Sources */,
-				322218651E696C1900937996 /* Makefile in Sources */,
 				322218531E696C1800937996 /* compress.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
