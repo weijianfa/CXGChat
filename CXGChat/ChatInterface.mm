@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "CXGChat.h"
 #import "ChatManager.hpp"
+#import "MessageControl.h"
+
 
 @implementation Message
 
@@ -35,38 +37,75 @@
 @end
 
 
+@interface ChatInterface ()
+
+@property (nonatomic,strong)NSString* mUid;    // user id
+@property (nonatomic,strong)NSString* mToken;    // user id
+
+@property (nonatomic,strong)NSString* mRid;    // user id
+
+@property (nonatomic,strong)NSString* mUname;    // user id
+
+@property (nonatomic,assign)int mPort;    // user id
+@property (nonatomic,assign)NSString* mHost;   // user id
+
+@property (nonatomic,strong)    ChatControl* mController; //
+
+
+
+@end
+
+
 @implementation ChatInterface
 
-- (void) setHost:(NSString *)host {
-    mHost = host;
+- (void)dealloc
+{
+    _mController = nil;
 }
 
-- (void) setUid:(NSString *)uid {
-    mUid = uid;
+
+- (void)configureRoomHost:(NSString*)host Port:(int)port UID:(NSString*)uid Token:(NSString*)t Rid:(NSString*)rid UName:(NSString*)uname
+{
+    if ([host length]) {
+        _mHost = host;
+    }
+    if (port != 0) {
+        _mPort = port;
+    }
+    if ([uid length]) {
+        _mUid = uid;
+
+    }
+    if ([t length]) {
+        _mToken = t;
+
+    }
+    
+    if ([rid length]) {
+        _mRid = rid;
+
+    }
+    
+    if ([uname length]) {
+        _mUname = uname;
+
+    }
+    
+    if (!_mController) {
+        _mController = [[ChatControl alloc] init];
+        
+    }
+    
+    
 }
 
-- (void) setToken:(NSString *)token {
-    mToken = token;
-}
-
-- (void) setRid:(NSString *)rid {
-    mRid= rid;
-}
-
-- (void) setUname:(NSString *) uname {
-    mUname = uname;
-}
-
-- (void) setPort:(int)port{
-    mPort = port;
-}
 
 - (int) enterRoom {
     
     ChatManager* manager = ChatManager::GetInstance();
-    manager->setHost([mHost UTF8String], mPort);
-    manager->setUser([mUid UTF8String], [mRid UTF8String], [mToken UTF8String]);
-    manager->setController(mController);
+    manager->setHost([_mHost UTF8String], _mPort);
+    manager->setUser([_mUid UTF8String], [_mRid UTF8String], [_mToken UTF8String]);
+    manager->setController(_mController);
     manager->Enter();
 
 
@@ -79,8 +118,12 @@
     return 1;
 }
 
-- (void) setController:(ChatControl *)listener {
-    mController = listener;
+
+
+- (void)setReceiverObject:(id<OnChatDelegate>)delegate
+{
+    _mController.delegate = delegate;
 }
+
 
 @end

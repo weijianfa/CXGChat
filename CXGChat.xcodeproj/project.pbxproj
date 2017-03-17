@@ -91,6 +91,7 @@
 		32A5BF211E69705D001BAE04 /* infback.c in Sources */ = {isa = PBXBuildFile; fileRef = 322219751E696E4E00937996 /* infback.c */; };
 		32A5BF261E6C29DD001BAE04 /* MessageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A5BF251E6C29DD001BAE04 /* MessageControl.m */; };
 		32EB099A1E56C4E100652D2D /* CXGChatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32EB09991E56C4E100652D2D /* CXGChatTests.m */; };
+		99540C251E7BBB9D00A3449D /* MessageControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 99540C241E7BBB9D00A3449D /* MessageControl.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -380,6 +381,7 @@
 		32EB09941E56C4E100652D2D /* CXGChatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CXGChatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		32EB09991E56C4E100652D2D /* CXGChatTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CXGChatTests.m; sourceTree = "<group>"; };
 		32EB099B1E56C4E100652D2D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		99540C241E7BBB9D00A3449D /* MessageControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageControl.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1029,6 +1031,7 @@
 				322216671E696C1800937996 /* CXGChat.h */,
 				322216681E696C1800937996 /* Info.plist */,
 				32A5BF251E6C29DD001BAE04 /* MessageControl.m */,
+				99540C241E7BBB9D00A3449D /* MessageControl.h */,
 			);
 			path = CXGChat;
 			sourceTree = "<group>";
@@ -1061,6 +1064,7 @@
 				322217BD1E696C1800937996 /* json.h in Headers */,
 				322217711E696C1800937996 /* ChatMsgInfo.h in Headers */,
 				322218631E696C1900937996 /* inftrees.h in Headers */,
+				99540C251E7BBB9D00A3449D /* MessageControl.h in Headers */,
 				322217751E696C1800937996 /* cxgChatRoom.h in Headers */,
 				322217A71E696C1800937996 /* features.h in Headers */,
 				322217BF1E696C1800937996 /* value.h in Headers */,

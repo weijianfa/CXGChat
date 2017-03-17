@@ -41,46 +41,23 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
 
 
 
-@interface ChatControl : NSObject
-//遵循协议的一个代理变量定义
-@property (nonatomic, weak) id<OnChatDelegate> delegate;
-- (void) doOnMessage:(Message*) pkg;
-- (void) doOnError:(int) errorCode Msg:(NSString*) msg;
-@end
+@interface ChatInterface : NSObject
 
-//
-//
-//@interface MsgListener : NSObject
-//
-//-(void) OnMsg:(Message*) pkg;
-//-(void) OnError:(int) errorCode Msg:(NSString*) msg;
-//
-//@end
-
-
-
-@interface ChatInterface : NSObject {
-    NSString* mUid;    // user id
-    NSString* mToken;  // login key
-    NSString* mRid;    // room id
-    NSString* mUname;  // nick name
-    int mPort;
-    
-    NSString* mHost;    // server config
-    
-    ChatControl* mController; //
-}
-
-- (void) setHost:(NSString *)host;
-- (void) setPort:(int) port;
-- (void) setUid:(NSString * )uid;
-- (void) setToken:(NSString *)token;
-- (void) setRid:(NSString *)rid;
-- (void) setUname:(NSString *) uname;
-- (void) setController:(ChatControl*) control;
-
+//配置chat服务器地址
+- (void)configureRoomHost:(NSString*)host Port:(int)port UID:(NSString*)uid Token:(NSString*)t Rid:(NSString*)rid UName:(NSString*)uname;
+//进入聊天室
 - (int) enterRoom; // enter the room
+
+//说话，发消息
 - (int) speak:(NSString*) message to:(NSString*)uid ispublic:(bool)isall;     // speak in the room, include
+
+//设置消息接受者，任意改变
+- (void)setReceiverObject:(id<OnChatDelegate>)delegate;
+
+
+
+
+
 
 
 

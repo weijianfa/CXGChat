@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include "cxgChatRoom.h"
 #include "CXGChat.h"
-
+#import "MessageControl.h"
 class ChatManager: ChatRoom::IChatRoomObserver {
     
     
