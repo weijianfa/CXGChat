@@ -146,7 +146,7 @@ void CChatRoom::SetChatRoomInfo(ChatRoomInfo RoomInfo)
 	m_nRoomPort = RoomInfo.nPort;
 	m_nMasterId = RoomInfo.nMasterId;
 	
-	for (int i = 0; i < MAX_CHAT_NODE; i++)
+	for (long i = 0; i < MAX_CHAT_NODE; i++)
 	{
 		m_strRoomIp[i] = RoomInfo.strIp[i];
 	}
@@ -155,7 +155,7 @@ void CChatRoom::SetChatRoomInfo(ChatRoomInfo RoomInfo)
     printf("##### %s,%s", m_nRoomId.c_str(), m_nMasterId.c_str());
 }
 
-void CChatRoom::OpenTCPLink(int nNodeNum)
+void CChatRoom::OpenTCPLink(long nNodeNum)
 {
 	if (m_pLink)
 	{
@@ -188,14 +188,14 @@ void CChatRoom::OpenTCPLink(int nNodeNum)
 	}
 }
 
-int CChatRoom::EnterChatRoom()
+long CChatRoom::EnterChatRoom()
 {
 	if (m_bEnter)
 	{
 		return 0;
 	}
 
-	int nNodeNum = 0;
+	long nNodeNum = 0;
 	{
 		pthread_mutex_lock(&m_SynchMutex);
 
@@ -246,16 +246,16 @@ int CChatRoom::EnterChatRoom()
 	m_nKeepLiveTimer = StartTimer(true, KEEPLIVE_INTERVAL * MULTIPLENUM, 50);
 #else
 
-	clock_gettime(CLOCK_REALTIME, &m_tOutTime);
-	m_tOutTime.tv_sec += MAX_WAIT_TIME;
-    int nRet = 0;//sem_timedwait(&m_semEnter, &m_tOutTime);
-	if (nRet == -1)
-	{
-		m_eMsgType = CR_ERROR;
-		m_strChatMsg = ERR_ENTER_FAILD;
-		m_pObserver->OnError(1,"");
-		return 0;
-	}
+//	clock_gettime(CLOCK_REALTIME, &m_tOutTime);
+//	m_tOutTime.tv_sec += MAX_WAIT_TIME;
+//    int nRet = 0;//sem_timedwait(&m_semEnter, &m_tOutTime);
+//	if (nRet == -1)
+//	{
+//		m_eMsgType = CR_ERROR;
+//		m_strChatMsg = ERR_ENTER_FAILD;
+//		m_pObserver->OnError(1,"");
+//		return 0;
+//	}
 
 	//signal(SIGALRM, CChatRoom::OnTimer);
 	//alarm(KEEPLIVE_INTERVAL);
@@ -265,7 +265,7 @@ int CChatRoom::EnterChatRoom()
 	return nNodeNum;
 }
 
-int CChatRoom::Speak(std::string words, std::string uid, bool ispublic) {
+long CChatRoom::Speak(std::string words, std::string uid, bool ispublic) {
     pthread_mutex_lock(&m_SynchMutex);
     
     if(uid == "0") {  //to all the room users; ispublic is to all
@@ -320,7 +320,7 @@ int CChatRoom::Speak(std::string words, std::string uid, bool ispublic) {
     return 1;
 }
 
-int CChatRoom::ReentryChatRoom(int nNodeNum)
+long CChatRoom::ReentryChatRoom(long nNodeNum)
 {
     if (m_bEnter)
 	{
@@ -429,7 +429,7 @@ bool CChatRoom::OnTimer(int nTimeID)
 
 #else
 
-void CChatRoom::OnTimer(int nTimeId)
+void CChatRoom::OnTimer(long nTimeId)
 {
 	time_t tStamp;
 	time(&tStamp);
@@ -477,6 +477,10 @@ void CChatRoom::OnLinkPacket(CRawLink* pLink, CPacket* pPacket)
 	{
 		return;
 	}
+    
+    time_t rawtime;
+    time ( &rawtime );
+    this->lastPackTime = rawtime;
 
 	if (pPacket->GetPacketType() == ((3<<8) + 0))
 	{

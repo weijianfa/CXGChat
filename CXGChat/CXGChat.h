@@ -36,7 +36,7 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
 
 @protocol OnChatDelegate <NSObject>
 - (void)onMessage:(Message*) pkg;
-- (void)onError:(int) errorCode Msg:(NSString*) msg;
+- (void)onError:(long) errorCode Msg:(NSString*) msg;
 @end
 
 
@@ -44,12 +44,12 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
 @interface ChatInterface : NSObject
 
 //配置chat服务器地址
-- (void)configureRoomHost:(NSString*)host Port:(int)port UID:(NSString*)uid Token:(NSString*)t Rid:(NSString*)rid UName:(NSString*)uname;
+- (void)configureRoomHost:(NSString*)host Port:(long)port UID:(NSString*)uid Token:(NSString*)t Rid:(NSString*)rid UName:(NSString*)uname;
 //进入聊天室
-- (int) enterRoom; // enter the room
+- (long) enterRoom; // enter the room
 
 //说话，发消息
-- (int) speak:(NSString*) message to:(NSString*)uid ispublic:(bool)isall;     // speak in the room, include
+- (long) speak:(NSString*) message to:(NSString*)uid ispublic:(bool)isall;     // speak in the room, include
 
 //设置消息接受者，任意改变
 - (void)setReceiverObject:(id<OnChatDelegate>)delegate;

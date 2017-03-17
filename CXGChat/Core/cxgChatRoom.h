@@ -53,7 +53,7 @@ namespace ChatRoom
 
 	struct ChatRoomInfo
 	{
-		int	nPort;
+		long	nPort;
         std::string nRoomId;
         std::string nMasterId;
 
@@ -81,7 +81,7 @@ namespace ChatRoom
         // 消息的回调
         virtual void OnMsg(PtlBase* ptl) = 0;
         // 错误的回调
-        virtual void OnError(int errcode, char* msg) = 0;
+        virtual void OnError(long errcode, char* msg) = 0;
 #endif
 	};
 
@@ -94,8 +94,8 @@ namespace ChatRoom
 		virtual bool __stdcall IsEntered(void) = 0;
 		virtual bool __stdcall IsConnect(void) = 0;
 
-		virtual int  __stdcall EnterChatRoom(void) = 0;
-		virtual int  __stdcall ReentryChatRoom(int nNodeNum = 0) = 0;
+		virtual long  __stdcall EnterChatRoom(void) = 0;
+		virtual long  __stdcall ReentryChatRoom(int nNodeNum = 0) = 0;
 		virtual void __stdcall ExitChatRoom(void) = 0;
 
 		virtual void __stdcall SetToken(std::string strToken) = 0;
@@ -107,10 +107,10 @@ namespace ChatRoom
 		virtual bool IsEntered(void) = 0;
 		virtual bool IsConnect(void) = 0;
 
-		virtual int  EnterChatRoom(void) = 0;
-		virtual int  ReentryChatRoom(int nNodeNum = 0) = 0;
+		virtual long  EnterChatRoom(void) = 0;
+		virtual long  ReentryChatRoom(long nNodeNum = 0) = 0;
 		virtual void ExitChatRoom(void) = 0;
-        virtual int Speak(std::string words, std::string uid, bool ispublic) = 0;
+        virtual long Speak(std::string words, std::string uid, bool ispublic) = 0;
 
 		virtual void SetToken(std::string strToken) = 0;
 		virtual void SetChatRoomInfo(ChatRoomInfo RoomInfo) = 0;

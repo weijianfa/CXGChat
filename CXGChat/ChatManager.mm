@@ -37,7 +37,7 @@ void ChatManager::Enter() {
     
     m_pChatRoom->SetToken(token);
     
-    int nRet = 0;
+    long nRet = 0;
     if(!m_pChatRoom->IsEntered())
     {
         nRet = m_pChatRoom->EnterChatRoom();
@@ -50,7 +50,7 @@ void ChatManager::Speak(const char *message, const char *uid, bool isall) {
     }
 }
 
-void ChatManager::setHost(const char *ip, int port) {
+void ChatManager::setHost(const char *ip, long port) {
     m_RoomInfo.strIp[0] = ip;
     m_RoomInfo.strIp[1] = ip;
     m_RoomInfo.strIp[2] = ip;
@@ -73,8 +73,8 @@ void ChatManager::OnMsg(PtlBase* ptl) {
     }
 }
 
-void ChatManager::OnError(int errcode, char* msg) {
-    printf("OnMsg OnError= (%d)%s  \n", errcode, msg);
+void ChatManager::OnError(long errcode, char* msg) {
+    printf("OnMsg OnError= (%ld)%s  \n", errcode, msg);
     if(mController) {
         [mController doOnError:errcode Msg:[NSString stringWithUTF8String:msg]];
     }

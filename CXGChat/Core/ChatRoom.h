@@ -34,8 +34,8 @@ public:
 	virtual bool __stdcall IsEntered(void);
 	virtual bool __stdcall IsConnect(void);
 
-	virtual int  __stdcall EnterChatRoom(void);
-	virtual int  __stdcall ReentryChatRoom(int nNodeNum =0);
+	virtual long  __stdcall EnterChatRoom(void);
+	virtual long  __stdcall ReentryChatRoom(int nNodeNum =0);
 	virtual void __stdcall ExitChatRoom(void);
 
 	virtual void __stdcall SetToken(std::string strToken);
@@ -47,9 +47,9 @@ public:
 	virtual bool IsEntered(void);
 	virtual bool IsConnect(void);
 
-	virtual int EnterChatRoom(void);
-	virtual int ReentryChatRoom(int nNodeNum = 0);
-    virtual int Speak(std::string words, std::string uid, bool ispublic);
+	virtual long EnterChatRoom(void);
+	virtual long ReentryChatRoom(long nNodeNum = 0);
+    virtual long Speak(std::string words, std::string uid, bool ispublic);
 	virtual void ExitChatRoom(void);
 
 	virtual void SetToken(std::string strToken);
@@ -75,10 +75,10 @@ private:
 	virtual void __attribute__((__stdcall__))  OnLinkPacket(CRawLink* pLink, CPacket* pPacket);
 	virtual void __attribute__((__stdcall__))  OnLinkErr(CRawLink* pLink);
 
-	static void __attribute__((__stdcall__))  OnTimer(int nTimeId);
+	static void __attribute__((__stdcall__))  OnTimer(long nTimeId);
 #endif
 
-	void OpenTCPLink(int nNodeNum);
+	void OpenTCPLink(long nNodeNum);
 
 	std::string TransCode(const std::string& strUtf8);
 	std::string EscapeCode(std::string& str);
@@ -94,7 +94,8 @@ private:
 	std::string m_nRoomId;
 	unsigned int   m_nKeepLiveTimer;
 
-	int		m_nRoomPort;
+	long		m_nRoomPort;
+    long        lastPackTime = 0;
 	const char*	m_strChatMsg;
 	ChatRoomMsg	m_eMsgType;
 	std::string	m_strToken;

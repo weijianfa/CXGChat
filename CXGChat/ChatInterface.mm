@@ -46,7 +46,7 @@
 
 @property (nonatomic,strong)NSString* mUname;    // user id
 
-@property (nonatomic,assign)int mPort;    // user id
+@property (nonatomic,assign)long mPort;    // user id
 @property (nonatomic,assign)NSString* mHost;   // user id
 
 @property (nonatomic,strong)    ChatControl* mController; //

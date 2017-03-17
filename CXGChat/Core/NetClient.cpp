@@ -160,7 +160,7 @@ void* CNetPeer::ConnectBengin(void *arg)
 {
 	CNetPeer* pNp = (CNetPeer*)arg;
 
-	int  nCount = -1;
+	long  nCount = -1;
 	bool bRet = false;
 	char buf[BUF_SIZE];
 	char bufRecv[BUF_SIZE];
@@ -168,7 +168,13 @@ void* CNetPeer::ConnectBengin(void *arg)
 	fd_set  wFds, rFds, eFds;
 	timeval tvTimeval;
 	tvTimeval.tv_sec = 0;
-	tvTimeval.tv_usec = 500;
+	tvTimeval.tv_usec = 100;
+    
+    
+    time_t tStamp;
+    time(&tStamp);
+    
+    long count=0;
 
 	while (true)
 	{
@@ -181,12 +187,25 @@ void* CNetPeer::ConnectBengin(void *arg)
 		FD_SET(pNp->m_socket, &eFds);
         
         usleep(1000);// tick 中添加sleep，降低cpu损耗。
+        
+        if(count == 20) {
+            time_t tNow;
+            time(&tNow);
+            if(tNow - tStamp > 30)
+            {
+                // exceeded time, this shoule be to close the socket and to notice the owner
+                printf("the client has exceeded time, you should connect agadin! %ld,%ld\n",tNow ,tStamp);
+            }
+            count = 0;
+        }
+        count++;
 
 		int nRet = select(FD_SETSIZE, &rFds, &wFds, &eFds, &tvTimeval);
-		if (nRet > 0)
+		if (nRet > 0)             // have to process
 		{
 			if (FD_ISSET(pNp->m_socket, &rFds) > 0) 
 			{
+                time(&tStamp);  // reset the time to show data comes;
 				nCount = recv(pNp->m_socket, bufRecv, BUF_SIZE, 0);
 //                printf("qqqqq  %d, %s\n", nCount, bufRecv);
 				pNp->m_RawLink->OnRecvData(bufRecv, nCount);
@@ -194,11 +213,13 @@ void* CNetPeer::ConnectBengin(void *arg)
 
 			if (FD_ISSET(pNp->m_socket, &wFds) > 0)  
 			{
+                
 				if (nCount > 0)
 				{
 					bRet = pNp->SendData(buf, strlen(buf));
 					if (!bRet)
 					{
+                        printf("SendData error!");
 						pNp->Close();
 						break;
 					}
@@ -207,9 +228,15 @@ void* CNetPeer::ConnectBengin(void *arg)
 			}
 
 			if (FD_ISSET(pNp->m_socket, &eFds) > 0){ break; }
-		}
-		else
+		} else if(nRet == 0) {  // socket close
+            pNp->m_RawLink->OnNetErr(1001);
+            printf("SendData error1!");
+            break;
+        } else {                // error other
+            pNp->m_RawLink->OnNetErr(1002);
+            printf("SendData error2!");
 			break;
+        }
 	}
 
 	return 0;
