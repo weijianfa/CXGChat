@@ -2,6 +2,7 @@
 #define __NET_CLIENT_H_
 
 #include "network.h"
+#include "Packet.h"
 
 using namespace NetWork;
 
@@ -59,7 +60,7 @@ private:
 
 private:
 
-	int		m_nRetCode;
+	long		m_nRetCode;
 	long    m_nRefCount;
 	bool	m_bRet;
 	bool	m_bThreadRet;

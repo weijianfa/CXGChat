@@ -43,9 +43,9 @@ protected:
 private:
 	PACKET_HADER*    m_pHeader;
 	char*            m_pTotal;
-	int              m_nTotal;
+	long              m_nTotal;
 	char*            m_pPayload;
-	int              m_nPayload;
+	long              m_nPayload;
 };
 
 #endif

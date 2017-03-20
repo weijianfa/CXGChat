@@ -511,6 +511,10 @@ void CChatRoom::OnLinkPacket(CRawLink* pLink, CPacket* pPacket)
     
     PtlBase* protocol = PtlBase::getProtocol(dbuf);
     
+    if(protocol == NULL) {
+        return ;
+    }
+    
     switch(protocol->getRetCode()){
         case 0: // ok
 //            printf("****** ok \n");

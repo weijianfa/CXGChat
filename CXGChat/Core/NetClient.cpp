@@ -111,7 +111,7 @@ void CNetPeer::Close()
 	close(m_socket);
 #endif
     
-    this->m_RawLink->OnNetErr(1);
+    this->m_RawLink->OnNetErr(m_nRetCode);
 }
 
 bool CNetPeer::SendData(const char* pData, int nLen)
@@ -196,14 +196,23 @@ void* CNetPeer::ConnectBengin(void *arg)
 		FD_SET(pNp->m_socket, &rFds);
 		FD_SET(pNp->m_socket, &eFds);
         
-        usleep(1000);// tick 中添加sleep，降低cpu损耗。
+        usleep(900);// tick 中添加sleep，降低cpu损耗。
         
         // to check fresh the client, 45s is to allowed.
-        if(count == 10) {
+        if(count == 7) {
             time_t tNow;
             time(&tNow);
-            if(tNow - tStamp > 45)
+            long tGapTime = tNow - tStamp;
+            if(tGapTime > 50 && tGapTime < 60) { // send the heartbeat you know.
+                std::string jsonEnter = "{\"randomNumber\":\"222\",\"v\":\"0\"}";
+                CPacket* pPacket = CPacket::CreateFromPayload((char*)jsonEnter.c_str(), (int)jsonEnter.length());
+                pPacket->SetPacketType(0);
+                pPacket->SetPacketAction(3);
+                pNp->SendData(pPacket->GetTotal(), pPacket->GetTotalSize()) ;
+            }
+            if(tNow - tStamp > 90)
             {
+                pNp->m_nRetCode = CON_NOHEARTPACK;
                 // exceeded time, this shoule be to close the socket and to notice the owner
                 printf("the client has exceeded time, you should connect agadin!\n");
                 pNp->Close();
@@ -233,6 +242,7 @@ void* CNetPeer::ConnectBengin(void *arg)
 					bRet = pNp->SendData(buf, strlen(buf));
 					if (!bRet)
 					{
+                        pNp->m_nRetCode = CON_WRITEDERROR;
                         printf("SendData error!");
 						pNp->Close();
 						break;
@@ -244,13 +254,16 @@ void* CNetPeer::ConnectBengin(void *arg)
 			if (FD_ISSET(pNp->m_socket, &eFds) > 0)
             {
                 // some errors.
+                pNp->m_nRetCode = CON_SELECTERROR;
                 break;
             }
 		} else if(nRet == 0) {  // socket close
+            pNp->m_nRetCode = CON_DISONCECONN;
             pNp->Close();
             printf("SendData error1!");
             break;
         } else {                // error other
+            pNp->m_nRetCode = CON_ERRCREATESC;
             pNp->Close();
             printf("SendData error2!");
 			break;
