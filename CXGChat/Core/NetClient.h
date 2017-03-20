@@ -5,6 +5,18 @@
 
 using namespace NetWork;
 
+
+enum ERRNO {
+    CON_NETNOTREACH = 100001,
+    CON_DISONCECONN,
+    CON_SELECTERROR,
+    CON_READDAERROR,
+    CON_WRITEDERROR,
+    CON_NOHEARTPACK,
+    CON_ERRCREATESC,
+    CON_STARTTHREAD,
+};
+
 class CNetPeer
 	: public INetPeer
 {

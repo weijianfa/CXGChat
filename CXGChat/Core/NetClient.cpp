@@ -43,6 +43,7 @@ bool CNetPeer::Connect()
 	m_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (m_socket < 0)
 	{
+        m_nRetCode = CON_ERRCREATESC;
 		#if(CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 			WSACleanup();
 		#endif
@@ -69,6 +70,7 @@ bool CNetPeer::Connect()
 
 	if (m_nRetCode < 0)
 	{
+        m_nRetCode = CON_NETNOTREACH;
 		#if(CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 			WSAGetLastError();
 		#else
@@ -92,11 +94,13 @@ bool CNetPeer::Open()
 	if (!nRet)
 		m_bThreadRet = true;
 	else
+        m_nRetCode = CON_STARTTHREAD;
 		m_bThreadRet = false;
 
 	return m_bThreadRet;
 }
 
+// close the socket, this step should tell the upfloor
 void CNetPeer::Close()
 {
 
@@ -106,21 +110,25 @@ void CNetPeer::Close()
 #else
 	close(m_socket);
 #endif
+    
+    this->m_RawLink->OnNetErr(1);
 }
 
 bool CNetPeer::SendData(const char* pData, int nLen)
 {
-
+    long ret = 0;
 #if(CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	m_nRetCode = send(m_socket, pData, nLen, 0);
+	ret = send(m_socket, pData, nLen, 0);
 #elif(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	m_nRetCode = send(m_socket, pData, nLen, SO_NOSIGPIPE);
+	ret = send(m_socket, pData, nLen, SO_NOSIGPIPE);
 #else 
-    m_nRetCode = send(m_socket, pData, nLen, MSG_NOSIGNAL);
+    ret = send(m_socket, pData, nLen, MSG_NOSIGNAL);
 #endif
 
-	if (m_nRetCode < 0)
+    if (ret < 0) {
+        m_nRetCode = CON_WRITEDERROR;
 		m_bSendRet = false;
+    }
 	else
 		m_bSendRet = true;
 
@@ -156,6 +164,8 @@ long CNetPeer::Release()
 	return nRef;
 }
 
+
+// this is a thread to call this function.
 void* CNetPeer::ConnectBengin(void *arg)
 {
 	CNetPeer* pNp = (CNetPeer*)arg;
@@ -188,18 +198,22 @@ void* CNetPeer::ConnectBengin(void *arg)
         
         usleep(1000);// tick 中添加sleep，降低cpu损耗。
         
-        if(count == 20) {
+        // to check fresh the client, 45s is to allowed.
+        if(count == 10) {
             time_t tNow;
             time(&tNow);
-            if(tNow - tStamp > 30)
+            if(tNow - tStamp > 45)
             {
                 // exceeded time, this shoule be to close the socket and to notice the owner
-                printf("the client has exceeded time, you should connect agadin! %ld,%ld\n",tNow ,tStamp);
+                printf("the client has exceeded time, you should connect agadin!\n");
+                pNp->Close();
+                break;
             }
             count = 0;
         }
         count++;
 
+        // select the socket
 		int nRet = select(FD_SETSIZE, &rFds, &wFds, &eFds, &tvTimeval);
 		if (nRet > 0)             // have to process
 		{
@@ -227,13 +241,17 @@ void* CNetPeer::ConnectBengin(void *arg)
 				}
 			}
 
-			if (FD_ISSET(pNp->m_socket, &eFds) > 0){ break; }
+			if (FD_ISSET(pNp->m_socket, &eFds) > 0)
+            {
+                // some errors.
+                break;
+            }
 		} else if(nRet == 0) {  // socket close
-            pNp->m_RawLink->OnNetErr(1001);
+            pNp->Close();
             printf("SendData error1!");
             break;
         } else {                // error other
-            pNp->m_RawLink->OnNetErr(1002);
+            pNp->Close();
             printf("SendData error2!");
 			break;
         }
