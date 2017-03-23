@@ -7,10 +7,17 @@ CNetPeer::CNetPeer(INetPeerSink* pNb)
 	m_RawLink = pNb;
 
 	m_nRetCode = 0;
+	m_nRecvSize = 0;
+	m_nPacketSize = 0;
 	m_nRefCount = 1;
+
 	m_bRet = false;
 	m_bThreadRet = false;
 	m_bSendRet = false;
+	m_bReading = false;
+
+	memset(m_cHeadBuf, 0, HEAD_SIZE);
+	memset(m_cFullBuf, 0, RECV_BUF_SIZE);
 
 	m_Mutex = PTHREAD_MUTEX_INITIALIZER;
 }
@@ -135,6 +142,54 @@ bool CNetPeer::SendData(const char* pData, int nLen)
 	return m_bSendRet;
 }
 
+bool CNetPeer::RecvData()
+{
+	if (!m_bReading)
+	{
+		m_nRecvSize = recv(m_socket, m_cHeadBuf, HEAD_SIZE, 0);
+		if (m_nRecvSize < HEAD_SIZE)
+		{
+			return false;
+		}
+		int nPacketSize = 0;
+		char* pPacketSize = (char*)&nPacketSize;
+		memcpy(pPacketSize, m_cHeadBuf, 4);
+		m_nPacketSize = ntohl(nPacketSize);
+		if (m_nPacketSize <= HEAD_SIZE || m_nPacketSize > RECV_BUF_SIZE)
+		{
+			return false;
+		}
+		else
+		{
+			m_bReading = true;
+			memcpy(m_cFullBuf, m_cHeadBuf, HEAD_SIZE);
+			memset(m_cHeadBuf, 0, HEAD_SIZE);
+			m_cFullBuf[4] = '\0';
+		}
+	}
+	else
+	{
+		char bufRecv[RECV_BUF_SIZE] = "0";
+		m_nRecvSize = recv(m_socket, bufRecv, m_nPacketSize - 4, 0);
+		if (m_nRecvSize == m_nPacketSize - 4)
+		{
+			for (int n = 0; n < m_nRecvSize; n++)
+			{
+				m_cFullBuf[n + 4] = bufRecv[n];
+			}
+			m_RawLink->OnRecvData(m_cFullBuf, m_nPacketSize);
+			m_bReading = false;
+			memset(m_cFullBuf, 0, RECV_BUF_SIZE);
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
 long CNetPeer::AddRef()
 {
 	long nRef = 0;
@@ -170,10 +225,8 @@ void* CNetPeer::ConnectBengin(void *arg)
 {
 	CNetPeer* pNp = (CNetPeer*)arg;
 
-	long  nCount = -1;
 	bool bRet = false;
-	char buf[BUF_SIZE];
-	char bufRecv[BUF_SIZE];
+	char buf[SEND_BUF_SIZE] = "";
 	
 	fd_set  wFds, rFds, eFds;
 	timeval tvTimeval;
@@ -195,11 +248,15 @@ void* CNetPeer::ConnectBengin(void *arg)
 		FD_SET(pNp->m_socket, &wFds);
 		FD_SET(pNp->m_socket, &rFds);
 		FD_SET(pNp->m_socket, &eFds);
-        
-        usleep(900);// tick 中添加sleep，降低cpu损耗。
+    
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)    
+		Sleep(100);
+#else
+		usleep(100);
+#endif
         
         // to check fresh the client, 45s is to allowed.
-        if(count == 7) {
+        if(count == 300) {
             time_t tNow;
             time(&tNow);
             long tGapTime = tNow - tStamp;
@@ -228,17 +285,12 @@ void* CNetPeer::ConnectBengin(void *arg)
 		{
 			if (FD_ISSET(pNp->m_socket, &rFds) > 0) 
 			{
-                time(&tStamp);  // reset the time to show data comes;
-				nCount = recv(pNp->m_socket, bufRecv, BUF_SIZE, 0);
-//                printf("qqqqq  %d, %s\n", nCount, bufRecv);
-				pNp->m_RawLink->OnRecvData(bufRecv, nCount);
+				pNp->RecvData();
 			}
 
 			if (FD_ISSET(pNp->m_socket, &wFds) > 0)  
 			{
                 
-				if (nCount > 0)
-				{
 					bRet = pNp->SendData(buf, strlen(buf));
 					if (!bRet)
 					{
@@ -246,8 +298,6 @@ void* CNetPeer::ConnectBengin(void *arg)
                         printf("SendData error!");
 						pNp->Close();
 						break;
-					}
-					nCount = -1;
 				}
 			}
 

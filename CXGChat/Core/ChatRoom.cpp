@@ -6,7 +6,7 @@
 
 long hex2dec(char * s)
 {
-	int L = strlen(s);
+	int L = (int)strlen(s);
 	char c;
 	long re = 0;
 	while (c = s++[0])
@@ -14,14 +14,12 @@ long hex2dec(char * s)
 		if (c >= '0' && c <= '9')
 		{
 			c -= 48;
-		}
-			
+		}		
 		else
 		{
 			c = c>'Z' ? c - 32 : c;
 			c -= 'A' - 10;
 		}
-
 		re += c*pow(16.0, --L);
 	}
 
@@ -30,6 +28,14 @@ long hex2dec(char * s)
 
 std::string unescape(char* str)
 {
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	const int nMultiByte = 2;
+#else
+	setlocale(LC_ALL, "chs");
+	const int nMultiByte = 3;
+#endif
+
 	char* re = (char*)calloc(strlen(str) + 1, 1);
 	char* _str;
 	char* _re = re;
@@ -51,25 +57,20 @@ std::string unescape(char* str)
 			_re += n;
 		}
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-		_strset_s(code, 0);
-#else
-		memset(code, '0', 5);
-#endif
+		memset(code, 0, sizeof(code));
 		if (_str[1] == 'u')
 		{
 			memcpy(code, _str + 2, 4);
 			str = _str + 6;
 			wc = hex2dec(code);
 			memset(code, 0, 5);
-			#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-				WideCharToMultiByte(CP_OEMCP, NULL, &wc, -1, (char*)code, 2, NULL, FALSE);
-			#else
-				const wchar_t* cwc = &wc;
-				wcstombs(code,cwc,5);
-			#endif
-			memcpy(_re, code, 2);
-			_re += 2;
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+			WideCharToMultiByte(CP_OEMCP, NULL, &wc, -1, (char*)code, nMultiByte, NULL, FALSE);
+#else
+			wctombs(code, &wc, nMultiByte);
+#endif
+			memcpy(_re, code, nMultiByte);
+			_re += nMultiByte;
 		}
 		else
 		{
@@ -80,11 +81,7 @@ std::string unescape(char* str)
 		}
 	}
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	strcpy_s(_re, strlen(_re), str);
-#else
 	strcpy(_re, str);
-#endif
 	std::string rt(re);
 	free(re);
 	re = NULL;
@@ -488,13 +485,13 @@ void CChatRoom::OnLinkPacket(CRawLink* pLink, CPacket* pPacket)
 		return;
 	}
 
-	uLongf dlen = sizeof(char)* (2048);
+	uLongf dlen = sizeof(char)* (8192);
 	char* dbuf = (char*)malloc(dlen);
 	memset(dbuf, 0, dlen);
 	int nRet = uncompress((Bytef*)dbuf, &dlen, (Bytef*)pPacket->GetPayload(), pPacket->GetPacketSize());
 	while (nRet != Z_OK)
 	{
-		if (dlen / 2048 > 10)
+		if (dlen / 8192 > 10)
 		{
 			break;
 		}
