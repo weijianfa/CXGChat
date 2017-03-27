@@ -7,18 +7,14 @@ CNetPeer::CNetPeer(INetPeerSink* pNb)
 	m_RawLink = pNb;
 
 	m_nRetCode = 0;
-	m_nRecvSize = 0;
-	m_nPacketSize = 0;
+	m_nNeedCopySize = 0;
 	m_nRefCount = 1;
 
 	m_bRet = false;
 	m_bThreadRet = false;
 	m_bSendRet = false;
-	m_bReading = false;
 
-	memset(m_cHeadBuf, 0, HEAD_SIZE);
-	memset(m_cFullBuf, 0, RECV_BUF_SIZE);
-
+	memset(m_cLastRecv, 0, RECV_BUF_SIZE);
 	m_Mutex = PTHREAD_MUTEX_INITIALIZER;
 }
 
@@ -117,8 +113,23 @@ void CNetPeer::Close()
 #else
 	close(m_socket);
 #endif
-    
-    this->m_RawLink->OnNetErr(m_nRetCode);
+
+	m_RawLink->OnNetErr(m_nRetCode);
+}
+
+int CNetPeer::GetPacketHeadLenth(char* sData)
+{
+	int nPacketSize = 0;
+	char* pPacketSize = (char*)&nPacketSize;
+	memcpy(pPacketSize, sData, HEAD_SIZE);
+	nPacketSize = ntohl(nPacketSize);
+
+	if (nPacketSize > RECV_BUF_SIZE)
+	{
+		Close();
+	}
+
+	return nPacketSize;
 }
 
 bool CNetPeer::SendData(const char* pData, int nLen)
@@ -142,49 +153,63 @@ bool CNetPeer::SendData(const char* pData, int nLen)
 	return m_bSendRet;
 }
 
-bool CNetPeer::RecvData()
+bool CNetPeer::RecvData(char* pData, int nLen)
 {
-	if (!m_bReading)
+	int	nPacketSize, nValidSize, nLeftSize;
+	nPacketSize = nValidSize = nLeftSize = 0;
+	char cTempData[MAX_BUF_SIZE] = "";
+
+	if (m_nNeedCopySize)
 	{
-		m_nRecvSize = recv(m_socket, m_cHeadBuf, HEAD_SIZE, 0);
-		if (m_nRecvSize < HEAD_SIZE)
-		{
-			return false;
-		}
-		int nPacketSize = 0;
-		char* pPacketSize = (char*)&nPacketSize;
-		memcpy(pPacketSize, m_cHeadBuf, 4);
-		m_nPacketSize = ntohl(nPacketSize);
-		if (m_nPacketSize <= HEAD_SIZE || m_nPacketSize > RECV_BUF_SIZE)
-		{
-			return false;
-		}
-		else
-		{
-			m_bReading = true;
-			memcpy(m_cFullBuf, m_cHeadBuf, HEAD_SIZE);
-			memset(m_cHeadBuf, 0, HEAD_SIZE);
-			m_cFullBuf[4] = '\0';
-		}
+		memcpy(cTempData, m_cLastRecv, m_nNeedCopySize);
+		memset(m_cLastRecv, 0, RECV_BUF_SIZE);
 	}
-	else
+	for (int n = 0; n < nLen; n++)
 	{
-		char bufRecv[RECV_BUF_SIZE] = "0";
-		m_nRecvSize = recv(m_socket, bufRecv, m_nPacketSize - 4, 0);
-		if (m_nRecvSize == m_nPacketSize - 4)
+		cTempData[n + m_nNeedCopySize] = pData[n];
+	}
+	nLen = nLen + m_nNeedCopySize;
+	m_nNeedCopySize = 0;
+
+	if (nLen < HEAD_SIZE)
+	{
+		m_nNeedCopySize = nLen;
+		for (int n = 0; n < nLen; n++)
 		{
-			for (int n = 0; n < m_nRecvSize; n++)
-			{
-				m_cFullBuf[n + 4] = bufRecv[n];
-			}
-			m_RawLink->OnRecvData(m_cFullBuf, m_nPacketSize);
-			m_bReading = false;
-			memset(m_cFullBuf, 0, RECV_BUF_SIZE);
+			m_cLastRecv[n] = cTempData[n];
 		}
-		else
+		return true;
+	}
+	
+	nPacketSize = GetPacketHeadLenth(cTempData);
+	nLeftSize = nLen - nPacketSize;
+
+	while (nLeftSize > HEAD_SIZE)
+	{
+		nValidSize += nPacketSize;
+		char cData[RECV_BUF_SIZE] = "";
+		for (int n = 0; n < nLeftSize; n++)
 		{
-			return false;
+			cData[n] = cTempData[n + nValidSize];
 		}
+		nPacketSize = GetPacketHeadLenth(cData);
+		nLeftSize -= nPacketSize;
+	}
+
+	if (!nLeftSize)
+	{
+		m_RawLink->OnRecvData(cTempData, nLen);
+		return true;
+	}
+
+	char cBufData[MAX_BUF_SIZE] = "";
+	memcpy(cBufData, cTempData, nValidSize);
+	m_RawLink->OnRecvData(cBufData, nValidSize);
+
+	m_nNeedCopySize = nLen - nValidSize;
+	for (int n = 0; n < m_nNeedCopySize; n++)
+	{
+		m_cLastRecv[n] = cTempData[n + nValidSize];
 	}
 
 	return true;
@@ -227,6 +252,7 @@ void* CNetPeer::ConnectBengin(void *arg)
 
 	bool bRet = false;
 	char buf[SEND_BUF_SIZE] = "";
+	char Recvbuf[RECV_BUF_SIZE] = "";
 	
 	fd_set  wFds, rFds, eFds;
 	timeval tvTimeval;
@@ -249,14 +275,10 @@ void* CNetPeer::ConnectBengin(void *arg)
 		FD_SET(pNp->m_socket, &rFds);
 		FD_SET(pNp->m_socket, &eFds);
     
-#if(CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)    
-		Sleep(100);
-#else
-		usleep(100);
-#endif
+		usleep(900);
         
         // to check fresh the client, 45s is to allowed.
-        if(count == 300) {
+        if(count == 33) {
             time_t tNow;
             time(&tNow);
             long tGapTime = tNow - tStamp;
@@ -285,7 +307,13 @@ void* CNetPeer::ConnectBengin(void *arg)
 		{
 			if (FD_ISSET(pNp->m_socket, &rFds) > 0) 
 			{
-				pNp->RecvData();
+				int nRecvSize = recv(pNp->m_socket, Recvbuf, RECV_BUF_SIZE, 0);
+				if (nRecvSize <= 0)
+				{
+					pNp->Close();
+					break;
+				}
+				pNp->RecvData(Recvbuf, nRecvSize);
 			}
 
 			if (FD_ISSET(pNp->m_socket, &wFds) > 0)  
