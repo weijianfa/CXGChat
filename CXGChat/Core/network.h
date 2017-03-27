@@ -7,6 +7,12 @@
 	#define NETWORK_API __declspec(dllexport)
 #endif
 
+#define RECV_BUF_SIZE	4096
+#define SEND_BUF_SIZE	2048
+
+#define	MAX_BUF_SIZE	8192
+#define	HEAD_SIZE	4
+
 namespace NetWork
 {
 	class INetPeer;
