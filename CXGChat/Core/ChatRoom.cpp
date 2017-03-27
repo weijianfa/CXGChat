@@ -67,7 +67,7 @@ std::string unescape(char* str)
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 			WideCharToMultiByte(CP_OEMCP, NULL, &wc, -1, (char*)code, nMultiByte, NULL, FALSE);
 #else
-			wctombs(code, &wc, nMultiByte);
+			wcstombs(code, &wc, nMultiByte);
 #endif
 			memcpy(_re, code, nMultiByte);
 			_re += nMultiByte;
@@ -401,18 +401,18 @@ void CChatRoom::ExitChatRoom()
 
 bool CChatRoom::OnTimer(int nTimeID)
 {
-	bool bRet = true;
-
 	if (nTimeID == m_nKeepLiveTimer)
 	{
 		pthread_mutex_lock(&m_SynchMutex);
 
 		time_t tStamp = time(NULL);
-		char sTimeStamp[50];
-		ctime_s(sTimeStamp, 50, &tStamp);
-		CPacket* pPacket = CPacket::CreateFromPayload(sTimeStamp, strlen(sTimeStamp));
-        pPacket->SetPacketAction(3);
-		pPacket->SetPacketType(0);
+
+		std::string HreatBeat = "{\"randomNumber\":\"";
+		HreatBeat += std::to_string(tStamp);
+		HreatBeat += "\",\"v\":\"0\"}";
+
+		CPacket* pPacket = CPacket::CreateFromPayload((char*)HreatBeat.c_str(), HreatBeat.length());
+		pPacket->SetPacketType(KEEPLIVE);
 		if (m_pLink)
 		{
 			m_pLink->SendPacket(pPacket);
@@ -420,21 +420,21 @@ bool CChatRoom::OnTimer(int nTimeID)
 
 		pthread_mutex_unlock(&m_SynchMutex);
 	}
-
-	return bRet;
+	return true;
 }
 
 #else
 
 void CChatRoom::OnTimer(long nTimeId)
 {
-	time_t tStamp;
-	time(&tStamp);
-	char sTimeStamp[50];
-	sprintf(sTimeStamp,"%lu",tStamp);
-	CPacket* pPacket = CPacket::CreateFromPayload(sTimeStamp, strlen(sTimeStamp));
-    pPacket->SetPacketAction(3);
-	pPacket->SetPacketType(0);
+	time_t tStamp = time(NULL);
+
+	std::string HreatBeat = "{\"randomNumber\":\"";
+	HreatBeat += std::to_string(tStamp);
+	HreatBeat += "\",\"v\":\"0\"}";
+
+	CPacket* pPacket = CPacket::CreateFromPayload((char*)HreatBeat.c_str(), HreatBeat.length());
+	pPacket->SetPacketType(KEEPLIVE);
 	if (g_pLink)
 		g_pLink->SendPacket(pPacket);
 
@@ -485,13 +485,13 @@ void CChatRoom::OnLinkPacket(CRawLink* pLink, CPacket* pPacket)
 		return;
 	}
 
-	uLongf dlen = sizeof(char)* (8192);
+	uLongf dlen = sizeof(char)* (MAX_BUF_SIZE);
 	char* dbuf = (char*)malloc(dlen);
 	memset(dbuf, 0, dlen);
 	int nRet = uncompress((Bytef*)dbuf, &dlen, (Bytef*)pPacket->GetPayload(), pPacket->GetPacketSize());
 	while (nRet != Z_OK)
 	{
-		if (dlen / 8192 > 10)
+		if (dlen / MAX_BUF_SIZE > 10)
 		{
 			break;
 		}
