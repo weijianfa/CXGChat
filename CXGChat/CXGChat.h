@@ -16,20 +16,56 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <CXGChat/PublicHeader.h>
 
+@interface User : NSObject {
+    NSInteger fensi;
+    NSInteger caifu;
+    NSInteger juese;
+}
+
+- (NSInteger) getFensi;
+- (NSInteger) getCaifu;
+- (NSInteger) getJuese;
+
+- (void) setFensi:(NSInteger) fensi;
+- (void) setCaifu:(NSInteger) caifu;
+- (void) setJuese:(NSInteger) juese;
+
+@end
+
+@interface Gift : NSObject {
+    NSString* name;
+    NSInteger count;
+}
+
+- (NSString*) getName;
+- (NSInteger) getCount;
+- (void) setName:(NSString*) name;
+- (void) setCount:(NSInteger) count;
+@end
+
 @interface Message : NSObject {
     NSString* mUid;
     NSString* mNickName;
     NSString* mMsg;
+    NSInteger mType;
+    
+    Gift* mGift;
+    User* mUser;
 }
+
+- (id) init;
 
 - (void) setUid:(NSString*) uid;
 - (void) setNickName:(NSString*) name;
 - (void) setMsg:(NSString*) msg;
+- (void) setType:(NSInteger) type;
 
 - (NSString*) getUid;
 - (NSString*) getNickName;
 - (NSString*) getMsg;
-
+- (NSInteger) getType;
+- (Gift*) getGift;
+- (User*) getUser;
 @end
 
 
@@ -47,6 +83,9 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
 - (void)configureRoomHost:(NSString*)host Port:(long)port UID:(NSString*)uid Token:(NSString*)t Rid:(NSString*)rid UName:(NSString*)uname;
 //进入聊天室
 - (long) enterRoom; // enter the room
+
+//
+- (long) leaveRoom;
 
 //说话，发消息
 - (long) speak:(NSString*) message to:(NSString*)uid ispublic:(bool)isall;     // speak in the room, include

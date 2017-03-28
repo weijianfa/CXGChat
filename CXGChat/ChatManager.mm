@@ -9,10 +9,38 @@
 #include "ChatManager.hpp"
 
 Message* getMessage(PtlBase* ptl) {
-    Message* message = [Message alloc];
+    Message* message = [[Message alloc] init];
     [message setUid: [NSString stringWithUTF8String:ptl->getUserID().c_str()]];
     [message setMsg: [NSString stringWithUTF8String:ptl->getMsg().c_str()]];
     [message setNickName: [NSString stringWithUTF8String:ptl->getNickName().c_str()]];
+    [message setType:ptl->type];
+    
+    
+    switch(ptl->type) {
+        case 1: // usermsg
+        case 2: // gift
+        case 4: // enter in
+            [[message getUser] setFensi:ptl->fensi];
+            [[message getUser] setCaifu:ptl->caifu];
+            [[message getUser] setJuese:ptl->juese];
+            break;
+        case 3: // sys
+            break;
+    }
+    
+    switch(ptl->type) {
+        case 1: // usermsg
+            break;
+        case 2: // gift
+            [[message getGift] setName:[NSString stringWithUTF8String:ptl->giftName.c_str()]];
+            [[message getGift] setCount:ptl->giftCount];
+            break;
+        case 3: // sys
+            break;
+        case 4:
+            break;
+    }
+    
     return message;
 }
 
@@ -48,6 +76,10 @@ void ChatManager::Speak(const char *message, const char *uid, bool isall) {
     if(m_pChatRoom->IsEntered()) {
         m_pChatRoom->Speak(message, uid, isall);
     }
+}
+
+void ChatManager::ExitChatRoom() {
+    m_pChatRoom->ExitChatRoom();
 }
 
 void ChatManager::setHost(const char *ip, long port) {

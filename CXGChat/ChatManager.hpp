@@ -40,6 +40,8 @@ public:
     
     void Enter();
     void Speak(const char *message, const char *uid ,bool isall);
+    
+    void ExitChatRoom();
 private:
     ChatRoom::ChatRoomInfo m_RoomInfo;
     ChatRoom::IChatRoom*  m_pChatRoom = 0;

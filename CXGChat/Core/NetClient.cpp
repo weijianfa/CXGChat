@@ -278,22 +278,22 @@ void* CNetPeer::ConnectBengin(void *arg)
 		usleep(900);
         
         // to check fresh the client, 45s is to allowed.
-        if(count == 33) {
+        if(count == 10) {
             time_t tNow;
             time(&tNow);
-            long tGapTime = tNow - tStamp;
-            if(tGapTime > 50 && tGapTime < 60) { // send the heartbeat you know.
+            long tGapTime = (tNow - tStamp)/1000;
+            if(tGapTime > 55 && tGapTime < 60) { // send the heartbeat you know.
                 std::string jsonEnter = "{\"randomNumber\":\"222\",\"v\":\"0\"}";
                 CPacket* pPacket = CPacket::CreateFromPayload((char*)jsonEnter.c_str(), (int)jsonEnter.length());
                 pPacket->SetPacketType(0);
                 pPacket->SetPacketAction(3);
                 pNp->SendData(pPacket->GetTotal(), pPacket->GetTotalSize()) ;
             }
-            if(tNow - tStamp > 90)
+            if(tGapTime > 90)
             {
                 pNp->m_nRetCode = CON_NOHEARTPACK;
                 // exceeded time, this shoule be to close the socket and to notice the owner
-                printf("the client has exceeded time, you should connect agadin!\n");
+                printf("chatroom: the client has exceeded time, you should connect agadin!\n");
                 pNp->Close();
                 break;
             }
@@ -307,9 +307,11 @@ void* CNetPeer::ConnectBengin(void *arg)
 		{
 			if (FD_ISSET(pNp->m_socket, &rFds) > 0) 
 			{
+                time(&tStamp);
 				int nRecvSize = recv(pNp->m_socket, Recvbuf, RECV_BUF_SIZE, 0);
 				if (nRecvSize <= 0)
 				{
+                    printf("chatroom: RecvData error! %d", nRecvSize);
 					pNp->Close();
 					break;
 				}
@@ -323,7 +325,7 @@ void* CNetPeer::ConnectBengin(void *arg)
 					if (!bRet)
 					{
                         pNp->m_nRetCode = CON_WRITEDERROR;
-                        printf("SendData error!");
+                        printf("chatroom: SendData error!");
 						pNp->Close();
 						break;
 				}
@@ -332,18 +334,20 @@ void* CNetPeer::ConnectBengin(void *arg)
 			if (FD_ISSET(pNp->m_socket, &eFds) > 0)
             {
                 // some errors.
+                printf("chatroom: SelectData error!");
                 pNp->m_nRetCode = CON_SELECTERROR;
+                pNp->Close();
                 break;
             }
 		} else if(nRet == 0) {  // socket close
             pNp->m_nRetCode = CON_DISONCECONN;
             pNp->Close();
-            printf("SendData error1!");
+            printf("chatroom: SendData error1!");
             break;
         } else {                // error other
             pNp->m_nRetCode = CON_ERRCREATESC;
             pNp->Close();
-            printf("SendData error2!");
+            printf("chatroom: SendData error2!");
 			break;
         }
 	}

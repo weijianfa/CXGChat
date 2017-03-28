@@ -9,9 +9,10 @@
 #include "PtlBase.hpp"
 #include "json.h"
 
-const int USER_MSG = (0<<8) + 2;
-const int SYST_MSG = (24<<8) + 1;
-const int GIFT_MSG = (3<<8) + 1;
+const int USER_MSG = (0<<16) + 2;
+const int SYST_MSG = (24<<16) + 1;
+const int GIFT_MSG = (3<<16) + 1;
+const int CONT_MSG = (84<<16) + 1;  // men count in room
 const int LOGN_RET = 0;
 
 int PtlBase::getRetCode() {
@@ -55,7 +56,7 @@ PtlBase* PtlBase::getProtocol(char* buf) {
     
     printf("receive %d,%d:  %d\n", nAction, nMsgType, ncode);
     
-    switch((nAction<<8)+ nMsgType) {
+    switch((nAction<<16)+ nMsgType) {
         case USER_MSG:
             return new PtlUserMsg(ncode, object["msg"]);
         case SYST_MSG:
@@ -64,6 +65,8 @@ PtlBase* PtlBase::getProtocol(char* buf) {
             return new PtlGiftMsg(ncode, object["msg"]);
         case LOGN_RET:
             return new PtlLoginRet(ncode, object["msg"]);
+        case CONT_MSG:
+            return new PtlContMsg(ncode, object["msg"]);
         default:
             return new PtlBase(ncode, object["msg"]);
     }

@@ -12,9 +12,9 @@
 #include "ChatRoom.h"
 
 PtlGiftMsg::PtlGiftMsg(int ret,Json::Value  buf):PtlBase(ret, buf) {
-    printf( "PtlGiftMsg\n");
+    printf( "chatroom: PtlGiftMsg\n");
     
-    this->type = 1;  // msg
+    this->type = 2;  // msg
     
     Json::Value::iterator itc = buf.begin();
     std::string typeStr = (*itc)["escape"].asString();
@@ -29,12 +29,17 @@ PtlGiftMsg::PtlGiftMsg(int ret,Json::Value  buf):PtlBase(ret, buf) {
         if (ctreader.parse(ct.c_str(), ctobject))
         {
             nickName = ctobject["b9"].asString();
-            userID = ctobject["b2"].asString();
+            userID = ctobject["b2"].asInt();
             
-            int fensi = ctobject["e"].asInt();
-            int caifu = ctobject["b7"].asInt();
+            juese = ctobject["c2"].asInt();
+            fensi = ctobject["e"].asInt();
+            caifu = ctobject["b7"].asInt();
             
-            msg = "我送了" + ctobject["q"].asString();
+            giftName = ctobject["q"].asString();
+            giftCount = ctobject["i"].asInt();
+            
+            msg = "我送了" + giftName;
+            
         }
     }
 }

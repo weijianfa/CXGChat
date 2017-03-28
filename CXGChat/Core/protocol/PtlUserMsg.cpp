@@ -8,7 +8,7 @@
 #include "PtlBase.hpp"
 
 PtlUserMsg::PtlUserMsg(int ret,Json::Value  buf):PtlBase(ret, buf) {
-    printf( "PtlUserMsg\n");
+    printf( "chatroom: PtlUserMsg\n");
     this->type = 1;  // msg
     
     
@@ -20,7 +20,9 @@ PtlUserMsg::PtlUserMsg(int ret,Json::Value  buf):PtlBase(ret, buf) {
     userID = (*itc)["e"]["bb"].asString();
     nickName = (*itc)["e"]["p"].asString();
     
-    int fensi = (*itc)["e"]["b3"].asInt();
+    fensi = (*itc)["e"]["b3"].asInt();
+    caifu = (*itc)["e"]["h"].asInt();
+    juese = (*itc)["e"]["a8"].asInt();
 //    int caifu = (*itc)["e"]["bb"].asInt();
     
 }

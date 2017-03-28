@@ -62,7 +62,7 @@ void CPacket::SetPacketType(int ptType)
 int CPacket::GetPacketType() const
 {
     int nPacketType = 0;
-    nPacketType = (m_pHeader->packetAction<<8) + m_pHeader->packetType;
+    nPacketType = (m_pHeader->packetAction<<16) + m_pHeader->packetType;
 
     return nPacketType;
 }

@@ -11,13 +11,15 @@
 
 
 PtlSysMsg::PtlSysMsg(int ret,Json::Value  buf):PtlBase(ret, buf) {
-    printf( "PtlSysMsg\n");
-    this->type = 1;  // msg
+    printf( "chatroom: PtlSysMsg\n");
+    this->type = 3;  // msg
     
     Json::Value::iterator itc = buf.begin();
     std::string typeStr = (*itc)["escape"].asString();
     
     std::string ct = (*itc)["ct"].asString();
+    
+    userID = "SYS";
     
     if(ct.length() > 0) {
         ct = unescape((char*)ct.c_str());

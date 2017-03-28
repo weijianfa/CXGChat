@@ -15,7 +15,13 @@
 class PtlBase {
     
 public:
-    int type = 0;
+    int type = 0;  // 消息类型 1， 聊天消息，2 ，礼物消息 3.系统消息，
+    
+    long fensi = 0;
+    long caifu = 0;
+    long juese = 0;
+    long giftCount = 0;
+    std::string giftName;
     
 protected:
     std::string userID;
@@ -30,7 +36,7 @@ public:
     PtlBase(int ret,Json::Value  buf);
     
     int getRetCode();
-    bool isMsg(){return (type == 1);};
+    bool isMsg(){return ((type < 10) && (type > 0));};
     std::string getDisplayMsg();
     
     std::string getUserID(){
@@ -71,6 +77,11 @@ public:
 class PtlSysMsg: public PtlBase {
 public:
     PtlSysMsg(int ret,Json::Value  buf);
+};
+
+class PtlContMsg: public PtlBase {
+public:
+    PtlContMsg(int ret,Json::Value buf);
 };
 
 #endif /* PtlBase_hpp */

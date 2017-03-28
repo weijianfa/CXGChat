@@ -24,6 +24,10 @@
     mMsg = msg;
 }
 
+- (void) setType:(NSInteger) type {
+    mType = type;
+}
+
 - (NSString*) getUid {
     return mUid;
 }
@@ -33,8 +37,79 @@
 - (NSString*) getMsg {
     return mMsg;
 }
+- (NSInteger) getType {
+    return mType;
+}
+
+- (User*) getUser {
+    return mUser;
+}
+
+- (Gift*) getGift {
+    return mGift;
+}
+
+- (id) init
+{
+    if(self = [super init])
+    {
+        mUser = [[User alloc] init];
+        mGift = [[Gift alloc] init];
+    }
+    return self; 
+}
 
 @end
+
+
+@implementation User
+
+- (NSInteger) getFensi {
+    return fensi;
+}
+
+- (NSInteger) getCaifu {
+    return caifu;
+}
+
+- (NSInteger) getJuese {
+    return juese;
+}
+
+- (void) setFensi:(NSInteger) temp {
+    self->fensi = temp;
+}
+
+- (void) setCaifu:(NSInteger) temp {
+    self->caifu = temp;
+}
+
+- (void) setJuese:(NSInteger) temp {
+    self->juese = temp;
+}
+
+@end
+
+@implementation  Gift
+
+- (NSString*) getName {
+    return name;
+}
+- (NSInteger) getCount {
+    return count;
+}
+
+- (void) setName:(NSString*) temp {
+    self->name = temp;
+}
+
+- (void) setCount:(NSInteger) temp {
+    self->count = temp;
+}
+
+@end
+
+
 
 
 @interface ChatInterface ()
@@ -101,6 +176,10 @@
 
 
 - (int) enterRoom {
+    NSString* resources = [[NSBundle mainBundle] resourcePath];
+    NSString *s = [NSString stringWithFormat:@"%s/locale/", [resources cStringUsingEncoding:NSUTF8StringEncoding]] ;
+    setenv( "PATH_LOCALE", [s UTF8String] ,1);
+    
     
     ChatManager* manager = ChatManager::GetInstance();
     manager->setHost([_mHost UTF8String], _mPort);
@@ -108,7 +187,12 @@
     manager->setController(_mController);
     manager->Enter();
 
+    return 1;
+}
 
+- (int) leaveRoom {
+    ChatManager* manager = ChatManager::GetInstance();
+    manager->ExitChatRoom();
     return 1;
 }
 

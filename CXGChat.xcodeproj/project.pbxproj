@@ -88,6 +88,7 @@
 		322218871E696C1900937996 /* Timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 322216651E696C1800937996 /* Timer.cpp */; };
 		322218881E696C1900937996 /* Timer.h in Headers */ = {isa = PBXBuildFile; fileRef = 322216661E696C1800937996 /* Timer.h */; };
 		322218891E696C1900937996 /* CXGChat.h in Headers */ = {isa = PBXBuildFile; fileRef = 322216671E696C1800937996 /* CXGChat.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3227A8031E88F6840070D1CE /* PtlContMsg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3227A8021E88F6840070D1CE /* PtlContMsg.cpp */; };
 		32A5BF211E69705D001BAE04 /* infback.c in Sources */ = {isa = PBXBuildFile; fileRef = 322219751E696E4E00937996 /* infback.c */; };
 		32A5BF261E6C29DD001BAE04 /* MessageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A5BF251E6C29DD001BAE04 /* MessageControl.m */; };
 		32EB099A1E56C4E100652D2D /* CXGChatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32EB09991E56C4E100652D2D /* CXGChatTests.m */; };
@@ -376,6 +377,7 @@
 		322216671E696C1800937996 /* CXGChat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CXGChat.h; sourceTree = "<group>"; };
 		322216681E696C1800937996 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		322219751E696E4E00937996 /* infback.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = infback.c; sourceTree = "<group>"; };
+		3227A8021E88F6840070D1CE /* PtlContMsg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PtlContMsg.cpp; sourceTree = "<group>"; };
 		32A5BF251E6C29DD001BAE04 /* MessageControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageControl.m; sourceTree = "<group>"; };
 		32EB098B1E56C4E000652D2D /* CXGChat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CXGChat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		32EB09941E56C4E100652D2D /* CXGChatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CXGChatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -442,12 +444,13 @@
 		3222153B1E696C1700937996 /* protocol */ = {
 			isa = PBXGroup;
 			children = (
-				3222153C1E696C1700937996 /* PtlBase.cpp */,
 				3222153D1E696C1700937996 /* PtlBase.hpp */,
-				3222153E1E696C1700937996 /* PtlGiftMsg.cpp */,
-				3222153F1E696C1700937996 /* PtlLoginRet.cpp */,
-				322215401E696C1700937996 /* PtlSysMsg.cpp */,
+				3222153C1E696C1700937996 /* PtlBase.cpp */,
 				322215411E696C1700937996 /* PtlUserMsg.cpp */,
+				3222153F1E696C1700937996 /* PtlLoginRet.cpp */,
+				3222153E1E696C1700937996 /* PtlGiftMsg.cpp */,
+				322215401E696C1700937996 /* PtlSysMsg.cpp */,
+				3227A8021E88F6840070D1CE /* PtlContMsg.cpp */,
 			);
 			path = protocol;
 			sourceTree = "<group>";
@@ -1216,6 +1219,7 @@
 				322217801E696C1800937996 /* NetClient.cpp in Sources */,
 				322218621E696C1900937996 /* inftrees.c in Sources */,
 				322217821E696C1800937996 /* network.cpp in Sources */,
+				3227A8031E88F6840070D1CE /* PtlContMsg.cpp in Sources */,
 				322217C51E696C1800937996 /* json_value.cpp in Sources */,
 				322217891E696C1800937996 /* PtlLoginRet.cpp in Sources */,
 				322218781E696C1900937996 /* uncompr.c in Sources */,
