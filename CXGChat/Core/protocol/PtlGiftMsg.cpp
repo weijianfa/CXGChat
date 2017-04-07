@@ -40,6 +40,9 @@ PtlGiftMsg::PtlGiftMsg(int ret,Json::Value  buf):PtlBase(ret, buf) {
             
             msg = "我送了" + giftName;
             
+            if(giftName.length() == 0) {
+                int w = 0;
+            }
         }
     }
 }

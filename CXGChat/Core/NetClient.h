@@ -69,6 +69,8 @@ private:
 	bool	m_bRet;
 	bool	m_bThreadRet;
 	bool	m_bSendRet;
+    
+    bool    m_isdisconnect;
 
 	long    m_nRefCount;
 	char	m_cLastRecv[RECV_BUF_SIZE];

@@ -219,7 +219,7 @@ long CChatRoom::EnterChatRoom()
 		jsonEnter += "\",\"uname\":\"hehe\",\"token\":\"";
 		jsonEnter += m_strToken;
 		//jsonEnter += "\",\"md5\":\"RTYUI\",\"majorType\":\"0\",\"terminal\":\"2\"}";
-        jsonEnter += "\",\"md5\":\"RTYUI\",\"majorType\":\"0\"}";
+        jsonEnter += "\",\"md5\":\"RTYUI\",\"majorType\":\"0\",\"terminal\":\"2\"}";
 
 		CPacket* pPacket = CPacket::CreateFromPayload((char*)jsonEnter.c_str(), (int)jsonEnter.length());
 		pPacket->SetPacketType(0);
@@ -337,7 +337,7 @@ long CChatRoom::ReentryChatRoom(long nNodeNum)
 		jsonEnter += "\",\"uname\":\"hehe\",\"token\":\"";
 		jsonEnter += m_strToken;
 		//jsonEnter += "\",\"md5\":\"RTYUI\",\"majorType\":\"0\",\"terminal\":\"2\"}";
-        jsonEnter += "\",\"md5\":\"RTYUI\",\"majorType\":\"0\"}";
+        jsonEnter += "\",\"md5\":\"RTYUI\",\"majorType\":\"0\",\"terminal\":\"2\"}";
 
 		CPacket* pPacket = CPacket::CreateFromPayload((char*)jsonEnter.c_str(), jsonEnter.length());
         pPacket->SetPacketAction(0);
@@ -387,12 +387,12 @@ void CChatRoom::ExitChatRoom()
 	}
 
 	m_bEnter = false;
-	StopTimer(m_nKeepLiveTimer);
+	//StopTimer(m_nKeepLiveTimer);
 
-	if (m_pLink)
+	if (m_pLink != NULL)
 	{
 		m_pLink->Close();
-		m_pLink->Release();
+		//m_pLink->Release();
 		m_pLink = NULL;
 	}
 }
@@ -549,7 +549,6 @@ void CChatRoom::OnLinkPacket(CRawLink* pLink, CPacket* pPacket)
         case 402007:
             break;
         case 402008:
-            
             break;
         case 402009:
             break;
