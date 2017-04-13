@@ -84,4 +84,97 @@ public:
     PtlContMsg(int ret,Json::Value buf);
 };
 
+
+// 飞屏
+class PtlFeiPingMsg: public PtlBase {
+public:
+    PtlFeiPingMsg(int ret, Json::Value buf);
+};
+
+// 广播
+class PtlBroadcastMsg: public PtlBase {
+public:
+    PtlBroadcastMsg(int ret, Json::Value buf);
+};
+
+// 头条
+class PtlHeadTipMsg: public PtlBase {
+public:
+    PtlHeadTipMsg(int ret, Json::Value buf);
+};
+
+// 同步主播魅力等级
+class PtlSyncMsg: public PtlBase {
+public:
+    PtlSyncMsg(int ret, Json::Value buf);
+};
+
+// 等级提升
+class PtlLevelUpMsg: public PtlBase {
+public:
+    PtlLevelUpMsg(int ret, Json::Value buf);
+};
+
+// combo消息
+class PtlComboMsg: public PtlBase {
+public:
+    PtlComboMsg(int ret, Json::Value buf);
+};
+
+// 提升管理员
+class PtlNotiManagerMsg: public PtlBase {
+public:
+    PtlNotiManagerMsg(int ret, Json::Value buf);
+};
+
+// 踢人消息
+class PtlNotiKickMsg: public PtlBase {
+public:
+    PtlNotiKickMsg(int ret, Json::Value buf);
+};
+
+// 取消禁言
+class PtlResumeUserMsg: public PtlBase {
+public:
+    PtlResumeUserMsg(int ret, Json::Value buf);
+};
+
+// 禁言
+class PtlUnResumeUserMsg: public PtlBase {
+public:
+    PtlUnResumeUserMsg(int ret, Json::Value buf);
+};
+
+// 关闭聊天
+class PtlCloseChatMsg: public PtlBase {
+public:
+    PtlCloseChatMsg(int ret, Json::Value buf);
+};
+
+// 直播结束
+class PtlRoomCloseMsg: public PtlBase {
+public:
+    PtlRoomCloseMsg(int ret, Json::Value buf);
+};
+
+// 直播开始
+class PtlRoomOpenMsg: public PtlBase {
+public:
+    PtlRoomOpenMsg(int ret, Json::Value buf);
+};
+
+// 用户列表
+class PtlUserListMsg: public PtlBase {
+public:
+    PtlUserListMsg(int ret, Json::Value buf);
+};
+
+// 用户信息
+class PtlUserInfoMsg: public PtlBase {
+public:
+    PtlUserInfoMsg(int ret, Json::Value buf);
+};
+
+
+
 #endif /* PtlBase_hpp */
