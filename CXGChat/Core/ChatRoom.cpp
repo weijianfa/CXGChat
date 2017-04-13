@@ -34,6 +34,7 @@ std::string unescape(char* str)
 #else
 	setlocale(LC_CTYPE, "zh_CN.UTF-8");
 	const int nMultiByte = 3;
+    int nByte = 0;
 #endif
 
 	char* re = (char*)calloc(strlen(str) + 1, 1);
@@ -69,8 +70,9 @@ std::string unescape(char* str)
 #else
 			wcstombs(code, &wc, nMultiByte);
 #endif
-			memcpy(_re, code, nMultiByte);
-			_re += nMultiByte;
+            nByte = (int)strlen(code);
+			memcpy(_re, code, nByte);
+			_re += nByte;
 		}
 		else
 		{
@@ -392,7 +394,7 @@ void CChatRoom::ExitChatRoom()
 	if (m_pLink != NULL)
 	{
 		m_pLink->Close();
-		//m_pLink->Release();
+		m_pLink->Release();
 		m_pLink = NULL;
 	}
 }
