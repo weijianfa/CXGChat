@@ -221,7 +221,7 @@ long CChatRoom::EnterChatRoom()
 		jsonEnter += "\",\"uname\":\"hehe\",\"token\":\"";
 		jsonEnter += m_strToken;
 		//jsonEnter += "\",\"md5\":\"RTYUI\",\"majorType\":\"0\",\"terminal\":\"2\"}";
-        jsonEnter += "\",\"md5\":\"RTYUI\",\"majorType\":\"0\",\"terminal\":\"2\"}";
+        jsonEnter += "\",\"md5\":\"RTYUI\",\"majorType\":\"0\",\"terminal\":\"2\",\"v\":\"0\"}";
 
 		CPacket* pPacket = CPacket::CreateFromPayload((char*)jsonEnter.c_str(), (int)jsonEnter.length());
 		pPacket->SetPacketType(0);
