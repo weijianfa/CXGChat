@@ -34,7 +34,7 @@ std::string unescape(char* str)
 #else
 	setlocale(LC_CTYPE, "zh_CN.UTF-8");
 	const int nMultiByte = 3;
-    int nByte = 0;
+    	int nByte = 0;
 #endif
 
 	char* re = (char*)calloc(strlen(str) + 1, 1);
@@ -70,7 +70,7 @@ std::string unescape(char* str)
 #else
 			wcstombs(code, &wc, nMultiByte);
 #endif
-            nByte = (int)strlen(code);
+            		nByte = (int)strlen(code);
 			memcpy(_re, code, nByte);
 			_re += nByte;
 		}
