@@ -303,7 +303,7 @@ void* CNetPeer::ConnectBengin(void *arg)
                 pNp->m_nRetCode = CON_NOHEARTPACK;
                 // exceeded time, this shoule be to close the socket and to notice the owner
                 printf("chatroom: the client has exceeded time, you should connect agadin!\n");
-				pNp->m_RawLink->OnNetErr(nPacketSize);
+				pNp->m_RawLink->OnNetErr(0);
                 pNp->Close();
                 break;
             }
@@ -321,7 +321,7 @@ void* CNetPeer::ConnectBengin(void *arg)
 				int nRecvSize = recv(pNp->m_socket, Recvbuf, RECV_BUF_SIZE, 0);
 				if (nRecvSize <= 0)
 				{
-					pNp->m_RawLink->OnNetErr(nPacketSize);
+					pNp->m_RawLink->OnNetErr(0);
 					pNp->Close();
 					break;
 				}
@@ -336,7 +336,7 @@ void* CNetPeer::ConnectBengin(void *arg)
                 {
                     pNp->m_nRetCode = CON_WRITEDERROR;
                     printf("chatroom: SendData error!");
-					pNp->m_RawLink->OnNetErr(nPacketSize);
+					pNp->m_RawLink->OnNetErr(0);
                     pNp->Close();
                     break;
                 }
@@ -347,19 +347,19 @@ void* CNetPeer::ConnectBengin(void *arg)
                 // some errors.
                 printf("chatroom: SelectData error!\n");
                 pNp->m_nRetCode = CON_SELECTERROR;
-				pNp->m_RawLink->OnNetErr(nPacketSize);
+				pNp->m_RawLink->OnNetErr(0);
                 pNp->Close();
                 break;
             }
 		} else if(nRet == 0) {  // socket close
             pNp->m_nRetCode = CON_DISONCECONN;
-	    	pNp->m_RawLink->OnNetErr(nPacketSize);
+	    	pNp->m_RawLink->OnNetErr(0);
             pNp->Close();
             printf("chatroom: SendData error1!\n");
             break;
         } else {                // error other
             pNp->m_nRetCode = CON_ERRCREATESC;
-	   		pNp->m_RawLink->OnNetErr(nPacketSize);
+	   		pNp->m_RawLink->OnNetErr(0);
             //pNp->Close();
             printf("chatroom: SendData error2!\n");
 			break;

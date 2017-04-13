@@ -454,7 +454,7 @@ void CChatRoom::OnLinkErr(CRawLink* pLink)
 	pthread_mutex_lock(&m_SynchMutex);
 
 	m_bEnter = false;
-	StopTimer(m_nKeepLiveTimer);
+	//StopTimer(m_nKeepLiveTimer);
 
 	if (m_pLink != NULL)
 	{
