@@ -49,6 +49,11 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
 - (NSInteger) getGiftId;
 - (NSString*) getVersion;
 - (bool) getIsShow;
+
+- (void) setZipPath:(NSString*) path;
+- (void) setGiftId:(NSInteger) giftid;
+- (void) setVersion:(NSString*) version;
+- (void) setIsShow:(bool) isshow;
 @end
 
 @interface Message : NSObject {

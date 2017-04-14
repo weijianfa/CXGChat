@@ -22,6 +22,10 @@ public:
     long juese = 0;
     long giftCount = 0;
     std::string giftName;
+    int giftid = 0;
+    std::string giftVersion;
+    std::string zipPath;
+    bool isShowGift = true;
     
 protected:
     std::string userID;

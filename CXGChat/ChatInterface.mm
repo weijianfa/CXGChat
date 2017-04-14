@@ -120,6 +120,19 @@
     return isShow;
 }
 
+- (void) setZipPath:(NSString*) path {
+    self->zipPath = path;
+}
+- (void) setGiftId:(NSInteger) giftid {
+    self->giftId = giftid;
+}
+- (void) setVersion:(NSString*) ver {
+    self->version = ver;
+}
+- (void) setIsShow:(bool) show {
+    self->isShow = show;
+}
+
 @end
 
 

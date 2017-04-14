@@ -37,12 +37,10 @@ PtlGiftMsg::PtlGiftMsg(int ret,Json::Value  buf):PtlBase(ret, buf) {
             
             giftName = ctobject["q"].asString();
             giftCount = ctobject["i"].asInt();
+            giftid = ctobject["n"].asInt();   // giftid
             
             msg = "我送了" + giftName;
             
-            if(giftName.length() == 0) {
-                int w = 0;
-            }
         }
     }
 }

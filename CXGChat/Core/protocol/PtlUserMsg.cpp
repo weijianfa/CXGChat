@@ -23,7 +23,6 @@ PtlUserMsg::PtlUserMsg(int ret,Json::Value  buf):PtlBase(ret, buf) {
     fensi = (*itc)["e"]["b3"].asInt();
     caifu = (*itc)["e"]["h"].asInt();
     juese = (*itc)["e"]["a8"].asInt();
-//    int caifu = (*itc)["e"]["bb"].asInt();
     
 }
 

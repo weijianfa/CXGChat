@@ -84,36 +84,36 @@ PtlBase* PtlBase::getProtocol(char* buf) {
             return new PtlLoginRet(ncode, object["msg"]);
         case CONT_MSG:
             return new PtlContMsg(ncode, object["msg"]);
-        case FEIPING_MSG:
-            return new PtlFeiPingMsg(ncode, object["msg"]);
-        case BROADCT_MSG:
-            return new PtlBroadcastMsg(ncode, object["msg"]);
-        case HEADTIP_MSG:
-            return new PtlHeadTipMsg(ncode, object["msg"]);
-        case SYNC_MSG:
-            return new PtlSysMsg(ncode, object["msg"]);
-        case LEVLEUP_MSG:
-            return new PtlLevelUpMsg(ncode, object["msg"]);
-        case COMBOIT_MSG:
-            return new PtlComboMsg(ncode, object["msg"]);
-        case NOTIMAN_MSG:
-            return new PtlNotiManagerMsg(ncode, object["msg"]);
-        case KICK_MSG:
-            return new PtlNotiKickMsg(ncode, object["msg"]);
-        case RESUME_MSG:
-            return new PtlResumeUserMsg(ncode, object["msg"]);
-        case URESUME_MSG:
-            return new PtlUnResumeUserMsg(ncode, object["msg"]);
-        case OPENCHAT_MSG:
-            return new PtlCloseChatMsg(ncode, object["msg"]);
-        case CLOSE_MSG:
-            return new PtlRoomOpenMsg(ncode, object["msg"]);
-        case OPENI_MSG:
-            return new PtlRoomOpenMsg(ncode, object["msg"]);
-        case USERLIST_MSG:
-            return new PtlUserListMsg(ncode, object["msg"]);
-        case USERINTO_MSG:
-            return new PtlUserInfoMsg(ncode, object["msg"]);
+//        case FEIPING_MSG:
+//            return new PtlFeiPingMsg(ncode, object["msg"]);
+//        case BROADCT_MSG:
+//            return new PtlBroadcastMsg(ncode, object["msg"]);
+//        case HEADTIP_MSG:
+//            return new PtlHeadTipMsg(ncode, object["msg"]);
+//        case SYNC_MSG:
+//            return new PtlSysMsg(ncode, object["msg"]);
+//        case LEVLEUP_MSG:
+//            return new PtlLevelUpMsg(ncode, object["msg"]);
+//        case COMBOIT_MSG:
+//            return new PtlComboMsg(ncode, object["msg"]);
+//        case NOTIMAN_MSG:
+//            return new PtlNotiManagerMsg(ncode, object["msg"]);
+//        case KICK_MSG:
+//            return new PtlNotiKickMsg(ncode, object["msg"]);
+//        case RESUME_MSG:
+//            return new PtlResumeUserMsg(ncode, object["msg"]);
+//        case URESUME_MSG:
+//            return new PtlUnResumeUserMsg(ncode, object["msg"]);
+//        case OPENCHAT_MSG:
+//            return new PtlCloseChatMsg(ncode, object["msg"]);
+//        case CLOSE_MSG:
+//            return new PtlRoomOpenMsg(ncode, object["msg"]);
+//        case OPENI_MSG:
+//            return new PtlRoomOpenMsg(ncode, object["msg"]);
+//        case USERLIST_MSG:
+//            return new PtlUserListMsg(ncode, object["msg"]);
+//        case USERINTO_MSG:
+//            return new PtlUserInfoMsg(ncode, object["msg"]);
         default:
             return new PtlBase(ncode, object["msg"]);
     }

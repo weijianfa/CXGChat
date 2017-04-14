@@ -32,12 +32,15 @@ Message* getMessage(PtlBase* ptl) {
         case 1: // usermsg
             break;
         case 2: // gift
+        case 4: // enter in
             [[message getGift] setName:[NSString stringWithUTF8String:ptl->giftName.c_str()]];
             [[message getGift] setCount:ptl->giftCount];
+            [[message getGift] setIsShow:ptl->isShowGift];
+            [[message getGift] setVersion:[NSString stringWithUTF8String:ptl->giftVersion.c_str()]];
+            [[message getGift] setGiftId:ptl->giftid];
+            [[message getGift] setZipPath:[NSString stringWithUTF8String:ptl->zipPath.c_str()]];
             break;
         case 3: // sys
-            break;
-        case 4:
             break;
     }
     
