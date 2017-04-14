@@ -37,7 +37,7 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
     NSInteger count;
     NSString* zipPath;  // zip path
     NSInteger giftId;   // texiaoid
-    NSString* version;  // texiao version
+    NSInteger version;  // texiao version
     bool isShow; // if show the texiao
 }
 
@@ -47,12 +47,12 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
 - (void) setCount:(NSInteger) count;
 - (NSString*) getZipPath;
 - (NSInteger) getGiftId;
-- (NSString*) getVersion;
+- (NSInteger) getVersion;
 - (bool) getIsShow;
 
 - (void) setZipPath:(NSString*) path;
 - (void) setGiftId:(NSInteger) giftid;
-- (void) setVersion:(NSString*) version;
+- (void) setVersion:(NSInteger) version;
 - (void) setIsShow:(bool) isshow;
 @end
 

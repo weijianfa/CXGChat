@@ -113,7 +113,7 @@
 - (NSInteger) getGiftId {
     return giftId;
 }
-- (NSString*) getVersion {
+- (NSInteger) getVersion {
     return version;
 }
 - (bool) getIsShow {
@@ -126,7 +126,7 @@
 - (void) setGiftId:(NSInteger) giftid {
     self->giftId = giftid;
 }
-- (void) setVersion:(NSString*) ver {
+- (void) setVersion:(NSInteger) ver {
     self->version = ver;
 }
 - (void) setIsShow:(bool) show {

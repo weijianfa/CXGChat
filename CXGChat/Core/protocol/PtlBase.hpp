@@ -15,15 +15,19 @@
 class PtlBase {
     
 public:
-    int type = 0;  // 消息类型 1， 聊天消息，2 ，礼物消息 3.系统消息，
+    int type = 0;  // 消息类型 1， 聊天消息（飞屏，广播），2 ，礼物消息 3.系统消息，4.进入聊天室【可能入场特效】
+    
+    int subType = 0; // 小类，（1-0普通聊天消息，1-1飞屏，1-2广播）
+    
+    int simpleProperty = 0; // 简单属性
     
     long fensi = 0;
     long caifu = 0;
     long juese = 0;
     long giftCount = 0;
     std::string giftName;
-    int giftid = 0;
-    std::string giftVersion;
+    long giftid = 0;
+    long giftVersion;
     std::string zipPath;
     bool isShowGift = true;
     

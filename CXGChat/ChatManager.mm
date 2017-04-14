@@ -17,7 +17,7 @@ Message* getMessage(PtlBase* ptl) {
     
     
     switch(ptl->type) {
-        case 1: // usermsg
+        case 1: // usermsg，feiping，broadcast
         case 2: // gift
         case 4: // enter in
             [[message getUser] setFensi:ptl->fensi];
@@ -29,14 +29,14 @@ Message* getMessage(PtlBase* ptl) {
     }
     
     switch(ptl->type) {
-        case 1: // usermsg
+        case 1: // usermsg，feiping，broadcast
             break;
         case 2: // gift
         case 4: // enter in
             [[message getGift] setName:[NSString stringWithUTF8String:ptl->giftName.c_str()]];
             [[message getGift] setCount:ptl->giftCount];
             [[message getGift] setIsShow:ptl->isShowGift];
-            [[message getGift] setVersion:[NSString stringWithUTF8String:ptl->giftVersion.c_str()]];
+            [[message getGift] setVersion:ptl->giftVersion];
             [[message getGift] setGiftId:ptl->giftid];
             [[message getGift] setZipPath:[NSString stringWithUTF8String:ptl->zipPath.c_str()]];
             break;

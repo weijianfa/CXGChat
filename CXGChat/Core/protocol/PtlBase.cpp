@@ -84,8 +84,8 @@ PtlBase* PtlBase::getProtocol(char* buf) {
             return new PtlLoginRet(ncode, object["msg"]);
         case CONT_MSG:
             return new PtlContMsg(ncode, object["msg"]);
-//        case FEIPING_MSG:
-//            return new PtlFeiPingMsg(ncode, object["msg"]);
+        case FEIPING_MSG:
+            return new PtlFeiPingMsg(ncode, object["msg"]);
 //        case BROADCT_MSG:
 //            return new PtlBroadcastMsg(ncode, object["msg"]);
 //        case HEADTIP_MSG:

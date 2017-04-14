@@ -45,10 +45,10 @@ PtlLoginRet::PtlLoginRet(int ret,Json::Value  buf):PtlBase(ret, buf) {
                 {
                     isShowGift = ctobject["c2"].asBool();
                     if(isShowGift) {
-                        std::string tempid = ctobject["c5"].asString();
-                        giftid = atoi(tempid.c_str());
+                        //std::string tempid = ctobject["c5"].asString();
+                        giftid = ctobject["c5"].asInt();
                         zipPath = ctobject["c6"].asString();
-                        giftVersion = ctobject["c7"].asString();
+                        giftVersion = ctobject["c7"].asInt();
                         giftCount = 1;
                         giftName = "";
                     }

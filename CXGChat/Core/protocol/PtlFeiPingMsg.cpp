@@ -13,7 +13,8 @@
 PtlFeiPingMsg::PtlFeiPingMsg(int ret, Json::Value buf):PtlBase(ret, buf) {
     printf( "chatroom: PtlFeiPingMsg\n");
     
-    this->type = 3;  // msg
+    this->type = 1;  // msg
+    this->subType = 1;  //1-1 feiping
     
     Json::Value::iterator itc = buf.begin();
     std::string typeStr = (*itc)["escape"].asString();
@@ -32,7 +33,7 @@ PtlFeiPingMsg::PtlFeiPingMsg(int ret, Json::Value buf):PtlBase(ret, buf) {
             msg = ctobject["c"].asString();
             nickName = ctobject["h"].asString();
             userID = ctobject["bb"].asInt();
-            int type = ctobject["b"].asInt(); // 飞屏类型
+            simpleProperty = ctobject["b"].asInt(); // 飞屏类型
         }
     }
 
