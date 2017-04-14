@@ -35,12 +35,20 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
 @interface Gift : NSObject {
     NSString* name;
     NSInteger count;
+    NSString* zipPath;  // zip path
+    NSInteger giftId;   // texiaoid
+    NSString* version;  // texiao version
+    bool isShow; // if show the texiao
 }
 
 - (NSString*) getName;
 - (NSInteger) getCount;
 - (void) setName:(NSString*) name;
 - (void) setCount:(NSInteger) count;
+- (NSString*) getZipPath;
+- (NSInteger) getGiftId;
+- (NSString*) getVersion;
+- (bool) getIsShow;
 @end
 
 @interface Message : NSObject {

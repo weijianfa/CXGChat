@@ -107,6 +107,19 @@
     self->count = temp;
 }
 
+- (NSString*) getZipPath {
+    return zipPath;
+}
+- (NSInteger) getGiftId {
+    return giftId;
+}
+- (NSString*) getVersion {
+    return version;
+}
+- (bool) getIsShow {
+    return isShow;
+}
+
 @end
 
 
