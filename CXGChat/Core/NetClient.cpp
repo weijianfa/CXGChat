@@ -94,13 +94,19 @@ bool CNetPeer::Connect()
 bool CNetPeer::Open()
 {
     m_isdisconnect = false;
-	int nRet = pthread_create(&m_Connect, NULL, CNetPeer::ConnectBengin, this);
+    
+    pthread_attr_t attr;
+    pthread_attr_init (&attr);
+    pthread_attr_setdetachstate (&attr, PTHREAD_CREATE_DETACHED);
+    
+    int nRet = pthread_create(&m_Connect, &attr, CNetPeer::ConnectBengin, this);
 	if (!nRet)
 		m_bThreadRet = true;
 	else
         m_nRetCode = CON_STARTTHREAD;
 		m_bThreadRet = false;
 
+    pthread_attr_destroy (&attr);
 	return m_bThreadRet;
 }
 
@@ -116,6 +122,8 @@ void CNetPeer::Close()
 #endif
         m_isdisconnect = true;
     }
+    
+    pthread_detach(m_Connect);
 }
 
 int CNetPeer::GetPacketHeadLenth(char* sData)
@@ -321,7 +329,8 @@ void* CNetPeer::ConnectBengin(void *arg)
 				int nRecvSize = recv(pNp->m_socket, Recvbuf, RECV_BUF_SIZE, 0);
 				if (nRecvSize <= 0)
 				{
-					pNp->m_RawLink->OnNetErr(0);
+                    pNp->m_nRetCode = CON_READDAERROR;
+					pNp->m_RawLink->OnNetErr(pNp->m_nRetCode);
 					pNp->Close();
 					break;
 				}
@@ -336,7 +345,7 @@ void* CNetPeer::ConnectBengin(void *arg)
                 {
                     pNp->m_nRetCode = CON_WRITEDERROR;
                     printf("chatroom: SendData error!");
-					pNp->m_RawLink->OnNetErr(0);
+					pNp->m_RawLink->OnNetErr(pNp->m_nRetCode);
                     pNp->Close();
                     break;
                 }
@@ -347,19 +356,19 @@ void* CNetPeer::ConnectBengin(void *arg)
                 // some errors.
                 printf("chatroom: SelectData error!\n");
                 pNp->m_nRetCode = CON_SELECTERROR;
-				pNp->m_RawLink->OnNetErr(0);
+				pNp->m_RawLink->OnNetErr(pNp->m_nRetCode);
                 pNp->Close();
                 break;
             }
 		} else if(nRet == 0) {  // socket close
             pNp->m_nRetCode = CON_DISONCECONN;
-	    	pNp->m_RawLink->OnNetErr(0);
+	    	pNp->m_RawLink->OnNetErr(pNp->m_nRetCode);
             pNp->Close();
             printf("chatroom: SendData error1!\n");
             break;
         } else {                // error other
             pNp->m_nRetCode = CON_ERRCREATESC;
-	   		pNp->m_RawLink->OnNetErr(0);
+	   		pNp->m_RawLink->OnNetErr(pNp->m_nRetCode);
             //pNp->Close();
             printf("chatroom: SendData error2!\n");
 			break;
