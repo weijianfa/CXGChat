@@ -40,6 +40,10 @@ PtlBase::PtlBase(int ret,Json::Value buf) {
     this->retCode = ret;
 }
 
+PtlBase::PtlBase() {
+    this->retCode = 0;
+}
+
 PtlBase* PtlBase::getProtocol(char* buf) {
     
     Json::Reader reader;
@@ -86,16 +90,16 @@ PtlBase* PtlBase::getProtocol(char* buf) {
             return new PtlContMsg(ncode, object["msg"]);
         case FEIPING_MSG:
             return new PtlFeiPingMsg(ncode, object["msg"]);
-//        case BROADCT_MSG:
-//            return new PtlBroadcastMsg(ncode, object["msg"]);
+        case BROADCT_MSG:
+            return new PtlBroadcastMsg(ncode, object["msg"]);
 //        case HEADTIP_MSG:
 //            return new PtlHeadTipMsg(ncode, object["msg"]);
-//        case SYNC_MSG:
-//            return new PtlSysMsg(ncode, object["msg"]);
-//        case LEVLEUP_MSG:
-//            return new PtlLevelUpMsg(ncode, object["msg"]);
-//        case COMBOIT_MSG:
-//            return new PtlComboMsg(ncode, object["msg"]);
+        case SYNC_MSG:
+            return new PtlSyncMsg(ncode, object["msg"]);
+        case LEVLEUP_MSG:
+            return new PtlLevelUpMsg(ncode, object["msg"]);
+        case COMBOIT_MSG:
+            return new PtlComboMsg(ncode, object["msg"]);
 //        case NOTIMAN_MSG:
 //            return new PtlNotiManagerMsg(ncode, object["msg"]);
 //        case KICK_MSG:

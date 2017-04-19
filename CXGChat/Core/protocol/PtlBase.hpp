@@ -26,10 +26,15 @@ public:
     long juese = 0;
     long giftCount = 0;
     std::string giftName;
+    std::string giftUUID;
+    long giftGroupCount = 1;
+    long giftPrice;
     long giftid = 0;
     long giftVersion;
     std::string zipPath;
     bool isShowGift = true;
+    PtlBase* nextp = NULL;
+    
     
 protected:
     std::string userID;
@@ -42,6 +47,7 @@ protected:
     
 public:
     PtlBase(int ret,Json::Value  buf);
+    PtlBase();
     
     int getRetCode();
     bool isMsg(){return ((type < 10) && (type > 0));};
@@ -127,6 +133,7 @@ public:
 class PtlComboMsg: public PtlBase {
 public:
     PtlComboMsg(int ret, Json::Value buf);
+    PtlComboMsg();
 };
 
 // 提升管理员

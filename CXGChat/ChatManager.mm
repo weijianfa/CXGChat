@@ -14,6 +14,8 @@ Message* getMessage(PtlBase* ptl) {
     [message setMsg: [NSString stringWithUTF8String:ptl->getMsg().c_str()]];
     [message setNickName: [NSString stringWithUTF8String:ptl->getNickName().c_str()]];
     [message setType:ptl->type];
+    [message setSubType:ptl->subType];
+    [message setSimpleProperty:ptl->simpleProperty];
     
     
     switch(ptl->type) {
@@ -26,6 +28,10 @@ Message* getMessage(PtlBase* ptl) {
             break;
         case 3: // sys
             break;
+        case 5: // levelup
+            break;
+        case 6: // caozuo
+            break;
     }
     
     switch(ptl->type) {
@@ -34,13 +40,20 @@ Message* getMessage(PtlBase* ptl) {
         case 2: // gift
         case 4: // enter in
             [[message getGift] setName:[NSString stringWithUTF8String:ptl->giftName.c_str()]];
+            [[message getGift] setZipPath:[NSString stringWithUTF8String:ptl->zipPath.c_str()]];
             [[message getGift] setCount:ptl->giftCount];
             [[message getGift] setIsShow:ptl->isShowGift];
             [[message getGift] setVersion:ptl->giftVersion];
             [[message getGift] setGiftId:ptl->giftid];
-            [[message getGift] setZipPath:[NSString stringWithUTF8String:ptl->zipPath.c_str()]];
+            [[message getGift] setUUID:[NSString stringWithUTF8String:ptl->giftUUID.c_str()]];
+            [[message getGift] setGroupCount:ptl->giftGroupCount];
+            [[message getGift] setPrice:ptl->giftPrice];
             break;
         case 3: // sys
+            break;
+        case 5: // levelup
+            break;
+        case 6: // caozuo
             break;
     }
     
@@ -103,8 +116,12 @@ void ChatManager::setUser(const char *uid, const char *rid,const char *token) {
 
 void ChatManager::OnMsg(PtlBase* ptl) {
     printf("OnMsg ChatRoomMsg= %s  \n", ptl->getDisplayMsg().c_str());
-    if(mController) {
-        [mController doOnMessage: getMessage(ptl)];
+    PtlBase* temp = ptl;
+    while(temp != NULL) {
+        if(mController) {
+            [mController doOnMessage: getMessage(temp)];
+        }
+        temp = ptl->nextp;
     }
 }
 

@@ -12,7 +12,8 @@
 PtlSyncMsg::PtlSyncMsg(int ret, Json::Value buf):PtlBase(ret, buf) {
     printf( "chatroom: PtlSyncMsg\n");
     
-    this->type = 3;  // msg
+    this->type = 5;  // msg
+    this->subType = 1; // meili
     
     Json::Value::iterator itc = buf.begin();
     std::string typeStr = (*itc)["escape"].asString();
@@ -28,7 +29,7 @@ PtlSyncMsg::PtlSyncMsg(int ret, Json::Value buf):PtlBase(ret, buf) {
         std::string strMsg = "";
         if (ctreader.parse(ct.c_str(), ctobject))
         {
-            long level = ctobject["b"].asInt();
+            simpleProperty = ctobject["b"].asInt();
         }
     }
 }

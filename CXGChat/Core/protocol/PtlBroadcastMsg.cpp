@@ -12,7 +12,8 @@
 PtlBroadcastMsg::PtlBroadcastMsg(int ret, Json::Value buf):PtlBase(ret, buf) {
     printf( "chatroom: PtlBroadcastMsg\n");
     
-    this->type = 3;  // msg
+    this->type = 1;  // msg
+    this->subType = 3; // 广播
     
     Json::Value::iterator itc = buf.begin();
     std::string typeStr = (*itc)["escape"].asString();
@@ -31,7 +32,7 @@ PtlBroadcastMsg::PtlBroadcastMsg(int ret, Json::Value buf):PtlBase(ret, buf) {
             msg = ctobject["b"].asString();
             nickName = ctobject["f"].asString();
             userID = ctobject["bb"].asInt();
-            long rid = ctobject["c"].asInt(); // room id
+            simpleProperty = ctobject["c"].asInt(); // room id
         }
     }
 }

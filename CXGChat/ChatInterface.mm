@@ -41,6 +41,20 @@
     return mType;
 }
 
+- (void) setSubType:(NSInteger) stype {
+    self->mSubType = stype;
+}
+- (void) setSimpleProperty:(NSInteger) property {
+    self->mSimpleProperty  = property;
+}
+
+- (NSInteger) getSubType {
+    return mSubType;
+}
+- (NSInteger) getSimpleProperty {
+    return mSimpleProperty;
+}
+
 - (User*) getUser {
     return mUser;
 }
@@ -131,6 +145,25 @@
 }
 - (void) setIsShow:(bool) show {
     self->isShow = show;
+}
+
+- (NSInteger) getGroupCount {
+    return groupCount;
+}
+- (NSInteger) getPrice {
+    return price;
+}
+- (NSString*) getUUID {
+    return uuid;
+}
+- (void) setGroupCount:(NSInteger) cnt {
+    self->groupCount = cnt;
+}
+- (void) setPrice:(NSInteger) p {
+    self->price = p;
+}
+- (void) setUUID:(NSString*) uud {
+    self->uuid = uud;
 }
 
 @end
