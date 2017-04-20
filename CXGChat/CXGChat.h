@@ -38,6 +38,9 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
     NSString* zipPath;  // zip path
     NSInteger giftId;   // texiaoid
     NSInteger version;  // texiao version
+    NSInteger groupCount; // groupcount
+    NSInteger price;
+    NSString* uuid;     // combo uuid
     bool isShow; // if show the texiao
 }
 
@@ -49,11 +52,17 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
 - (NSInteger) getGiftId;
 - (NSInteger) getVersion;
 - (bool) getIsShow;
+- (NSInteger) getGroupCount;
+- (NSInteger) getPrice;
+- (NSString*) getUUID;
 
 - (void) setZipPath:(NSString*) path;
 - (void) setGiftId:(NSInteger) giftid;
 - (void) setVersion:(NSInteger) version;
 - (void) setIsShow:(bool) isshow;
+- (void) setGroupCount:(NSInteger) count;
+- (void) setPrice:(NSInteger) count;
+- (void) setUUID:(NSString*) uud;
 @end
 
 @interface Message : NSObject {
@@ -61,6 +70,8 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
     NSString* mNickName;
     NSString* mMsg;
     NSInteger mType;
+    NSInteger mSubType;
+    NSInteger mSimpleProperty;
     
     Gift* mGift;
     User* mUser;
@@ -72,11 +83,15 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
 - (void) setNickName:(NSString*) name;
 - (void) setMsg:(NSString*) msg;
 - (void) setType:(NSInteger) type;
+- (void) setSubType:(NSInteger) stype;
+- (void) setSimpleProperty:(NSInteger) property;
 
 - (NSString*) getUid;
 - (NSString*) getNickName;
 - (NSString*) getMsg;
 - (NSInteger) getType;
+- (NSInteger) getSubType;
+- (NSInteger) getSimpleProperty;
 - (Gift*) getGift;
 - (User*) getUser;
 @end
