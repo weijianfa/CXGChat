@@ -111,6 +111,7 @@ namespace ChatRoom
 		virtual long  ReentryChatRoom(long nNodeNum = 0) = 0;
 		virtual void ExitChatRoom(void) = 0;
         virtual long Speak(std::string words, std::string uid, bool ispublic) = 0;
+        virtual void UserList(void) = 0;
 
 		virtual void SetToken(std::string strToken) = 0;
 		virtual void SetChatRoomInfo(ChatRoomInfo RoomInfo) = 0;

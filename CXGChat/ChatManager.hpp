@@ -40,6 +40,7 @@ public:
     
     void Enter();
     void Speak(const char *message, const char *uid ,bool isall);
+    void UserList();
     
     void ExitChatRoom();
 private:

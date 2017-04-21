@@ -29,12 +29,12 @@ PtlNotiManagerMsg::PtlNotiManagerMsg(int ret, Json::Value buf):PtlBase(ret, buf)
         if (ctreader.parse(ct.c_str(), ctobject))
         {
             nickName = ctobject["g"].asString();
-            userID = ctobject["e"].asInt();
+            userID = ctobject["e"].asUInt();
             
-            long opid = ctobject["a"].asInt();
-            std::string userName = ctobject["c"].asString();
+            user2ID = ctobject["a"].asUInt();
+            nickName2 = ctobject["c"].asString();
             
-            long op = ctobject["h"].asInt();  // 1 set 2 cancel
+            simpleProperty = ctobject["h"].asInt();  // 1 set 2 cancel
             
         }
     }

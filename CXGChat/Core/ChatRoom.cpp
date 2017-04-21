@@ -264,6 +264,17 @@ long CChatRoom::EnterChatRoom()
 	return nNodeNum;
 }
 
+void CChatRoom::UserList() {
+    pthread_mutex_lock(&m_SynchMutex);
+    std::string jsonUserList = "{\"pno\":\"1\",\"rpp\":\"40\",\"v\":\"0\"}";
+    
+    CPacket* pPacket = CPacket::CreateFromPayload((char*)jsonUserList.c_str(), (int)jsonUserList.length());
+    pPacket->SetPacketAction(0);
+    pPacket->SetPacketType(6);
+    m_pLink->SendPacket(pPacket);
+    pthread_mutex_unlock(&m_SynchMutex);
+}
+
 long CChatRoom::Speak(std::string words, std::string uid, bool ispublic) {
     pthread_mutex_lock(&m_SynchMutex);
     

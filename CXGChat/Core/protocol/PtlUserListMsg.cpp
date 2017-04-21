@@ -13,22 +13,37 @@
 PtlUserListMsg::PtlUserListMsg(int ret, Json::Value buf):PtlBase(ret, buf) {
     printf( "chatroom: PtlUserListMsg\n");
     
-    this->type = 3;  // msg
+    this->type = 7;  // msg
     
     Json::Value::iterator itc = buf.begin();
     std::string typeStr = (*itc)["escape"].asString();
     
     Json::Value::iterator itc2 = (*itc)["ct"].begin();
     
-    long count = (*itc2)["e"].asInt();
-    
     itc2++;
+    //long count = (*itc2)["e"].asInt();
     
-    Json::Value::iterator itc3 = (*itc2)["h"].begin();  // userlist
+    int i = 0;
     
-//    while(itc3++) {
-//        long headid =(*itc3)["j"].asInt();
-//        long userid = (*itc3)["bb"].asInt();
-//        
-//    }
+    UserInfo* puser = NULL;
+    
+    for (Json::ValueIterator itr = (*itc2)["h"].begin(); itr != (*itc2)["h"].end(); itr++)
+    {
+        Json::Value t=(Json::Value)*itr;
+        std::string nickName = t["p"].asString();
+        std::string userID = t["bb"].asString();
+        std::string head = t["j"].asString();
+        
+        UserInfo* user= new UserInfo(userID, nickName, head);
+        
+        if(0 == i) {
+            this->user = user;
+            puser = user;
+        } else {
+            puser->nextp = user;
+            puser = user;
+        }
+        
+        i++;
+    }
 }

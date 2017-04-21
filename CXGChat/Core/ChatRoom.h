@@ -50,6 +50,7 @@ public:
 	virtual long EnterChatRoom(void);
 	virtual long ReentryChatRoom(long nNodeNum = 0);
     virtual long Speak(std::string words, std::string uid, bool ispublic);
+    virtual void UserList(void);
 	virtual void ExitChatRoom(void);
 
 	virtual void SetToken(std::string strToken);

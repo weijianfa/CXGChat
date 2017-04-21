@@ -32,7 +32,7 @@ PtlBroadcastMsg::PtlBroadcastMsg(int ret, Json::Value buf):PtlBase(ret, buf) {
             msg = ctobject["b"].asString();
             nickName = ctobject["f"].asString();
             userID = ctobject["bb"].asInt();
-            simpleProperty = ctobject["c"].asInt(); // room id
+            simpleProperty = ctobject["c"].asUInt(); // room id
         }
     }
 }

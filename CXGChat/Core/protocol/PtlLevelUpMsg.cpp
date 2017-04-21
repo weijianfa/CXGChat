@@ -45,6 +45,7 @@ PtlLevelUpMsg::PtlLevelUpMsg(int ret, Json::Value buf):PtlBase(ret, buf) {
                     level = ctobject["c"].asInt();
                     break;
             }
+            simpleProperty = level;
             nickName = ctobject["o"].asString();
         }
     }

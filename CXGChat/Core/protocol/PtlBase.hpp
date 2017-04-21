@@ -11,6 +11,16 @@
 
 #include "json.h"
 
+class UserInfo {
+public:
+    std::string userID;
+    std::string nickName;
+    std::string head;
+    
+    UserInfo *nextp = NULL;
+    
+    UserInfo(std::string userID, std::string nickName, std::string head);
+};
 
 class PtlBase {
     
@@ -34,14 +44,15 @@ public:
     std::string zipPath;
     bool isShowGift = true;
     PtlBase* nextp = NULL;
-    
+    UserInfo* user = NULL;
     
 protected:
     std::string userID;
     std::string nickName;
     std::string msg;
     
-    
+    std::string user2ID;
+    std::string nickName2;
     
     int retCode;
     

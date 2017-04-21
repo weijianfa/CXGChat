@@ -32,6 +32,18 @@ Message* getMessage(PtlBase* ptl) {
             break;
         case 6: // caozuo
             break;
+        case 7: // userlist
+//            message->mUserList = [[NSMutableArray alloc] init];
+            UserInfo* user = ptl->user;
+            while(user != NULL) {
+                User* ocUser = [[User alloc] init];
+                [ocUser setHead:[NSString stringWithUTF8String:user->head.c_str()]];
+                [ocUser setUserID:[NSString stringWithUTF8String:user->userID.c_str()]];
+                [ocUser setNickName:[NSString stringWithUTF8String:user->nickName.c_str()]];
+                [message addUserList:ocUser];
+                user = user->nextp;
+            }
+            break;
     }
     
     switch(ptl->type) {
@@ -54,6 +66,8 @@ Message* getMessage(PtlBase* ptl) {
         case 5: // levelup
             break;
         case 6: // caozuo
+            break;
+        case 7:
             break;
     }
     
@@ -94,6 +108,12 @@ void ChatManager::Speak(const char *message, const char *uid, bool isall) {
     }
 }
 
+void ChatManager::UserList() {
+    if(m_pChatRoom->IsEntered()) {
+        m_pChatRoom->UserList();
+    }
+}
+
 void ChatManager::ExitChatRoom() {
     m_pChatRoom->ExitChatRoom();
 }
@@ -121,7 +141,7 @@ void ChatManager::OnMsg(PtlBase* ptl) {
         if(mController) {
             [mController doOnMessage: getMessage(temp)];
         }
-        temp = ptl->nextp;
+        temp = temp->nextp;
     }
 }
 

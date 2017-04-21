@@ -48,6 +48,13 @@
     self->mSimpleProperty  = property;
 }
 
+- (void) addUserList:(User*) user {
+    if(mUserList == NULL) {
+        mUserList = [[NSMutableArray alloc] init];
+    }
+    [mUserList addObject:user];
+}
+
 - (NSInteger) getSubType {
     return mSubType;
 }
@@ -61,6 +68,10 @@
 
 - (Gift*) getGift {
     return mGift;
+}
+
+- (NSMutableArray*) getUserList {
+    return mUserList;
 }
 
 - (id) init
@@ -90,6 +101,18 @@
     return juese;
 }
 
+- (NSString*) getUserID {
+    return userID;
+}
+
+- (NSString*) getNickName {
+    return nickName;
+}
+
+- (NSString*) getHead {
+    return head;
+}
+
 - (void) setFensi:(NSInteger) temp {
     self->fensi = temp;
 }
@@ -100,6 +123,18 @@
 
 - (void) setJuese:(NSInteger) temp {
     self->juese = temp;
+}
+
+- (void) setUserID:(NSString*) uid {
+    self->userID = uid;
+}
+
+- (void) setNickName:(NSString*) nick {
+    self->nickName = nick;
+}
+
+- (void) setHead:(NSString*) headimg {
+    self->head = headimg;
 }
 
 @end
@@ -261,7 +296,10 @@
     return 1;
 }
 
-
+- (void) userList {
+    ChatManager* manager = ChatManager::GetInstance();
+    manager->UserList();
+}
 
 - (void)setReceiverObject:(id<OnChatDelegate>)delegate
 {

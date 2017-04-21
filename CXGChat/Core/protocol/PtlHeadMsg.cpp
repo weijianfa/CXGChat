@@ -12,7 +12,9 @@
 PtlHeadTipMsg::PtlHeadTipMsg(int ret, Json::Value buf):PtlBase(ret, buf) {
     printf( "chatroom: PtlHeadTipMsg\n");
     
-    this->type = 3;  // msg
+    this->type = 2;  // msg
+    this->subType = 3; // toutiaoxiaoxi
+    
     
     Json::Value::iterator itc = buf.begin();
     std::string typeStr = (*itc)["escape"].asString();
@@ -37,8 +39,8 @@ PtlHeadTipMsg::PtlHeadTipMsg(int ret, Json::Value buf):PtlBase(ret, buf) {
             caifu = ctobject["s"].asInt();
             
             giftName = ctobject["i"].asString();
-            giftCount = ctobject["f"].asInt();
-            
+            giftCount = ctobject["f"].asUInt();
+            simpleProperty = ctobject["j"].asUInt();
             
             
             msg = "我送了" + giftName;

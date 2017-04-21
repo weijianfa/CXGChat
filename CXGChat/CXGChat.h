@@ -20,15 +20,26 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
     NSInteger fensi;
     NSInteger caifu;
     NSInteger juese;
+    
+    NSString* userID;
+    NSString* nickName;  // nickname
+    NSString* head;      // userhead id
 }
 
 - (NSInteger) getFensi;
 - (NSInteger) getCaifu;
 - (NSInteger) getJuese;
+- (NSString*) getUserID;
+- (NSString*) getNickName;
+- (NSString*) getHead;
 
 - (void) setFensi:(NSInteger) fensi;
 - (void) setCaifu:(NSInteger) caifu;
 - (void) setJuese:(NSInteger) juese;
+
+- (void) setUserID:(NSString*) uid;
+- (void) setNickName:(NSString*) nick;
+- (void) setHead:(NSString*) headimg;
 
 @end
 
@@ -75,6 +86,8 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
     
     Gift* mGift;
     User* mUser;
+    
+    NSMutableArray* mUserList;
 }
 
 - (id) init;
@@ -85,6 +98,7 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
 - (void) setType:(NSInteger) type;
 - (void) setSubType:(NSInteger) stype;
 - (void) setSimpleProperty:(NSInteger) property;
+- (void) addUserList:(User*) user;
 
 - (NSString*) getUid;
 - (NSString*) getNickName;
@@ -94,6 +108,7 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
 - (NSInteger) getSimpleProperty;
 - (Gift*) getGift;
 - (User*) getUser;
+- (NSMutableArray*) getUserList;
 @end
 
 
@@ -118,13 +133,10 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
 //说话，发消息
 - (long) speak:(NSString*) message to:(NSString*)uid ispublic:(bool)isall;     // speak in the room, include
 
+- (void) userList;
+
 //设置消息接受者，任意改变
 - (void)setReceiverObject:(id<OnChatDelegate>)delegate;
-
-
-
-
-
 
 
 
