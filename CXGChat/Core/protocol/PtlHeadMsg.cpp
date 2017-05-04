@@ -40,6 +40,7 @@ PtlHeadTipMsg::PtlHeadTipMsg(int ret, Json::Value buf):PtlBase(ret, buf) {
             
             giftName = ctobject["i"].asString();
             giftCount = ctobject["f"].asUInt();
+            giftid = ctobject["h"].asUInt();
             simpleProperty = ctobject["j"].asUInt();
             
             

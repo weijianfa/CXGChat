@@ -29,19 +29,19 @@ public:
     
     int subType = 0; // 小类，（1-0普通聊天消息，1-1飞屏，1-2广播）
     
-    int simpleProperty = 0; // 简单属性
+    long simpleProperty = 0; // 简单属性
     
     long fensi = 0;
     long caifu = 0;
     long juese = 0;
     long giftCount = 0;
-    std::string giftName;
-    std::string giftUUID;
+    std::string giftName = "";
+    std::string giftUUID = "";
     long giftGroupCount = 1;
-    long giftPrice;
+    long giftPrice = 0;
     long giftid = 0;
-    long giftVersion;
-    std::string zipPath;
+    long giftVersion = 0;
+    std::string zipPath = "";
     bool isShowGift = true;
     PtlBase* nextp = NULL;
     UserInfo* user = NULL;
