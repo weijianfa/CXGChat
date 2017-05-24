@@ -101,6 +101,10 @@
     return juese;
 }
 
+- (NSString*) getJueseStr {
+    return jueseStr;
+}
+
 - (NSString*) getUserID {
     return userID;
 }
@@ -111,6 +115,10 @@
 
 - (NSString*) getHead {
     return head;
+}
+
+- (void) setJueseStr:(NSString*) juesestr {
+    self->jueseStr = juesestr;
 }
 
 - (void) setFensi:(NSInteger) temp {

@@ -13,6 +13,7 @@ PtlBroadcastMsg::PtlBroadcastMsg(int ret, Json::Value buf):PtlBase(ret, buf) {
     printf( "chatroom: PtlBroadcastMsg\n");
     
     this->type = 1;  // msg
+    
     this->subType = 3; // 广播
     
     Json::Value::iterator itc = buf.begin();

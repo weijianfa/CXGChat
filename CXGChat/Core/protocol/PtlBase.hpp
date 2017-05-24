@@ -34,6 +34,7 @@ public:
     long fensi = 0;
     long caifu = 0;
     long juese = 0;
+    std::string jueseStr = "";
     long giftCount = 0;
     std::string giftName = "";
     std::string giftUUID = "";

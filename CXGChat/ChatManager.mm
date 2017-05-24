@@ -25,6 +25,7 @@ Message* getMessage(PtlBase* ptl) {
             [[message getUser] setFensi:ptl->fensi];
             [[message getUser] setCaifu:ptl->caifu];
             [[message getUser] setJuese:ptl->juese];
+            [[message getUser] setJueseStr:[NSString stringWithUTF8String:ptl->jueseStr.c_str()]];
             break;
         case 3: // sys
             break;

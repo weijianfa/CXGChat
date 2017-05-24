@@ -24,6 +24,7 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
     NSString* userID;
     NSString* nickName;  // nickname
     NSString* head;      // userhead id
+    NSString* jueseStr;
 }
 
 - (NSInteger) getFensi;
@@ -32,10 +33,12 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
 - (NSString*) getUserID;
 - (NSString*) getNickName;
 - (NSString*) getHead;
+- (NSString*) getJueseStr;
 
 - (void) setFensi:(NSInteger) fensi;
 - (void) setCaifu:(NSInteger) caifu;
 - (void) setJuese:(NSInteger) juese;
+- (void) setJueseStr:(NSString*) juesestr;
 
 - (void) setUserID:(NSString*) uid;
 - (void) setNickName:(NSString*) nick;
