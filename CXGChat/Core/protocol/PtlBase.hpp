@@ -26,7 +26,6 @@ class PtlBase {
     
 public:
     int type = 0;  // 消息类型 1， 聊天消息（飞屏，广播），2 ，礼物消息 3.系统消息，4.进入聊天室【可能入场特效】
-    
     int subType = 0; // 小类，（1-0普通聊天消息，1-1飞屏，1-2广播）
     
     long simpleProperty = 0; // 简单属性
@@ -81,14 +80,22 @@ public:
 };
 
 
-
-
-
-
 class PtlUserMsg: public PtlBase {
 public:
     PtlUserMsg(int ret, Json::Value  buf);
 };
+
+/*
+class PtlUserMsgPub: public PtlBase {
+public:
+    PtlUserMsgPub(int ret, Json::Value  buf);
+};
+
+class PtlUserMsgPri: public PtlBase {
+public:
+    PtlUserMsgPri(int ret, Json::Value  buf);
+};
+ */
 
 class PtlGiftMsg: public PtlBase {
 public:
@@ -139,6 +146,18 @@ public:
 class PtlLevelUpMsg: public PtlBase {
 public:
     PtlLevelUpMsg(int ret, Json::Value buf);
+};
+
+// 天龙VIP等级提升
+class PtlVipLevelUpMsg: public PtlBase {
+public:
+    PtlVipLevelUpMsg(int ret, Json::Value buf);
+};
+
+// 7日排行榜总数
+class PtlRankSumMsg: public PtlBase {
+public:
+    PtlRankSumMsg(int ret, Json::Value buf);
 };
 
 // combo消息

@@ -10,6 +10,9 @@
 #include "json.h"
 
 const int USER_MSG = (0<<16) + 2;
+const int USER_PUB_MSG = (1<<16) + 2; //对某人公开说
+const int USER_PRI_MSG = (2<<16) + 2; //对某人私聊
+
 const int SYST_MSG = (24<<16) + 1;
 const int GIFT_MSG = (3<<16) + 1;
 const int CONT_MSG = (84<<16) + 1;  // men count in room
@@ -20,6 +23,7 @@ const int BROADCT_MSG = (31<<16) + 1;  // 广播
 const int HEADTIP_MSG = (12<<16) + 1;  // 头条
 const int SYNC_MSG    = (79<<16) + 1;  // 同步魅力等级
 const int LEVLEUP_MSG = (20<<16) + 1;  // 等级提升
+const int VIPUP_MSG   = (81<<16) + 1;  // 天龙角色VIP提升
 const int COMBOIT_MSG = (82<<16) + 1;  // combo消息
 const int NOTIMAN_MSG = (13<<16) + 1;  // 提示用户提升管理员
 const int KICK_MSG    = (0<<16)  + 4;  // 踢人消息
@@ -30,6 +34,7 @@ const int CLOSE_MSG   = (18<<16) + 1;  // 关闭直播通知
 const int OPENI_MSG   = (15<<16) + 1;  // 开启直播通知
 const int USERLIST_MSG= (0<<16)  + 6;  // 用户列表
 const int USERINTO_MSG= (4<<16)  + 2;  // 用户信息
+const int RANKSUM_MSG    = (93<<16) + 1;  // 7日排行榜总数
 
 UserInfo::UserInfo(std::string userID, std::string nickName, std::string head){
     this->userID = userID;
@@ -85,6 +90,10 @@ PtlBase* PtlBase::getProtocol(char* buf) {
     switch((nAction<<16)+ nMsgType) {
         case USER_MSG:
             return new PtlUserMsg(ncode, object["msg"]);
+        case USER_PUB_MSG:
+            return new PtlUserMsg(ncode, object["msg"]);//return new PtlUserMsgPub(ncode, object["msg"]);
+        case USER_PRI_MSG:
+            return new PtlUserMsg(ncode, object["msg"]);//return new PtlUserMsgPri(ncode, object["msg"]);
         case SYST_MSG:
             return new PtlSysMsg(ncode, object["msg"]);
         case GIFT_MSG:
@@ -103,6 +112,10 @@ PtlBase* PtlBase::getProtocol(char* buf) {
             return new PtlSyncMsg(ncode, object["msg"]);
         case LEVLEUP_MSG:
             return new PtlLevelUpMsg(ncode, object["msg"]);
+        case VIPUP_MSG:
+            return new PtlVipLevelUpMsg(ncode, object["msg"]);
+        case RANKSUM_MSG:
+            return new PtlRankSumMsg(ncode, object["msg"]);
         case COMBOIT_MSG:
             return new PtlComboMsg(ncode, object["msg"]);
         case NOTIMAN_MSG:

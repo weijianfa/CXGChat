@@ -10,21 +10,37 @@
 PtlUserMsg::PtlUserMsg(int ret,Json::Value  buf):PtlBase(ret, buf) {
     printf( "chatroom: PtlUserMsg\n");
     this->type = 1;  // msg
-    
-    
+
     Json::Value::iterator itc = buf.begin();
-    std::string typeStr = (*itc)["b"].asString();
     
     msg = (*itc)["ct"].asString();
     
     userID = (*itc)["e"]["bb"].asString();
     nickName = (*itc)["e"]["p"].asString();
+    user2ID = "";
+    nickName2 = "";
     
     fensi = (*itc)["e"]["b3"].asInt();
     caifu = (*itc)["e"]["h"].asInt();
-    // juese = (*itc)["e"]["a8"].asInt();
-    
     jueseStr = (*itc)["e"]["a1"].asString();
     
+    std::string typeStr = (*itc)["b"].asString();
+    int nType = atoi(typeStr.c_str());
+    switch (nType)
+    {
+        case 0:
+            this->subType = 0;
+            break;
+        case 1:
+            this->subType = 3;
+            break;
+        case 2:
+            this->subType = 4;
+            user2ID = (*itc)["f"]["bb"].asString();
+            nickName2 = (*itc)["f"]["p"].asString();
+            break;
+        default:
+            break;
+    }
 }
 
