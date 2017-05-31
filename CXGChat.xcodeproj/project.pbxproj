@@ -7,6 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		320D097B1E9F4F88007004E7 /* PtlFeiPingMsg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 320D097A1E9F4F88007004E7 /* PtlFeiPingMsg.cpp */; };
+		320D097D1E9F4FC8007004E7 /* PtlBroadcastMsg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 320D097C1E9F4FC8007004E7 /* PtlBroadcastMsg.cpp */; };
+		320D097F1E9F4FE3007004E7 /* PtlHeadMsg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 320D097E1E9F4FE3007004E7 /* PtlHeadMsg.cpp */; };
+		320D09811E9F500C007004E7 /* PtlSyncMsg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 320D09801E9F500C007004E7 /* PtlSyncMsg.cpp */; };
+		320D09831E9F502C007004E7 /* PtlLevelUpMsg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 320D09821E9F502C007004E7 /* PtlLevelUpMsg.cpp */; };
+		320D09851E9F504D007004E7 /* PtlComboMsg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 320D09841E9F504D007004E7 /* PtlComboMsg.cpp */; };
+		320D09871E9F50B6007004E7 /* PtlNotiManagerMsg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 320D09861E9F50B6007004E7 /* PtlNotiManagerMsg.cpp */; };
+		320D09891E9F50CF007004E7 /* PtlNotiKickMsg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 320D09881E9F50CF007004E7 /* PtlNotiKickMsg.cpp */; };
+		320D098B1E9F513A007004E7 /* PtlNotiResumeMsg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 320D098A1E9F513A007004E7 /* PtlNotiResumeMsg.cpp */; };
+		320D098D1E9F5193007004E7 /* PtlNotiUnresumeMmsg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 320D098C1E9F5193007004E7 /* PtlNotiUnresumeMmsg.cpp */; };
+		320D098F1E9F5211007004E7 /* PtlOpenChatMsg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 320D098E1E9F5211007004E7 /* PtlOpenChatMsg.cpp */; };
+		320D09911E9F5293007004E7 /* PtlNotiCloseMsg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 320D09901E9F5293007004E7 /* PtlNotiCloseMsg.cpp */; };
+		320D09931E9F52A6007004E7 /* PtlNotiOpenMsg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 320D09921E9F52A6007004E7 /* PtlNotiOpenMsg.cpp */; };
+		320D09951E9F52E7007004E7 /* PtlUserListMsg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 320D09941E9F52E7007004E7 /* PtlUserListMsg.cpp */; };
+		320D09971E9F52FD007004E7 /* PtlUserInfoMsg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 320D09961E9F52FD007004E7 /* PtlUserInfoMsg.cpp */; };
 		3222176E1E696C1800937996 /* ChatInterface.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3222151D1E696C1700937996 /* ChatInterface.mm */; };
 		3222176F1E696C1800937996 /* ChatManager.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 3222151E1E696C1700937996 /* ChatManager.hpp */; };
 		322217701E696C1800937996 /* ChatManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3222151F1E696C1700937996 /* ChatManager.mm */; };
@@ -106,6 +121,21 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		320D097A1E9F4F88007004E7 /* PtlFeiPingMsg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PtlFeiPingMsg.cpp; sourceTree = "<group>"; };
+		320D097C1E9F4FC8007004E7 /* PtlBroadcastMsg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PtlBroadcastMsg.cpp; sourceTree = "<group>"; };
+		320D097E1E9F4FE3007004E7 /* PtlHeadMsg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PtlHeadMsg.cpp; sourceTree = "<group>"; };
+		320D09801E9F500C007004E7 /* PtlSyncMsg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PtlSyncMsg.cpp; sourceTree = "<group>"; };
+		320D09821E9F502C007004E7 /* PtlLevelUpMsg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PtlLevelUpMsg.cpp; sourceTree = "<group>"; };
+		320D09841E9F504D007004E7 /* PtlComboMsg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PtlComboMsg.cpp; sourceTree = "<group>"; };
+		320D09861E9F50B6007004E7 /* PtlNotiManagerMsg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PtlNotiManagerMsg.cpp; sourceTree = "<group>"; };
+		320D09881E9F50CF007004E7 /* PtlNotiKickMsg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PtlNotiKickMsg.cpp; sourceTree = "<group>"; };
+		320D098A1E9F513A007004E7 /* PtlNotiResumeMsg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PtlNotiResumeMsg.cpp; sourceTree = "<group>"; };
+		320D098C1E9F5193007004E7 /* PtlNotiUnresumeMmsg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PtlNotiUnresumeMmsg.cpp; sourceTree = "<group>"; };
+		320D098E1E9F5211007004E7 /* PtlOpenChatMsg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PtlOpenChatMsg.cpp; sourceTree = "<group>"; };
+		320D09901E9F5293007004E7 /* PtlNotiCloseMsg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PtlNotiCloseMsg.cpp; sourceTree = "<group>"; };
+		320D09921E9F52A6007004E7 /* PtlNotiOpenMsg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PtlNotiOpenMsg.cpp; sourceTree = "<group>"; };
+		320D09941E9F52E7007004E7 /* PtlUserListMsg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PtlUserListMsg.cpp; sourceTree = "<group>"; };
+		320D09961E9F52FD007004E7 /* PtlUserInfoMsg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PtlUserInfoMsg.cpp; sourceTree = "<group>"; };
 		3222151D1E696C1700937996 /* ChatInterface.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ChatInterface.mm; sourceTree = "<group>"; };
 		3222151E1E696C1700937996 /* ChatManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ChatManager.hpp; sourceTree = "<group>"; };
 		3222151F1E696C1700937996 /* ChatManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ChatManager.mm; sourceTree = "<group>"; };
@@ -451,6 +481,21 @@
 				3222153E1E696C1700937996 /* PtlGiftMsg.cpp */,
 				322215401E696C1700937996 /* PtlSysMsg.cpp */,
 				3227A8021E88F6840070D1CE /* PtlContMsg.cpp */,
+				320D097A1E9F4F88007004E7 /* PtlFeiPingMsg.cpp */,
+				320D097C1E9F4FC8007004E7 /* PtlBroadcastMsg.cpp */,
+				320D097E1E9F4FE3007004E7 /* PtlHeadMsg.cpp */,
+				320D09801E9F500C007004E7 /* PtlSyncMsg.cpp */,
+				320D09821E9F502C007004E7 /* PtlLevelUpMsg.cpp */,
+				320D09841E9F504D007004E7 /* PtlComboMsg.cpp */,
+				320D09861E9F50B6007004E7 /* PtlNotiManagerMsg.cpp */,
+				320D09881E9F50CF007004E7 /* PtlNotiKickMsg.cpp */,
+				320D098A1E9F513A007004E7 /* PtlNotiResumeMsg.cpp */,
+				320D098C1E9F5193007004E7 /* PtlNotiUnresumeMmsg.cpp */,
+				320D098E1E9F5211007004E7 /* PtlOpenChatMsg.cpp */,
+				320D09901E9F5293007004E7 /* PtlNotiCloseMsg.cpp */,
+				320D09921E9F52A6007004E7 /* PtlNotiOpenMsg.cpp */,
+				320D09941E9F52E7007004E7 /* PtlUserListMsg.cpp */,
+				320D09961E9F52FD007004E7 /* PtlUserInfoMsg.cpp */,
 			);
 			path = protocol;
 			sourceTree = "<group>";
@@ -1223,20 +1268,35 @@
 				322217C51E696C1800937996 /* json_value.cpp in Sources */,
 				322217891E696C1800937996 /* PtlLoginRet.cpp in Sources */,
 				322218781E696C1900937996 /* uncompr.c in Sources */,
+				320D09831E9F502C007004E7 /* PtlLevelUpMsg.cpp in Sources */,
 				322217701E696C1800937996 /* ChatManager.mm in Sources */,
+				320D098B1E9F513A007004E7 /* PtlNotiResumeMsg.cpp in Sources */,
 				322217721E696C1800937996 /* ChatRoom.cpp in Sources */,
+				320D098F1E9F5211007004E7 /* PtlOpenChatMsg.cpp in Sources */,
+				320D098D1E9F5193007004E7 /* PtlNotiUnresumeMmsg.cpp in Sources */,
 				3222178C1E696C1800937996 /* RawLink.cpp in Sources */,
+				320D097B1E9F4F88007004E7 /* PtlFeiPingMsg.cpp in Sources */,
+				320D09851E9F504D007004E7 /* PtlComboMsg.cpp in Sources */,
 				322217C71E696C1800937996 /* json_writer.cpp in Sources */,
+				320D097F1E9F4FE3007004E7 /* PtlHeadMsg.cpp in Sources */,
+				320D09891E9F50CF007004E7 /* PtlNotiKickMsg.cpp in Sources */,
+				320D09871E9F50B6007004E7 /* PtlNotiManagerMsg.cpp in Sources */,
+				320D09911E9F5293007004E7 /* PtlNotiCloseMsg.cpp in Sources */,
 				322218551E696C1800937996 /* crc32.c in Sources */,
 				3222184A1E696C1800937996 /* adler32.c in Sources */,
 				322217741E696C1800937996 /* cxgChatRoom.cpp in Sources */,
 				322218601E696C1900937996 /* inflate.c in Sources */,
 				322217C41E696C1800937996 /* json_reader.cpp in Sources */,
+				320D09951E9F52E7007004E7 /* PtlUserListMsg.cpp in Sources */,
+				320D09931E9F52A6007004E7 /* PtlNotiOpenMsg.cpp in Sources */,
 				3222178A1E696C1800937996 /* PtlSysMsg.cpp in Sources */,
 				3222178F1E696C1800937996 /* RefCount.cpp in Sources */,
 				3222185D1E696C1900937996 /* inffast.c in Sources */,
 				32A5BF261E6C29DD001BAE04 /* MessageControl.m in Sources */,
+				320D09971E9F52FD007004E7 /* PtlUserInfoMsg.cpp in Sources */,
+				320D097D1E9F4FC8007004E7 /* PtlBroadcastMsg.cpp in Sources */,
 				322217841E696C1800937996 /* Packet.cpp in Sources */,
+				320D09811E9F500C007004E7 /* PtlSyncMsg.cpp in Sources */,
 				322218871E696C1900937996 /* Timer.cpp in Sources */,
 				3222185A1E696C1800937996 /* gzio.c in Sources */,
 				322217861E696C1800937996 /* PtlBase.cpp in Sources */,
