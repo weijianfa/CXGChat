@@ -61,8 +61,7 @@ PtlVipLevelUpMsg::PtlVipLevelUpMsg(int ret, Json::Value buf):PtlBase(ret, buf) {
     this->subType = 6;
     
     Json::Value::iterator itc = buf.begin();
-    std::string typeStr = (*itc)["escape"].asString();  //or escapeflag
-    
+    //std::string typeStr = (*itc)["escape"].asString();  //or escapeflag
     std::string ct = (*itc)["ct"].asString();
     
     if(ct.length() > 0) {
@@ -73,11 +72,8 @@ PtlVipLevelUpMsg::PtlVipLevelUpMsg(int ret, Json::Value buf):PtlBase(ret, buf) {
         std::string strMsg = "";
         if (ctreader.parse(ct.c_str(), ctobject))
         {
-            long uid = ctobject["bb"].asInt();
-            long level = ctobject["c"].asInt();
-
-            simpleProperty = level;
-            userID = uid;
+            userID = ctobject["bb"].asInt();
+            simpleProperty = ctobject["c"].asInt();
         }
     }
 }
@@ -89,8 +85,7 @@ PtlRankSumMsg::PtlRankSumMsg(int ret, Json::Value buf):PtlBase(ret, buf) {
     this->subType = 7;
     
     Json::Value::iterator itc = buf.begin();
-    std::string typeStr = (*itc)["escape"].asString();  //or escapeflag
-    
+    //std::string typeStr = (*itc)["escape"].asString();  //or escapeflag
     std::string ct = (*itc)["ct"].asString();
     
     if(ct.length() > 0) {
@@ -101,8 +96,7 @@ PtlRankSumMsg::PtlRankSumMsg(int ret, Json::Value buf):PtlBase(ret, buf) {
         std::string strMsg = "";
         if (ctreader.parse(ct.c_str(), ctobject))
         {
-            long sum = ctobject["c"].asInt();
-            simpleProperty = sum;
+            simpleProperty = ctobject["a"].asInt();;
         }
     }
 }

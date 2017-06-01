@@ -23,6 +23,7 @@ PtlUserMsg::PtlUserMsg(int ret,Json::Value  buf):PtlBase(ret, buf) {
     fensi = (*itc)["e"]["b3"].asInt();
     caifu = (*itc)["e"]["h"].asInt();
     jueseStr = (*itc)["e"]["a1"].asString();
+    gameUid = (*itc)["e"]["a4"].asString();
     
     std::string typeStr = (*itc)["b"].asString();
     int nType = atoi(typeStr.c_str());
@@ -38,6 +39,7 @@ PtlUserMsg::PtlUserMsg(int ret,Json::Value  buf):PtlBase(ret, buf) {
             this->subType = 4;
             user2ID = (*itc)["f"]["bb"].asString();
             nickName2 = (*itc)["f"]["p"].asString();
+            gameUid2 = (*itc)["f"]["a4"].asString();
             break;
         default:
             break;

@@ -34,6 +34,7 @@ public:
     long caifu = 0;
     long juese = 0;
     std::string jueseStr = "";
+    std::string gameUid = "";
     long giftCount = 0;
     std::string giftName = "";
     std::string giftUUID = "";
@@ -53,6 +54,7 @@ protected:
     
     std::string user2ID;
     std::string nickName2;
+    std::string gameUid2;
     
     int retCode;
     
