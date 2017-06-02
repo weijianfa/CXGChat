@@ -117,8 +117,17 @@
     return head;
 }
 
+- (NSString *)getGameUid {
+    return gameUid;
+}
+
 - (void) setJueseStr:(NSString*) juesestr {
     self->jueseStr = juesestr;
+}
+
+- (void) setGameUid:(NSString *) gameUid
+{
+    self->gameUid = jueseStr;
 }
 
 - (void) setFensi:(NSInteger) temp {
