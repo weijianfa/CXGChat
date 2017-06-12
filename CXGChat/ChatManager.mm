@@ -103,9 +103,9 @@ void ChatManager::Enter() {
     }
 }
 
-void ChatManager::Speak(const char *message, const char *uid, bool isall) {
+void ChatManager::SendChatMsg(const char *message, const char *uid, bool isprivate) {
     if(m_pChatRoom->IsEntered()) {
-        m_pChatRoom->Speak(message, uid, isall);
+        m_pChatRoom->SendChatMsg(message, uid, isprivate);
     }
 }
 
@@ -125,14 +125,12 @@ void ChatManager::setHost(const char *ip, long port) {
     m_RoomInfo.strIp[2] = ip;
     
     m_RoomInfo.nPort = port;
-
 }
 
 void ChatManager::setUser(const char *uid, const char *rid,const char *token) {
     m_RoomInfo.nMasterId = uid;
     m_RoomInfo.nRoomId = rid;
     this->token = token;
-    
 }
 
 void ChatManager::OnMsg(PtlBase* ptl) {
@@ -146,8 +144,8 @@ void ChatManager::OnMsg(PtlBase* ptl) {
     }
 }
 
-void ChatManager::OnError(long errcode, char* msg) {
-    printf("OnMsg OnError= (%ld)%s  \n", errcode, msg);
+void ChatManager::OnError(int errcode, char* msg) {
+    printf("OnMsg OnError= (%d)%s  \n", errcode, msg);
     if(mController) {
         [mController doOnError:errcode Msg:[NSString stringWithUTF8String:msg]];
     }

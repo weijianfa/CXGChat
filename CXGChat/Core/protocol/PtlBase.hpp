@@ -78,7 +78,7 @@ public:
         return msg;
     }
     
-    static PtlBase* getProtocol(char* buf);
+    static PtlBase* getProtocol(int nType, Json::Value buff);
 };
 
 

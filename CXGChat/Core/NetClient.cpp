@@ -1,6 +1,6 @@
 #include "NetClient.h"
 
-#define BUF_SIZE 2048
+#pragma warning(disable: 4996)
 
 CNetPeer::CNetPeer(INetPeerSink* pNb)
 {
@@ -11,8 +11,7 @@ CNetPeer::CNetPeer(INetPeerSink* pNb)
 	m_nRefCount = 1;
 
 	m_bRet = false;
-	m_bThreadRet = false;
-	m_bSendRet = false;
+	m_bOnLoop = true;
 
 	memset(m_cLastRecv, 0, RECV_BUF_SIZE);
 	m_Mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -93,37 +92,33 @@ bool CNetPeer::Connect()
 
 bool CNetPeer::Open()
 {
-    m_isdisconnect = false;
-    
     pthread_attr_t attr;
     pthread_attr_init (&attr);
     pthread_attr_setdetachstate (&attr, PTHREAD_CREATE_DETACHED);
     
     int nRet = pthread_create(&m_Connect, &attr, CNetPeer::ConnectBengin, this);
 	if (!nRet)
-		m_bThreadRet = true;
+		nRet = true;
 	else
         m_nRetCode = CON_STARTTHREAD;
-		m_bThreadRet = false;
-
+		nRet = false;
     pthread_attr_destroy (&attr);
-	return m_bThreadRet;
+
+	return nRet;
 }
 
-// close the socket, this step should tell the upfloor
 void CNetPeer::Close()
 {
-    if(!m_isdisconnect) {
+	pthread_detach(m_Connect);
+    m_bOnLoop = false;
+    m_RawLink = NULL;
+
 #if(CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
         closesocket(m_socket);
         WSACleanup();
 #else
         close(m_socket);
 #endif
-        m_isdisconnect = true;
-    }
-    
-    pthread_detach(m_Connect);
 }
 
 int CNetPeer::GetPacketHeadLenth(char* sData)
@@ -135,7 +130,7 @@ int CNetPeer::GetPacketHeadLenth(char* sData)
 
 	if (nPacketSize > RECV_BUF_SIZE)
 	{
-		m_RawLink->OnNetErr(nPacketSize);
+        m_RawLink->OnNetErr(m_nRetCode);
 		Close();
 	}
 
@@ -144,7 +139,7 @@ int CNetPeer::GetPacketHeadLenth(char* sData)
 
 bool CNetPeer::SendData(const char* pData, int nLen)
 {
-    long ret = 0;
+    int ret = 0;
 #if(CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	ret = send(m_socket, pData, nLen, 0);
 #elif(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
@@ -153,20 +148,20 @@ bool CNetPeer::SendData(const char* pData, int nLen)
     ret = send(m_socket, pData, nLen, MSG_NOSIGNAL);
 #endif
 
-    if (ret < 0) {
+    if (ret < 0)
+    {
         m_nRetCode = CON_WRITEDERROR;
-		m_bSendRet = false;
+		return false;
     }
-	else
-		m_bSendRet = true;
-
-	return m_bSendRet;
+    
+    return true;
 }
 
 bool CNetPeer::RecvData(char* pData, int nLen)
 {
-	int	nPacketSize, nValidSize, nLeftSize;
-	nPacketSize = nValidSize = nLeftSize = 0;
+    int	nPacketSize = 0;
+    int nValidSize = 0;
+    int nLeftSize = 0;
 	char cTempData[MAX_BUF_SIZE] = "";
 
 	if (m_nNeedCopySize)
@@ -254,13 +249,13 @@ long CNetPeer::Release()
 	return nRef;
 }
 
-
-// this is a thread to call this function.
 void* CNetPeer::ConnectBengin(void *arg)
 {
 	CNetPeer* pNp = (CNetPeer*)arg;
 
-	bool bRet = false;
+    int  nRecvSize = 0;
+	int  nRet = 0;
+    bool bRet = false;
 	char buf[SEND_BUF_SIZE] = "";
 	char Recvbuf[RECV_BUF_SIZE] = "";
 	
@@ -269,13 +264,7 @@ void* CNetPeer::ConnectBengin(void *arg)
 	tvTimeval.tv_sec = 0;
 	tvTimeval.tv_usec = 100;
     
-    
-    time_t tStamp;
-    time(&tStamp);
-    
-    long count=0;
-
-	while (true)
+	while (pNp->m_bOnLoop)
 	{
 		FD_ZERO(&wFds);
 		FD_ZERO(&rFds);
@@ -284,96 +273,48 @@ void* CNetPeer::ConnectBengin(void *arg)
 		FD_SET(pNp->m_socket, &wFds);
 		FD_SET(pNp->m_socket, &rFds);
 		FD_SET(pNp->m_socket, &eFds);
-    
-		usleep(900*1000);
-        
-        if(pNp->m_isdisconnect) {
-            printf("chatroom: socket disconnected\n");
-            break;
-        }
-        
-        // to check fresh the client, 45s is to allowed.
-        if(count == 10) {
-            time_t tNow;
-            time(&tNow);
-            long tGapTime = (tNow - tStamp);
-            //printf("@@@@%ld", tGapTime);
-            if(tGapTime > 50 && tGapTime < 60) { // send the heartbeat you know.
-                std::string jsonEnter = "{\"randomNumber\":\"222\",\"v\":\"0\"}";
-                CPacket* pPacket = CPacket::CreateFromPayload((char*)jsonEnter.c_str(), (int)jsonEnter.length());
-                pPacket->SetPacketType(0);
-                pPacket->SetPacketAction(3);
-                pNp->SendData(pPacket->GetTotal(), pPacket->GetTotalSize()) ;
-                time(&tStamp);
-            }
-            if(tGapTime > 90)
-            {
-                pNp->m_nRetCode = CON_NOHEARTPACK;
-                // exceeded time, this shoule be to close the socket and to notice the owner
-                printf("chatroom: the client has exceeded time, you should connect agadin!\n");
-				pNp->m_RawLink->OnNetErr(0);
-                pNp->Close();
-                break;
-            }
-            count = 0;
-        }
-        count++;
 
-        // select the socket
-		int nRet = select(FD_SETSIZE, &rFds, &wFds, &eFds, &tvTimeval);
-		if (nRet > 0)             // have to process
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+		Sleep(1000);
+#else
+		sleep(1);
+#endif
+		nRet = select(FD_SETSIZE, &rFds, &wFds, &eFds, &tvTimeval);
+		if (nRet > 0)
 		{
 			if (FD_ISSET(pNp->m_socket, &rFds) > 0) 
 			{
-                
-				int nRecvSize = recv(pNp->m_socket, Recvbuf, RECV_BUF_SIZE, 0);
-				if (nRecvSize <= 0)
-				{
+				nRecvSize = (int)recv(pNp->m_socket, Recvbuf, RECV_BUF_SIZE, 0);
+                if(nRecvSize > 0)
+                    pNp->RecvData(Recvbuf, nRecvSize);
+                else{
                     pNp->m_nRetCode = CON_READDAERROR;
-					pNp->m_RawLink->OnNetErr(pNp->m_nRetCode);
-					pNp->Close();
-					break;
-				}
-				pNp->RecvData(Recvbuf, nRecvSize);
-			}
-
-			if (FD_ISSET(pNp->m_socket, &wFds) > 0)  
-			{
-                
-                bRet = pNp->SendData(buf, strlen(buf));
-                if (!bRet)
-                {
-                    pNp->m_nRetCode = CON_WRITEDERROR;
-                    printf("chatroom: SendData error!");
-					pNp->m_RawLink->OnNetErr(pNp->m_nRetCode);
-                    pNp->Close();
                     break;
                 }
 			}
-
-			if (FD_ISSET(pNp->m_socket, &eFds) > 0)
-            {
-                // some errors.
-                printf("chatroom: SelectData error!\n");
+			if (FD_ISSET(pNp->m_socket, &wFds) > 0)
+			{
+                bRet = pNp->SendData(buf, (int)strlen(buf));
+                if (!bRet){
+                    pNp->m_nRetCode = CON_WRITEDERROR;
+                    break;
+                }
+			}
+            
+			if (FD_ISSET(pNp->m_socket, &eFds) > 0){
                 pNp->m_nRetCode = CON_SELECTERROR;
-				pNp->m_RawLink->OnNetErr(pNp->m_nRetCode);
-                pNp->Close();
                 break;
             }
-		} else if(nRet == 0) {  // socket close
+		}
+        else if(!nRet){
             pNp->m_nRetCode = CON_DISONCECONN;
-	    	pNp->m_RawLink->OnNetErr(pNp->m_nRetCode);
-            pNp->Close();
-            printf("chatroom: SendData error1!\n");
             break;
-        } else {                // error other
-            pNp->m_nRetCode = CON_ERRCREATESC;
-	   		pNp->m_RawLink->OnNetErr(pNp->m_nRetCode);
-            //pNp->Close();
-            printf("chatroom: SendData error2!\n");
-			break;
         }
 	}
 
+    if(pNp->m_RawLink != NULL)
+        pNp->m_RawLink->OnNetErr(pNp->m_nRetCode);
+    
+    //pNp->Close();
 	return 0;
 }

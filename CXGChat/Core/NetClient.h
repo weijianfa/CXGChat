@@ -2,20 +2,8 @@
 #define __NET_CLIENT_H_
 
 #include "network.h"
-#include "Packet.h"
 
 using namespace NetWork;
-
-enum ERRNO {
-    CON_NETNOTREACH = 100001,
-    CON_DISONCECONN,
-    CON_SELECTERROR,
-    CON_READDAERROR,
-    CON_WRITEDERROR,
-    CON_NOHEARTPACK,
-    CON_ERRCREATESC,
-    CON_STARTTHREAD,
-};
 
 class CNetPeer
 	: public INetPeer
@@ -67,10 +55,7 @@ private:
 	int	m_nNeedCopySize;
 	
 	bool	m_bRet;
-	bool	m_bThreadRet;
-	bool	m_bSendRet;
-    
-    bool    m_isdisconnect;
+	bool	m_bOnLoop;
 
 	long    m_nRefCount;
 	char	m_cLastRecv[RECV_BUF_SIZE];

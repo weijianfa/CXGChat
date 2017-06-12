@@ -6,7 +6,6 @@
 //  Copyright © 2017年 Lu Jinfei. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "CXGChat.h"
 #import "ChatManager.hpp"
 #import "MessageControl.h"
@@ -235,7 +234,7 @@
 @property (nonatomic,assign)long mPort;    // user id
 @property (nonatomic,assign)NSString* mHost;   // user id
 
-@property (nonatomic,strong)    ChatControl* mController; //
+@property (nonatomic,strong)ChatControl* mController; //
 
 
 
@@ -281,12 +280,10 @@
         _mController = [[ChatControl alloc] init];
         
     }
-    
-    
 }
 
 
-- (int) enterRoom {
+- (long) enterRoom {
     NSString* resources = [[NSBundle mainBundle] resourcePath];
     NSString *s = [NSString stringWithFormat:@"%s/locale/", [resources cStringUsingEncoding:NSUTF8StringEncoding]] ;
     setenv( "PATH_LOCALE", [s UTF8String] ,1);
@@ -301,15 +298,15 @@
     return 1;
 }
 
-- (int) leaveRoom {
+- (long) leaveRoom {
     ChatManager* manager = ChatManager::GetInstance();
     manager->ExitChatRoom();
     return 1;
 }
 
-- (int) speak:(NSString*) message to:(NSString*)uid ispublic:(bool)isall {
+- (long) speak:(NSString*) message to:(NSString*)uid andPrivate:(bool)isprivate {
     ChatManager* manager = ChatManager::GetInstance();
-    manager->Speak([message UTF8String], [uid UTF8String], isall);
+    manager->SendChatMsg([message UTF8String], [uid UTF8String], isprivate);
     return 1;
 }
 

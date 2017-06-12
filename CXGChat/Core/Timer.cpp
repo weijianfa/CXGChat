@@ -1,5 +1,6 @@
-#include "Includes/PrecompileConfig.h"
 #include "Timer.h"
+#include "Includes/PrecompileConfig.h"
+
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 
@@ -50,41 +51,4 @@ void CTimer::StopTimer(unsigned int& nTimeID)
 		nTimeID = 0;
 	}
 }
-
-#else
-
-CTimer::CTimer()
-{
-	m_tTick.it_value.tv_sec = 0;
-	m_tTick.it_value.tv_usec = 0;  
-	m_tTick.it_interval.tv_sec = 0;
-	m_tTick.it_interval.tv_usec = 0;
-}
-
-CTimer::~CTimer()
-{
-}
-
-unsigned int CTimer::StartTimer(bool bCustom, int nPeriod, int nResolution)
-{
-	m_tTick.it_value.tv_sec = 1;
-	m_tTick.it_value.tv_usec = 0;  
-	m_tTick.it_interval.tv_sec = nPeriod; 
-	m_tTick.it_interval.tv_usec = 0;
-
-	setitimer(ITIMER_REAL, &m_tTick, NULL);
-
-	return 0;
-}
-
-void CTimer::StopTimer(unsigned int& nTimeID)
-{
-	m_tTick.it_value.tv_sec = 0;
-	m_tTick.it_value.tv_usec = 0;  
-	m_tTick.it_interval.tv_sec = 0;
-	m_tTick.it_interval.tv_usec = 0;
-
-	setitimer(ITIMER_REAL, &m_tTick, NULL);
-}
-
 #endif

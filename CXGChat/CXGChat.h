@@ -137,7 +137,7 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
 - (long) leaveRoom;
 
 //说话，发消息
-- (long) speak:(NSString*) message to:(NSString*)uid ispublic:(bool)isall;     // speak in the room, include
+- (long) speak:(NSString*) message to:(NSString*)uid andPrivate:(bool)isprivate;     // speak in the room, include
 
 - (void) userList;
 

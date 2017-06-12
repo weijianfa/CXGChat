@@ -9,13 +9,14 @@
 #ifndef ChatManager_hpp
 #define ChatManager_hpp
 
-#include <stdio.h>
 #include "cxgChatRoom.h"
 #include "CXGChat.h"
-#import "MessageControl.h"
-class ChatManager: ChatRoom::IChatRoomObserver {
-    
-    
+
+#import  "MessageControl.h"
+
+
+class ChatManager: ChatRoom::IChatRoomObserver
+{
 private:
     ChatManager();   //构造函数是私有的
 
@@ -27,19 +28,17 @@ public:
 public:
     
     std::string token;
-
     ~ChatManager();
     
     virtual void OnMsg(PtlBase* ptl);
-    
-    virtual void OnError(long errcode, char* msg);
+    virtual void OnError(int errcode, char* msg);
     
     void setHost(const char *ip, long port);
     void setUser(const char *uid,const char *rid,const char *token);
     void setController(ChatControl* listener);
     
     void Enter();
-    void Speak(const char *message, const char *uid ,bool isall);
+    void SendChatMsg(const char *message, const char *uid ,bool isprivate);
     void UserList();
     
     void ExitChatRoom();

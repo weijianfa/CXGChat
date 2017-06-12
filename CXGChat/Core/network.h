@@ -10,8 +10,8 @@
 #define RECV_BUF_SIZE	4096
 #define SEND_BUF_SIZE	2048
 
+#define	HEAD_SIZE		4
 #define	MAX_BUF_SIZE	8192
-#define	HEAD_SIZE	4
 
 namespace NetWork
 {
@@ -30,22 +30,27 @@ namespace NetWork
 		err_tcp_disconnect = 101,
 		err_fatal          = 102,
 	} media_err;
-
-	class INetPeer
+    
+    enum ERRNO
+    {
+        CON_NETNOTREACH = 100001,
+        CON_DISONCECONN,
+        CON_SELECTERROR,
+        CON_READDAERROR,
+        CON_WRITEDERROR,
+        CON_NOHEARTPACK,
+        CON_ERRCREATESC,
+        CON_STARTTHREAD,
+    };
+    
+    class INetPeer
 	{
 	public:
 		typedef enum
 		{
 			trans_tcp       = 1,
 			trans_udp       = 2,
-			trans_mc        = 3
 		} trans_type;
-
-		typedef enum
-		{
-			peer_active  = 1,
-			peer_passive = 2
-		} peer_type;
 
 		typedef struct _PEER_CONFIG
 		{
@@ -53,9 +58,16 @@ namespace NetWork
 			unsigned short     nRemotePort;
 
 			trans_type         transType;
-			peer_type          peerType;
 			INetPeerSink*      pSink;
 
+			void PEER_CONFIG()
+			{
+				memset(sRemoteIP, 0, sizeof(sRemoteIP));
+				nRemotePort = 0;
+
+				transType = trans_tcp;
+				pSink = NULL;
+			}
 		} PEER_CONFIG;
 
 	public:

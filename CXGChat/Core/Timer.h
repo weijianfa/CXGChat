@@ -16,19 +16,13 @@ public:
 
 private:
 
-#if(CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	virtual bool OnTimer(int nTimeID) = 0;
 	static void __stdcall TimerProc(unsigned int uID, unsigned int msg, unsigned long dwUser, unsigned long dw1, unsigned long dw2);
-#endif
 
 private:
 
 	unsigned int m_nTimerID;
 	unsigned int m_nTimerResolution;
-
-#if(CC_TARGET_PLATFORM != CC_PLATFORM_WIN32)
-	struct itimerval m_tTick;
-#endif
 };
 
 #endif

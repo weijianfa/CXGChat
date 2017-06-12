@@ -2,14 +2,15 @@
 //
 
 #include "ChatRoom.h"
-#include "zlib.h"
+
+#pragma warning(disable: 4996)
 
 long hex2dec(char * s)
 {
 	int L = (int)strlen(s);
 	char c;
 	long re = 0;
-	while (c = s++[0])
+	while ((c = s++[0]))
 	{
 		if (c >= '0' && c <= '9')
 		{
@@ -32,9 +33,8 @@ std::string unescape(char* str)
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	const int nMultiByte = 2;
 #else
-	setlocale(LC_CTYPE, "zh_CN.UTF-8");
+	int nByte = 0;
 	const int nMultiByte = 3;
-    	int nByte = 0;
 #endif
 
 	char* re = (char*)calloc(strlen(str) + 1, 1);
@@ -52,7 +52,7 @@ std::string unescape(char* str)
 			break;
 		}
 
-		if (n = _str - str)
+		if ((n = _str - str))
 		{
 			memcpy(_re, str, n);
 			_re += n;
@@ -67,12 +67,14 @@ std::string unescape(char* str)
 			memset(code, 0, 5);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 			WideCharToMultiByte(CP_OEMCP, NULL, &wc, -1, (char*)code, nMultiByte, NULL, FALSE);
+			memcpy(_re, code, nMultiByte);
+			_re += nMultiByte;
 #else
 			wcstombs(code, &wc, nMultiByte);
-#endif
-            		nByte = (int)strlen(code);
+			nByte = (int)strlen(code);
 			memcpy(_re, code, nByte);
 			_re += nByte;
+#endif
 		}
 		else
 		{
@@ -100,6 +102,7 @@ CChatRoom::CChatRoom(IChatRoomObserver* pObserver)
 	m_bConnect = false;
 	m_nKeepLiveTimer = 0;
 	m_nMasterId = "";
+	m_nMasterNo = "";
 	m_nRoomId = "";
 	m_nRoomPort = 0;
 
@@ -111,15 +114,18 @@ CChatRoom::CChatRoom(IChatRoomObserver* pObserver)
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	m_hEnter = CreateEvent(NULL, TRUE, FALSE, NULL);
-#else
-	sem_init(&m_semEnter, 0, 0);
 #endif
 }
 
 CChatRoom::~CChatRoom()
 {
-	StopTimer(m_nKeepLiveTimer);
-
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+    StopTimer(m_nKeepLiveTimer);
+#else
+    pthread_detach(m_HeartBeat);
+#endif
+	
 	if (m_pLink)
 	{
 		m_pLink->Close();
@@ -128,8 +134,6 @@ CChatRoom::~CChatRoom()
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	CloseHandle(m_hEnter);
-#else
-	sem_destroy(&m_semEnter);
 #endif
 }
 
@@ -144,17 +148,15 @@ void CChatRoom::SetChatRoomInfo(ChatRoomInfo RoomInfo)
 	m_nRoomId	= RoomInfo.nRoomId;
 	m_nRoomPort = RoomInfo.nPort;
 	m_nMasterId = RoomInfo.nMasterId;
-	
-	for (long i = 0; i < MAX_CHAT_NODE; i++)
+	m_nMasterNo = RoomInfo.nMasterNo;
+
+	for (int i = 0; i < MAX_CHAT_NODE; i++)
 	{
 		m_strRoomIp[i] = RoomInfo.strIp[i];
 	}
-    
-    
-    printf("##### %s,%s", m_nRoomId.c_str(), m_nMasterId.c_str());
 }
 
-void CChatRoom::OpenTCPLink(long nNodeNum)
+void CChatRoom::OpenTCPLink(int nNodeNum)
 {
 	if (m_pLink)
 	{
@@ -194,7 +196,7 @@ long CChatRoom::EnterChatRoom()
 		return 0;
 	}
 
-	long nNodeNum = 0;
+	int nNodeNum = 0;
 	{
 		pthread_mutex_lock(&m_SynchMutex);
 
@@ -209,7 +211,7 @@ long CChatRoom::EnterChatRoom()
 		{
 			m_strChatMsg = ERR_CONNECT_FAILD;
 			m_eMsgType = CR_ERROR;
-			m_pObserver->OnError(1, "");
+			m_pObserver->OnError(m_eMsgType, m_strChatMsg);
 			ExitChatRoom();
 			return 0;
 		}
@@ -217,15 +219,14 @@ long CChatRoom::EnterChatRoom()
 		std::string jsonEnter = "{\"_method_\":\"Enter\",\"type\":\"0\",\"rid\":\"";
 		jsonEnter += m_nRoomId;
 		jsonEnter += "\",\"uid\":\"";
-		jsonEnter += m_nMasterId;
+        //jsonEnter += m_nMasterId;
 		jsonEnter += "\",\"uname\":\"hehe\",\"token\":\"";
 		jsonEnter += m_strToken;
-		//jsonEnter += "\",\"md5\":\"RTYUI\",\"majorType\":\"0\",\"terminal\":\"2\"}";
         jsonEnter += "\",\"md5\":\"RTYUI\",\"majorType\":\"0\",\"terminal\":\"2\",\"v\":\"0\"}";
 
 		CPacket* pPacket = CPacket::CreateFromPayload((char*)jsonEnter.c_str(), (int)jsonEnter.length());
+        pPacket->SetPacketAction(ENTER);
 		pPacket->SetPacketType(0);
-        pPacket->SetPacketAction(0);
 		m_pLink->SendPacket(pPacket);
 
 		pthread_mutex_unlock(&m_SynchMutex);
@@ -245,22 +246,15 @@ long CChatRoom::EnterChatRoom()
 	m_nKeepLiveTimer = StartTimer(true, KEEPLIVE_INTERVAL * MULTIPLENUM, 50);
 #else
 
-//	clock_gettime(CLOCK_REALTIME, &m_tOutTime);
-//	m_tOutTime.tv_sec += MAX_WAIT_TIME;
-//    int nRet = 0;//sem_timedwait(&m_semEnter, &m_tOutTime);
-//	if (nRet == -1)
-//	{
-//		m_eMsgType = CR_ERROR;
-//		m_strChatMsg = ERR_ENTER_FAILD;
-//		m_pObserver->OnError(1,"");
-//		return 0;
-//	}
-
-	//signal(SIGALRM, CChatRoom::OnTimer);
-	//alarm(KEEPLIVE_INTERVAL);
+    time_t curtime = time(NULL);
+    if(!IsEnterChatRoom(curtime))
+    {
+        m_strChatMsg = ERR_ENTER_FAILD;
+        m_eMsgType = CR_ERROR;
+        //m_pObserver->OnChatRoom(m_eMsgType,"");
+    }
+	KeepLive();
 #endif
-
-	m_bEnter = true;
 	return nNodeNum;
 }
 
@@ -275,67 +269,9 @@ void CChatRoom::UserList() {
     pthread_mutex_unlock(&m_SynchMutex);
 }
 
-long CChatRoom::Speak(std::string words, std::string uid, bool ispublic) {
-    pthread_mutex_lock(&m_SynchMutex);
-    
-    if(uid == "0") {  //to all the room users; ispublic is to all
-        std::string jsonSpeaker = "{\"_method_\":\"SendPubMsg\",\"toMasterId\":\"";
-        //jsonSpeaker += uid;
-        jsonSpeaker += "\",\"toMasterNick\":\"\"";
-        jsonSpeaker += ",\"ct\":\"" ;
-        jsonSpeaker += words;
-        jsonSpeaker += "\"}";
-        
-        CPacket* pPacket = CPacket::CreateFromPayload((char*)jsonSpeaker.c_str(), (int)jsonSpeaker.length());
-        pPacket->SetPacketAction(0);
-        pPacket->SetPacketType(2);
-        m_pLink->SendPacket(pPacket);
-        
-        
-    }else {      // to somebody
-        if(ispublic) {  //
-            std::string jsonSpeaker = "{\"_method_\":\"SendPubMsg\",\"toMasterId\":\"";
-            //jsonSpeaker += uid;
-            jsonSpeaker += "\",\"toMasterNick\":\"\"";
-            jsonSpeaker += ",\"ct\":\"" ;
-            jsonSpeaker += words;
-            jsonSpeaker += "\"}";
-            
-            
-            
-            CPacket* pPacket = CPacket::CreateFromPayload((char*)jsonSpeaker.c_str(), (int)jsonSpeaker.length());
-            printf("%s,%s,%s", m_nRoomId.c_str(),m_nMasterId.c_str(),jsonSpeaker.c_str());
-            pPacket->SetPacketAction(0);
-            pPacket->SetPacketType(2);
-            m_pLink->SendPacket(pPacket);
-        } else {
-            std::string jsonSpeaker = "{\"_method_\":\"SendPubMsg\",\"toMasterId\":\"";
-            jsonSpeaker += uid;
-            jsonSpeaker += "\",\"toMasterNick\":\"\",\"rid\":\"";
-            jsonSpeaker += m_nRoomId;
-            jsonSpeaker += "\",\"uid\":\"";
-            jsonSpeaker += m_nMasterId;
-            jsonSpeaker += "\",\"ct\":\"" ;
-            jsonSpeaker += words;
-            jsonSpeaker += "\",\"pub\":\"0\",\"key\":\"\",\"code\":\"\",\"checksum\":\"\",\"v\",\"0\"}";
-            
-            CPacket* pPacket = CPacket::CreateFromPayload((char*)jsonSpeaker.c_str(), (int)jsonSpeaker.length());
-            pPacket->SetPacketAction(0);
-            pPacket->SetPacketType(2);
-            m_pLink->SendPacket(pPacket);
-        }
-    }
-    pthread_mutex_unlock(&m_SynchMutex);
-
-    return 1;
-}
-
-long CChatRoom::ReentryChatRoom(long nNodeNum)
+long CChatRoom::ReentryChatRoom(int nNodeNum)
 {
-    if (m_bEnter)
-	{
-		return nNodeNum;
-	}
+	if (m_bEnter){ return nNodeNum; }
 
 	{
 		pthread_mutex_lock(&m_SynchMutex);
@@ -344,16 +280,15 @@ long CChatRoom::ReentryChatRoom(long nNodeNum)
 		if (!m_bConnect){ return EnterChatRoom(); }
 
 		std::string jsonEnter = "{\"_method_\":\"Enter\",\"type\":\"0\",\"rid\":\"";
-		jsonEnter += m_nRoomId;
+        jsonEnter += m_nRoomId;
 		jsonEnter += "\",\"uid\":\"";
 		jsonEnter += m_nMasterId;
 		jsonEnter += "\",\"uname\":\"hehe\",\"token\":\"";
 		jsonEnter += m_strToken;
-		//jsonEnter += "\",\"md5\":\"RTYUI\",\"majorType\":\"0\",\"terminal\":\"2\"}";
-        jsonEnter += "\",\"md5\":\"RTYUI\",\"majorType\":\"0\",\"terminal\":\"2\"}";
+        jsonEnter += "\",\"md5\":\"RTYUI\",\"majorType\":\"0\",\"terminal\":\"2\",\"v\":\"0\"}";
 
-		CPacket* pPacket = CPacket::CreateFromPayload((char*)jsonEnter.c_str(), jsonEnter.length());
-        pPacket->SetPacketAction(0);
+		CPacket* pPacket = CPacket::CreateFromPayload((char*)jsonEnter.c_str(), (int)jsonEnter.length());
+        pPacket->SetPacketAction(ENTER);
 		pPacket->SetPacketType(0);
 		m_pLink->SendPacket(pPacket);
 
@@ -373,22 +308,17 @@ long CChatRoom::ReentryChatRoom(long nNodeNum)
 	m_nKeepLiveTimer = StartTimer(true, KEEPLIVE_INTERVAL * MULTIPLENUM, 50);
 #else
 
-	clock_gettime(CLOCK_REALTIME, &m_tOutTime);
-	m_tOutTime.tv_sec += MAX_WAIT_TIME;
-    int nRet = 0;//sem_timedwait(&m_semEnter, &m_tOutTime);
-	if (nRet == -1)
-	{
-		m_eMsgType = CR_ERROR;
-		m_strChatMsg = ERR_REENTRY_FAILD;
-		m_pObserver->OnError(1, "");
-		return nNodeNum;
-	}
+    time_t curtime = time(NULL);
+    if(!IsEnterChatRoom(curtime))
+    {
+        m_strChatMsg = ERR_ENTER_FAILD;
+        m_eMsgType = CR_ERROR;
+        m_pObserver->OnError(m_eMsgType, m_strChatMsg);
+    }
 
-	//signal(SIGALRM, CChatRoom::OnTimer);
-	//alarm(KEEPLIVE_INTERVAL);
+	KeepLive();
 #endif
 
-	m_bEnter = true;
 	return nNodeNum;
 }
 
@@ -400,7 +330,12 @@ void CChatRoom::ExitChatRoom()
 	}
 
 	m_bEnter = false;
-	//StopTimer(m_nKeepLiveTimer);
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	StopTimer(m_nKeepLiveTimer);
+#else
+	pthread_detach(m_HeartBeat);
+#endif
 
 	if (m_pLink != NULL)
 	{
@@ -438,22 +373,106 @@ bool CChatRoom::OnTimer(int nTimeID)
 
 #else
 
-void CChatRoom::OnTimer(long nTimeId)
+void CChatRoom::KeepLive()
 {
-	time_t tStamp = time(NULL);
+	if (m_bEnter)
+	{
+		pthread_attr_t attr;
+		pthread_attr_init(&attr);
+		pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 
-	std::string HreatBeat = "{\"randomNumber\":\"";
-	HreatBeat += std::to_string(tStamp);
-	HreatBeat += "\",\"v\":\"0\"}";
+		time(&m_tLastTime);
+		pthread_create(&m_HeartBeat, &attr, CChatRoom::SendHeartBeat, this);
+	}
+}
 
-	CPacket* pPacket = CPacket::CreateFromPayload((char*)HreatBeat.c_str(), HreatBeat.length());
-	pPacket->SetPacketType(KEEPLIVE);
-	if (g_pLink)
-		g_pLink->SendPacket(pPacket);
+bool CChatRoom::IsEnterChatRoom(time_t current)
+{
+	time_t tstamp = time(NULL);
+	while (tstamp - current <= MAX_WAIT_TIME)
+	{
+		if (m_bEnter){ break; }
+		usleep(500000);
+		time(&tstamp);
+	}
 
-	//alarm(KEEPLIVE_INTERVAL);
+	return m_bEnter;
+}
+
+void* CChatRoom::SendHeartBeat(void *arg)
+{
+	CChatRoom* pCt = (CChatRoom*)arg;
+	time_t tStamp;
+	while (pCt->m_bEnter)
+	{
+		time(&tStamp);
+		if (tStamp - pCt->m_tLastTime >= KEEPLIVE_INTERVAL)
+		{
+            std::string HreatBeat = "{\"randomNumber\":\"";
+            HreatBeat += std::to_string(tStamp);
+            HreatBeat += "\",\"v\":\"0\"}";
+
+			CPacket* pPacket = CPacket::CreateFromPayload((char*)HreatBeat.c_str(), (int)HreatBeat.length());
+            pPacket->SetPacketAction(KEEPLIVE);
+			pPacket->SetPacketType(0);
+			if (pCt->m_pLink)
+			{
+				pCt->m_pLink->SendPacket(pPacket);
+			}
+			pCt->m_tLastTime = tStamp;
+		}
+		sleep(TICKER_TIME);
+	}
+
+	return 0;
 }
 #endif
+
+void CChatRoom::SendChatMsg(std::string strMsg,std::string strMasterid, bool bPrivate)
+{
+   	pthread_mutex_lock(&m_SynchMutex);
+    
+    std::string jsonChatMsg = "{\"_method_\":\"";
+    if(strMasterid.empty())
+        jsonChatMsg += "SendPubMsg\",\"toMasterId\":\"";
+    else
+    {
+        jsonChatMsg += "SendPrvMsg\",\"toMasterId\":\"";
+        jsonChatMsg += strMasterid;
+    }
+
+    jsonChatMsg += "\",\"toMasterNick\":\"\",\"ct\":\"";
+    jsonChatMsg += strMsg;
+    jsonChatMsg += "\",\"pub\":\"";
+    
+    if(strMasterid.empty())
+        jsonChatMsg += "0";
+    else
+        jsonChatMsg += "1";
+    
+    jsonChatMsg += "\",\"key\":\"\",\"code\":\"\",\"checksum\":\"0\",\"v\":\"0\"}";
+    
+    
+    CPacket* pPacket = CPacket::CreateFromPayload((char*)jsonChatMsg.c_str(), (int)jsonChatMsg.length());
+    pPacket->SetPacketType(2);
+    
+    if(strMasterid.empty())
+        pPacket->SetPacketAction(SENDMSG);
+    else
+    {
+        if(bPrivate)
+            pPacket->SetPacketAction(SENDMSG_PRI);
+        else
+            pPacket->SetPacketAction(SENDMSG_PUB);
+    }
+    
+    if (m_pLink)
+    {
+        m_pLink->SendPacket(pPacket);
+    }
+    
+    pthread_mutex_unlock(&m_SynchMutex);
+}
 
 void CChatRoom::OnLinkErr(CRawLink* pLink)
 {
@@ -465,7 +484,11 @@ void CChatRoom::OnLinkErr(CRawLink* pLink)
 	pthread_mutex_lock(&m_SynchMutex);
 
 	m_bEnter = false;
-	//StopTimer(m_nKeepLiveTimer);
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	StopTimer(m_nKeepLiveTimer);
+#else
+    pthread_detach(m_HeartBeat);
+#endif
 
 	if (m_pLink != NULL)
 	{
@@ -476,7 +499,7 @@ void CChatRoom::OnLinkErr(CRawLink* pLink)
 
 	m_strChatMsg = MSG_RECONNECT_CHAT;
 	m_eMsgType = CR_RECONNECT;
-	m_pObserver->OnError(1,"");
+	//m_pObserver->OnError(m_eMsgType,m_strChatMsg);
 
 	pthread_mutex_unlock(&m_SynchMutex);
 }
@@ -487,16 +510,9 @@ void CChatRoom::OnLinkPacket(CRawLink* pLink, CPacket* pPacket)
 	{
 		return;
 	}
-    
-    time_t rawtime;
-    time ( &rawtime );
-    this->lastPackTime = rawtime;
-    
-    printf("chatroom: type %d, %d\n", pPacket->GetPacketType() >> 16, pPacket->GetPacketType() & 0xffff);
 
 	if (pPacket->GetPacketType() == ((3<<16) + 0))
 	{
-        printf("receive 3,0\n");
 		return;
 	}
 
@@ -518,15 +534,85 @@ void CChatRoom::OnLinkPacket(CRawLink* pLink, CPacket* pPacket)
 		nRet = uncompress((Bytef*)dbuf, &dlen, (Bytef*)pPacket->GetPayload(), pPacket->GetPacketSize());
 	}
     
+    Json::Reader reader;
+    Json::Value object;
     
-//    printf("comming: %s\n",dbuf);
-    
-    PtlBase* protocol = PtlBase::getProtocol(dbuf);
-    
-    if(protocol == NULL) {
-        return ;
+    try
+    {
+        if (!reader.parse(dbuf, object))
+        {
+            if (dbuf){ free(dbuf); }
+            return;
+        }
+    }
+    catch (std::exception& e)
+    {
+        if (dbuf){ free(dbuf); }
+        return;
     }
     
+    std::string retcode = object["retcode"].asString();
+    if(retcode != "000000")
+    {
+        int ncode = atoi(retcode.c_str());
+        switch (ncode) {
+            case 401005:
+                m_pObserver->OnError(401005, ERR_ROOMID_INVALID);
+                break;
+            case 409004:
+                m_pObserver->OnError(401005, ERR_REPETITION_LOGIN);
+                break;
+                
+            default:
+                break;
+        }
+        if (dbuf){ free(dbuf); }
+        return;
+    }
+    
+    
+    Json::Value msgObj = object["msg"];
+    if(msgObj.empty() || msgObj.size() <= 0)
+    {
+        if (dbuf){ free(dbuf); }
+        return;
+    }
+    
+    Json::Value::iterator itc = msgObj.begin();
+    std::string action = "";
+    std::string msgtype = "";
+    int nMsgType = -1;
+    int nAction = -1;
+    while(itc != msgObj.end())
+    {
+        action = (*itc)["b"].asString();
+        msgtype = (*itc)["c"].asString();
+        nMsgType = atoi(msgtype.c_str());
+        nAction = atoi(action.c_str());
+        
+        std::cout << "action = " << nAction << ", msgtype = " << nMsgType << std::endl;
+        if (!m_bEnter && !nMsgType && !nAction)
+        {
+            Json::Value ctObj = (*itc)["ct"];
+            if(!ctObj.empty())
+            {
+                std::string strMasterId = ctObj["bb"].asString();
+                if(strMasterId == m_nMasterId)
+                {
+                    m_bEnter = true;
+                }
+            }
+        }
+
+        PtlBase* protocol = PtlBase::getProtocol( (nAction << 16 ) + nMsgType , msgObj);
+        m_pObserver->OnMsg(protocol);
+        ++itc;
+    }
+
+    if (dbuf){ free(dbuf); }
+    return;
+}
+    /*
     switch(protocol->getRetCode()){
         case 0: // ok
 //            printf("****** ok \n");
@@ -543,7 +629,7 @@ void CChatRoom::OnLinkPacket(CRawLink* pLink, CPacket* pPacket)
         case 401002:
             break;
         case 401005:  // invalid roomid
-            m_pObserver->OnError(401005, "");
+            m_pObserver->OnError(401005, ERR_REPETITION_LOGIN);
             break;
         case 401007:
             break;
@@ -600,15 +686,7 @@ void CChatRoom::OnLinkPacket(CRawLink* pLink, CPacket* pPacket)
             break;
             
     }
-
-    
-	if (dbuf)
-	{
-		free(dbuf);
-	}
-
-	return;
-}
+     */
 
 long CChatRoom::AddRef()
 {
@@ -636,14 +714,24 @@ bool CChatRoom::IsConnect()
 }
 
 #define STACK_ARRAY(TYPE, LEN) static_cast<TYPE*>(::alloca((LEN)*sizeof(TYPE)))
-std::string CChatRoom::TransCode(const std::string& strUtf8)
+std::string CChatRoom::Utf_8ToANSI(const std::string& strUtf8)
 {
-	int nLen = strUtf8.size() * 4;
+	int nLen = (int)strUtf8.size() * 4;
 	char* pANSI = STACK_ARRAY(char, nLen);
-	Utf_8ToANSI(strUtf8.c_str(), strUtf8.size(), pANSI, &nLen);
+	Utf_8ToANSI(strUtf8.c_str(), (int)strUtf8.size(), pANSI, &nLen);
 	std::string strANSI = pANSI;
 	strANSI.assign(pANSI, nLen);
 	return strANSI;
+}
+
+std::string CChatRoom::ANSIToUtf_8(const std::string& strANSI)
+{
+	int nLen = (int)strANSI.size() * 4;
+	char* pUtf_8 = STACK_ARRAY(char, nLen);
+	ANSIToUtf_8(strANSI.c_str(), (int)strANSI.size(), pUtf_8, &nLen);
+	std::string strUtf_8;
+	strUtf_8.assign(pUtf_8, nLen);
+	return strUtf_8;
 }
 
 bool CChatRoom::Utf_8ToANSI(const char* pUtf8, int nUtf_8Len, char* pANSI, int* ANSILen)
@@ -666,7 +754,48 @@ bool CChatRoom::Utf_8ToANSI(const char* pUtf8, int nUtf_8Len, char* pANSI, int* 
 
 	delete[] pUnicode;
 
+#else
+	size_t nUnicodeLen = mbstowcs(nullptr, pUtf8, 0);
+	wchar_t* pUnicode = new wchar_t[nUnicodeLen + 1];
+	memset(pUnicode, 0, nUnicodeLen * 2 + 2);
+	mbstowcs(pUnicode, pUtf8, nUtf_8Len);
+
+	size_t nLen = wcstombs(nullptr, pUnicode, 0);
+	if (*ANSILen < nLen)
+	{
+		return false;
+	}
+
+	memset(pANSI, 0, *ANSILen);
+	wcstombs(pANSI, pUnicode, nLen);
+
+	delete[] pUnicode;
+
 #endif
+	return true;
+}
+
+bool CChatRoom::ANSIToUtf_8(const char* pANSI, int nANSILen, char* pUtf_8, int* Utf_8Len)
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	int nUnicodeLen = MultiByteToWideChar(CP_ACP, 0, pANSI, nANSILen, NULL, 0);
+	wchar_t* pUnicode = new wchar_t[nUnicodeLen + 1];
+	memset(pUnicode, 0, nUnicodeLen * 2 + 2);
+	MultiByteToWideChar(CP_ACP, 0, pANSI, nANSILen, pUnicode, nUnicodeLen);
+
+	int nLen = WideCharToMultiByte(CP_UTF8, 0, pUnicode, nUnicodeLen, NULL, 0, NULL, NULL);
+	if (*Utf_8Len < nLen)
+	{
+		return false;
+	}
+
+	memset(pUtf_8, 0, *Utf_8Len);
+	WideCharToMultiByte(CP_UTF8, 0, pUnicode, nUnicodeLen, pUtf_8, nLen, NULL, NULL);
+	*Utf_8Len = nLen;
+
+	delete[] pUnicode;
+#endif
+
 	return true;
 }
 
@@ -674,17 +803,17 @@ std::string CChatRoom::EscapeCode(std::string& str)
 {
 	EscapeCode(str, "&amp;", "&");
 	EscapeCode(str, "&nbsp;", " ");
-	EscapeCode(str, "&middot;", "°§");
+	EscapeCode(str, "&middot;", "");
 	EscapeCode(str, "&rsquo;", "'");
 	EscapeCode(str, "&lsquo;", "'");
 	EscapeCode(str, "&ldquo;", "\"");
 	EscapeCode(str, "&rdquo;", "\"");
 	EscapeCode(str, "&quot;", "\"");
-	EscapeCode(str, "&mdash;", "°™");
-	EscapeCode(str, "&hellip;", "°≠°≠");
+	EscapeCode(str, "&mdash;", "");
+	EscapeCode(str, "&hellip;", "");
 	EscapeCode(str, "&lt;", "<");
-	EscapeCode(str, "&rarr;", "°˙");
-	EscapeCode(str, "&cap;", "°…");
+	EscapeCode(str, "&rarr;", "");
+	EscapeCode(str, "&cap;", "");
 
 	return str;
 }

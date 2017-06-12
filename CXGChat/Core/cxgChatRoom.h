@@ -3,17 +3,11 @@
 
 #include "Includes/PrecompileConfig.h"
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-#ifdef CXGCHATROOM_EXPORTS
-#define CXGCHATROOM_API __declspec(dllexport)
-#else
-#define CXGCHATROOM_API __declspec(dllimport)
-#endif
-#endif
-
-#if defined(UNICODE) || defined(_UNICODE)
-typedef wchar_t LCHAR;
-#else
-typedef char LCHAR;
+    #ifdef CXGCHATROOM_EXPORTS
+        #define CXGCHATROOM_API __declspec(dllexport)
+    #else
+        #define CXGCHATROOM_API __declspec(dllimport)
+    #endif
 #endif
 
 #include "ChatMsgInfo.h"
@@ -54,9 +48,10 @@ namespace ChatRoom
 	struct ChatRoomInfo
 	{
 		long	nPort;
-        std::string nRoomId;
-        std::string nMasterId;
-
+        
+        std::string nMasterNo;
+		std::string nRoomId;
+		std::string nMasterId;
 		std::string strIp[MAX_CHAT_NODE];
 
 		ChatRoomInfo()
@@ -64,6 +59,7 @@ namespace ChatRoom
 			nPort	= 0;
 			nRoomId	= "";
 			nMasterId = "";
+			nMasterNo = "";
 
 			for (int i = 0; i < MAX_CHAT_NODE; i++)
 			{
@@ -78,10 +74,8 @@ namespace ChatRoom
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 		virtual void __stdcall OnChatRoom(ChatRoomMsg crMsg, const char* strMsg) = 0;
 #else
-        // 消息的回调
         virtual void OnMsg(PtlBase* ptl) = 0;
-        // 错误的回调
-        virtual void OnError(long errcode, char* msg) = 0;
+        virtual void OnError(int errcode, char* msg) = 0;
 #endif
 	};
 
@@ -94,27 +88,30 @@ namespace ChatRoom
 		virtual bool __stdcall IsEntered(void) = 0;
 		virtual bool __stdcall IsConnect(void) = 0;
 
-		virtual long  __stdcall EnterChatRoom(void) = 0;
-		virtual long  __stdcall ReentryChatRoom(int nNodeNum = 0) = 0;
+		virtual int  __stdcall EnterChatRoom(void) = 0;
+		virtual int  __stdcall ReentryChatRoom(int nNodeNum = 0) = 0;
 		virtual void __stdcall ExitChatRoom(void) = 0;
 
 		virtual void __stdcall SetToken(std::string strToken) = 0;
 		virtual void __stdcall SetChatRoomInfo(ChatRoomInfo RoomInfo) = 0;
 
 		virtual std::string __stdcall GetErrMsg(void) = 0;
+		virtual void __stdcall SendChatMsgPacket() = 0;
+		virtual void __stdcall SendHreatBeatPacket() = 0;
 #else
 
 		virtual bool IsEntered(void) = 0;
 		virtual bool IsConnect(void) = 0;
 
-		virtual long  EnterChatRoom(void) = 0;
-		virtual long  ReentryChatRoom(long nNodeNum = 0) = 0;
+		virtual long EnterChatRoom(void) = 0;
+		virtual long ReentryChatRoom(int nNodeNum = 0) = 0;
 		virtual void ExitChatRoom(void) = 0;
-        virtual long Speak(std::string words, std::string uid, bool ispublic) = 0;
+        //virtual long Speak(std::string words, std::string uid, bool ispublic) = 0;
         virtual void UserList(void) = 0;
 
 		virtual void SetToken(std::string strToken) = 0;
 		virtual void SetChatRoomInfo(ChatRoomInfo RoomInfo) = 0;
+        virtual void SendChatMsg(std::string strMsg,std::string strMasterid, bool bPrivate) = 0;
 
 		virtual std::string GetErrMsg(void) = 0;
 #endif

@@ -1,4 +1,5 @@
 #include "RawLink.h"
+#pragma warning(disable: 4996)
 
 CRawLink::CRawLink()
 {
@@ -116,7 +117,6 @@ bool CRawLink::Open(const char* pIP, unsigned short nPort)
 	strcpy(peerConfig.sRemoteIP, pIP);
 #endif
     peerConfig.nRemotePort = nPort;
-    peerConfig.peerType = INetPeer::peer_active;
     peerConfig.transType = INetPeer::trans_tcp;
     peerConfig.pSink = this;
     m_pNetPeer->UpdateConfig(peerConfig);
@@ -176,6 +176,8 @@ void CRawLink::Close()
         }
 
 		pNetPeer->Release();
+        DeleteNetPeer(m_pNetPeer);
+        m_pNetPeer = NULL;
 	}
 
 	ILinkSink* pSink = NULL;

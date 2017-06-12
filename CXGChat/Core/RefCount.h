@@ -3,7 +3,6 @@
 
 #include "Includes/PrecompileConfig.h"
 
-// CRefCount
 class CRefCount
 {
 public:
