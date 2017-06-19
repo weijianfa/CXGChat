@@ -9,10 +9,8 @@
 
 #import "CXGChat.h"
 
-
 @interface ChatControl : NSObject
-//遵循协议的一个代理变量定义
 @property (nonatomic, weak) id<OnChatDelegate> delegate;
-- (void) doOnMessage:(Message*) pkg;
+- (void) doOnMessage:(Message*) package;
 - (void) doOnError:(int) errorCode Msg:(NSString*) msg;
 @end

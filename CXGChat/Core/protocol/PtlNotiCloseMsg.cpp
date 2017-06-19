@@ -7,30 +7,25 @@
 //
 
 #include "PtlBase.hpp"
-#include "ChatRoom.h"
 
-PtlRoomCloseMsg::PtlRoomCloseMsg(int ret, Json::Value buf):PtlBase(ret, buf) {
-    printf( "chatroom: PtlRoomCloseMsg\n");
+PtlRoomCloseMsg::PtlRoomCloseMsg(int ret, Json::Value buf):PtlBase(ret, buf)
+{
+    m_nType = 6;  // msg
+    m_nSubType = 5;   //
     
-    this->type = 6;  // msg
-    this->subType = 5;   //
-    
-//    Json::Value::iterator itc = buf.begin();
-//    std::string typeStr = (*itc)["escape"].asString();
-//    
-//    std::string ct = (*itc)["ct"].asString();
-//    
-//    
-//    if(ct.length() > 0) {
-//        ct = unescape((char*)ct.c_str());
-//        
-//        Json::Reader ctreader;
-//        Json::Value ctobject;
-//        std::string strMsg = "";
-//        if (ctreader.parse(ct.c_str(), ctobject))
-//        {
-//
-//            
-//        }
-//    }
+    Json::Value::iterator itc = buf.begin();
+    std::string ct = (*itc)["ct"].asString();
+    if(!ct.empty())
+    {
+        ct = unescape((char*)ct.c_str());
+        Json::Reader ctreader;
+        Json::Value ctobject;
+        
+        if (ctreader.parse(ct.c_str(), ctobject))
+        {
+            m_User.userID = ctobject["bb"].asInt();
+            m_nExtraProperty = ctobject["b"].asInt();
+        }
+    }
 }
+

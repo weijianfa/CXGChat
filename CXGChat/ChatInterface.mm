@@ -10,315 +10,367 @@
 #import "ChatManager.hpp"
 #import "MessageControl.h"
 
+@implementation EntryAnimation
 
-@implementation Message
-
-- (void) setUid:(NSString*) uid {
-    mUid = uid;
+- (bool) isShow{
+    return _isShow;
 }
-- (void) setNickName:(NSString*) name {
-    mNickName = name;
+- (NSInteger) getID{
+    return _ID;
 }
-- (void) setMsg:(NSString*) msg {
-    mMsg = msg;
+- (NSString*) getPath{
+    return _path;
 }
-
-- (void) setType:(NSInteger) type {
-    mType = type;
+- (NSString*) getVersion{
+    return _version;
 }
 
-- (NSString*) getUid {
-    return mUid;
-}
-- (NSString*) getNickName {
-    return mNickName;
-}
-- (NSString*) getMsg {
-    return mMsg;
-}
-- (NSInteger) getType {
-    return mType;
-}
-
-- (void) setSubType:(NSInteger) stype {
-    self->mSubType = stype;
-}
-- (void) setSimpleProperty:(NSInteger) property {
-    self->mSimpleProperty  = property;
-}
-
-- (void) addUserList:(User*) user {
-    if(mUserList == NULL) {
-        mUserList = [[NSMutableArray alloc] init];
-    }
-    [mUserList addObject:user];
-}
-
-- (NSInteger) getSubType {
-    return mSubType;
-}
-- (NSInteger) getSimpleProperty {
-    return mSimpleProperty;
-}
-
-- (User*) getUser {
-    return mUser;
-}
-
-- (Gift*) getGift {
-    return mGift;
-}
-
-- (NSMutableArray*) getUserList {
-    return mUserList;
-}
-
-- (id) init
+- (void) setProPertyWithID:(NSInteger)ID andPath:(NSString *)path andVersion:(NSString *)version isShow:(bool)isShow
 {
-    if(self = [super init])
-    {
-        mUser = [[User alloc] init];
-        mGift = [[Gift alloc] init];
-    }
-    return self; 
+    _ID = ID;
+    _path = path;
+    _version = version;
+    _isShow = isShow;
 }
-
 @end
 
 
 @implementation User
 
-- (NSInteger) getFensi {
-    return fensi;
-}
-
-- (NSInteger) getCaifu {
-    return caifu;
-}
-
-- (NSInteger) getJuese {
-    return juese;
-}
-
-- (NSString*) getJueseStr {
-    return jueseStr;
-}
-
-- (NSString*) getUserID {
+- (NSString*) getUserID{
     return userID;
 }
-
-- (NSString*) getNickName {
+- (NSString*) getNickName{
     return nickName;
 }
-
-- (NSString*) getHead {
-    return head;
+- (NSString*) getHeadIcon{
+    return headIcon;
 }
-
-- (NSString *)getGameUid {
+- (NSString *)getGameUid{
     return gameUid;
 }
 
-- (void) setJueseStr:(NSString*) juesestr {
-    self->jueseStr = juesestr;
+- (NSString*) getRoomRole{
+    return roomRole;
+}
+- (NSString*) getGameZoneName{
+    return gameZoneName;
 }
 
-- (void) setGameUid:(NSString *) gameUid
+
+- (NSInteger) getTerminal{
+    return terminal;
+}
+- (NSInteger) getUserType{
+    return userType;
+}
+- (NSInteger) getRoleID{
+    return roleID;
+}
+- (NSInteger) getSortNum{
+    return sortNum;
+}
+
+- (NSInteger) getFansLevel{
+    return fansLevel;
+}
+- (NSInteger) getRichLevel{
+    return richLevel;
+}
+- (NSInteger) getUserLevel{
+    return userLevel;
+}
+
+
+- (NSInteger) getEquipScore{
+    return equipScore;
+}
+- (NSInteger) getGameRoleType{
+    return gameRoleType;
+}
+- (NSInteger) getGameVIPLevel{
+    return gameVIPLevel;
+}
+
+- (bool) getPrivateChatStatus{
+    return isAllowPrivateChat;
+}
+- (bool) getReconnectStatus{
+    return isReconnect;
+}
+
+- (EntryAnimation*) getEntryAnimation{
+    return _entryAnimation;
+}
+
+- (id) init
 {
-    self->gameUid = jueseStr;
+    self = [super init];
+    if(self)
+        _entryAnimation = [[EntryAnimation alloc] init];
+    
+    return self;
 }
 
-- (void) setFensi:(NSInteger) temp {
-    self->fensi = temp;
+
+- (void) setUserBaseInfoWithUid:(NSString *)uid andNickName:(NSString *)name andHeadIcon:(NSString *)icon andGameUid:(NSString *)guid
+{
+    userID = uid;
+    nickName = name;
+    headIcon = icon;
+    gameUid = guid;
 }
 
-- (void) setCaifu:(NSInteger) temp {
-    self->caifu = temp;
+- (void) setUserLevelInfoWithFans:(NSInteger)fanslv andRich:(NSInteger)richlv andUser:(NSInteger)userlv
+{
+    fansLevel = fanslv;
+    richLevel = richlv;
+    userLevel = userlv;
 }
 
-- (void) setJuese:(NSInteger) temp {
-    self->juese = temp;
+- (void) setUserDetailInfoWithRoomRole:(NSString *)role andUserType:(NSInteger)type andRoleID:(NSInteger)roleid andSortNum:(NSInteger)num
+{
+    roomRole = role;
+    userType = type;
+    roleID = roleid;
+    sortNum = num;
 }
 
-- (void) setUserID:(NSString*) uid {
-    self->userID = uid;
+- (void) setUserGameInfoWithGameZoneName:(NSString *)zonename andEquipScore:(NSInteger)score andGameRoleType:(NSInteger)gameroletype andGameVipLevel:(NSInteger)viplevel
+{
+    gameZoneName = zonename;
+    equipScore = score;
+    gameRoleType = gameroletype;
+    gameVIPLevel = viplevel;
 }
 
-- (void) setNickName:(NSString*) nick {
-    self->nickName = nick;
+- (void) setTerminal:(NSInteger)term
+{
+    terminal = term;
 }
 
-- (void) setHead:(NSString*) headimg {
-    self->head = headimg;
+- (void) setPrivateChatStatus:(bool)isallow
+{
+    isAllowPrivateChat = isallow;
 }
 
+- (void) setReconnectStatus:(bool)isreconnect
+{
+    isReconnect = isreconnect;
+}
 @end
+
 
 @implementation  Gift
 
-- (NSString*) getName {
-    return name;
+- (NSString*) getGiftName{
+    return giftName;
 }
-- (NSInteger) getCount {
-    return count;
+- (NSString*) getGiftIcon{
+    return giftIcon;
 }
-
-- (void) setName:(NSString*) temp {
-    self->name = temp;
-}
-
-- (void) setCount:(NSInteger) temp {
-    self->count = temp;
+- (NSString*) getGiftUniqueID{
+    return giftUniqueID;
 }
 
-- (NSString*) getZipPath {
-    return zipPath;
+- (NSInteger) getGiftID{
+    return giftID;
 }
-- (NSInteger) getGiftId {
-    return giftId;
+- (NSInteger) getGiftCount{
+    return giftCount;
 }
-- (NSInteger) getVersion {
+- (NSInteger) getGiftType{
+    return giftType;
+}
+- (NSInteger) getComboNum{
+    return comboNum;
+}
+- (NSInteger) getComboGroupNum{
+    return comboGroupNum;
+}
+- (NSInteger) getVersion{
     return version;
 }
-- (bool) getIsShow {
-    return isShow;
+
+- (bool) isCombo{
+    return _isCombo;
+}
+- (bool) isAutoCombo{
+    return _isAutoCombo;
+}
+- (bool) isFree{
+    return _isFree;
 }
 
-- (void) setZipPath:(NSString*) path {
-    self->zipPath = path;
-}
-- (void) setGiftId:(NSInteger) giftid {
-    self->giftId = giftid;
-}
-- (void) setVersion:(NSInteger) ver {
-    self->version = ver;
-}
-- (void) setIsShow:(bool) show {
-    self->isShow = show;
+- (void) setGiftBaseInfoWithName:(NSString *)name andID:(NSInteger)giftid andIcon:(NSString *)icon
+{
+    giftName = name;
+    giftID = giftid;
+    giftIcon = icon;
 }
 
-- (NSInteger) getGroupCount {
-    return groupCount;
-}
-- (NSInteger) getPrice {
-    return price;
-}
-- (NSString*) getUUID {
-    return uuid;
-}
-- (void) setGroupCount:(NSInteger) cnt {
-    self->groupCount = cnt;
-}
-- (void) setPrice:(NSInteger) p {
-    self->price = p;
-}
-- (void) setUUID:(NSString*) uud {
-    self->uuid = uud;
+- (void) setGiftDetailInfoWithUniqueID:(NSString *)uniqueid andCount:(NSInteger)count andType:(NSInteger)type andFree:(bool)isfree
+{
+    giftUniqueID = uniqueid;
+    giftCount = count;
+    giftType = type;
 }
 
+- (void) setGiftComboInfoWithAutoCombo:(bool)isauto andCombo:(bool)iscombo andComboNum:(NSInteger)num andGroupNum:(NSInteger)groupnum
+{
+    _isAutoCombo = isauto;
+    _isCombo = iscombo;
+    comboNum = num;
+    comboGroupNum = groupnum;
+}
+
+- (void) setGiftVersion:(NSInteger)ver
+{
+    version = ver;
+}
 @end
 
+@implementation Message
 
+- (NSInteger) getType{
+    return mType;
+}
+- (NSInteger) getSubType{
+    return mSubType;
+}
+- (NSInteger) getExtraProperty{
+    return mExtraProperty;
+}
+
+- (NSString*) getMsg{
+    return message;
+}
+- (User*) getUser{
+    return _User;
+}
+- (User*) getReceiveUser{
+    return _receiveUser;
+}
+- (Gift*) getGift {
+    return _Gift;
+}
+- (NSMutableArray*) getUserList {
+    return _UserList;
+}
+
+- (id) init
+{
+    self = [super init];
+    if(self)
+    {
+        if(_UserList == NULL)
+            _UserList = [[NSMutableArray alloc] init];
+        
+        _User = [[User alloc] init];
+        _Gift = [[Gift alloc] init];
+        _receiveUser = [[User alloc] init];
+    }
+    
+    return self; 
+}
+
+- (void) setMsgBaseInfoWithType:(NSInteger)type andSubType:(NSInteger)subtype andContent:(NSString *)msg
+{
+    mType = type;
+    mSubType = subtype;
+    message = msg;
+}
+
+- (void) setMsgExtraInfo:(NSInteger)extraProperty
+{
+    mExtraProperty = extraProperty;
+}
+
+- (void) addUserIntoList:(User*)user
+{
+    [_UserList addObject:user];
+}
+@end
 
 
 @interface ChatInterface ()
 
-@property (nonatomic,strong)NSString* mUid;    // user id
-@property (nonatomic,strong)NSString* mToken;    // user id
+@property (nonatomic,strong)NSString* Uid;
+@property (nonatomic,strong)NSString* Rid;
+@property (nonatomic,assign)NSString* Host;
+@property (nonatomic,strong)NSString* Token;
+@property (nonatomic,assign)int Port;
 
-@property (nonatomic,strong)NSString* mRid;    // user id
-
-@property (nonatomic,strong)NSString* mUname;    // user id
-
-@property (nonatomic,assign)long mPort;    // user id
-@property (nonatomic,assign)NSString* mHost;   // user id
-
-@property (nonatomic,strong)ChatControl* mController; //
-
-
+@property (nonatomic,strong)ChatControl* Controller; //
 
 @end
 
 
 @implementation ChatInterface
 
-- (void)dealloc
+- (void)dealloc{
+    _Controller = nil;
+}
+
+- (void) setRoomWithHost:(NSString *)host andPort:(int)port andUserID:(NSString *)uid andRoomID:(NSString *)rid
 {
-    _mController = nil;
+    _Host = host;
+    _Port = port;
+    
+    _Uid = uid;
+    _Rid = rid;
+    
+    if(!_Controller)
+        _Controller = [[ChatControl alloc] init];
+}
+
+- (void) setToken:(NSString *)token
+{
+    _Token = token;
 }
 
 
-- (void)configureRoomHost:(NSString*)host Port:(int)port UID:(NSString*)uid Token:(NSString*)t Rid:(NSString*)rid UName:(NSString*)uname
+- (long) enterChatRoom
 {
-    if ([host length]) {
-        _mHost = host;
-    }
-    if (port != 0) {
-        _mPort = port;
-    }
-    if ([uid length]) {
-        _mUid = uid;
-
-    }
-    if ([t length]) {
-        _mToken = t;
-
-    }
-    
-    if ([rid length]) {
-        _mRid = rid;
-
-    }
-    
-    if ([uname length]) {
-        _mUname = uname;
-
-    }
-    
-    if (!_mController) {
-        _mController = [[ChatControl alloc] init];
-        
-    }
-}
-
-
-- (long) enterRoom {
     NSString* resources = [[NSBundle mainBundle] resourcePath];
-    NSString *s = [NSString stringWithFormat:@"%s/locale/", [resources cStringUsingEncoding:NSUTF8StringEncoding]] ;
-    setenv( "PATH_LOCALE", [s UTF8String] ,1);
+    NSString *path = [NSString stringWithFormat:@"%s/locale/", [resources cStringUsingEncoding:NSUTF8StringEncoding]] ;
+    setenv( "PATH_LOCALE", [path UTF8String] ,1);
+    setlocale(LC_CTYPE, "zh_CN.UTF-8");
     
     
     ChatManager* manager = ChatManager::GetInstance();
-    manager->setHost([_mHost UTF8String], _mPort);
-    manager->setUser([_mUid UTF8String], [_mRid UTF8String], [_mToken UTF8String]);
-    manager->setController(_mController);
-    manager->Enter();
+    manager->setHost([_Host UTF8String], _Port);
+    manager->setUser([_Uid UTF8String], [_Rid UTF8String]);
+    manager->setToken([_Token UTF8String]);
+    manager->setController(_Controller);
+    manager->EnterChatRoom();
 
     return 1;
 }
 
-- (long) leaveRoom {
+- (void) leaveChatRoom
+{
     ChatManager* manager = ChatManager::GetInstance();
     manager->ExitChatRoom();
-    return 1;
 }
 
-- (long) speak:(NSString*) message to:(NSString*)uid andPrivate:(bool)isprivate {
+- (void) speak:(NSString*) message to:(NSString*)uid andPrivate:(bool)isprivate
+{
     ChatManager* manager = ChatManager::GetInstance();
     manager->SendChatMsg([message UTF8String], [uid UTF8String], isprivate);
-    return 1;
 }
 
-- (void) userList {
+- (void) userList
+{
     ChatManager* manager = ChatManager::GetInstance();
     manager->UserList();
 }
 
 - (void)setReceiverObject:(id<OnChatDelegate>)delegate
 {
-    _mController.delegate = delegate;
+    _Controller.delegate = delegate;
 }
 
+- (void) getUserList{}
 
 @end

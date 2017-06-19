@@ -5,6 +5,7 @@
 
 #pragma warning(disable: 4996)
 
+/*
 long hex2dec(char * s)
 {
 	int L = (int)strlen(s);
@@ -92,6 +93,7 @@ std::string unescape(char* str)
 
 	return rt;
 }
+*/
 
 CChatRoom::CChatRoom(IChatRoomObserver* pObserver)
 {
@@ -452,7 +454,6 @@ void CChatRoom::SendChatMsg(std::string strMsg,std::string strMasterid, bool bPr
     
     jsonChatMsg += "\",\"key\":\"\",\"code\":\"\",\"checksum\":\"0\",\"v\":\"0\"}";
     
-    
     CPacket* pPacket = CPacket::CreateFromPayload((char*)jsonChatMsg.c_str(), (int)jsonChatMsg.length());
     pPacket->SetPacketType(2);
     
@@ -555,12 +556,16 @@ void CChatRoom::OnLinkPacket(CRawLink* pLink, CPacket* pPacket)
     if(retcode != "000000")
     {
         int ncode = atoi(retcode.c_str());
-        switch (ncode) {
+        switch (ncode)
+        {
             case 401005:
-                m_pObserver->OnError(401005, ERR_ROOMID_INVALID);
+                m_pObserver->OnError(401005, (char*)ERR_ROOMID_INVALID);
                 break;
             case 409004:
-                m_pObserver->OnError(401005, ERR_REPETITION_LOGIN);
+                m_pObserver->OnError(401005, (char*)ERR_REPETITION_LOGIN);
+                break;
+            case 409007:
+                m_pObserver->OnError(401005, (char*)ERR_TERMINAl_MUTEX);
                 break;
                 
             default:
@@ -605,7 +610,8 @@ void CChatRoom::OnLinkPacket(CRawLink* pLink, CPacket* pPacket)
         }
 
         PtlBase* protocol = PtlBase::getProtocol( (nAction << 16 ) + nMsgType , msgObj);
-        m_pObserver->OnMsg(protocol);
+        if(protocol)
+            m_pObserver->OnMsg(protocol);
         ++itc;
     }
 

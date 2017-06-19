@@ -7,34 +7,32 @@
 //
 
 #include "PtlBase.hpp"
-#include "ChatRoom.h"
 
 // 飞屏
-PtlFeiPingMsg::PtlFeiPingMsg(int ret, Json::Value buf):PtlBase(ret, buf) {
-    printf( "chatroom: PtlFeiPingMsg\n");
-    
-    this->type = 1;  // msg
-    this->subType = 1;  //1-1 feiping
+PtlFeiPingMsg::PtlFeiPingMsg(int ret, Json::Value buf):PtlBase(ret, buf)
+{
+    m_nType = 1;
+    m_nSubType = 3;
     
     Json::Value::iterator itc = buf.begin();
-    std::string typeStr = (*itc)["escape"].asString();
-    
     std::string ct = (*itc)["ct"].asString();
-    
-    
-    if(ct.length() > 0) {
+    if(!ct.empty())
+    {
         ct = unescape((char*)ct.c_str());
-        
         Json::Reader ctreader;
         Json::Value ctobject;
-        std::string strMsg = "";
+        
         if (ctreader.parse(ct.c_str(), ctobject))
         {
-            msg = ctobject["c"].asString();
-            nickName = ctobject["h"].asString();
-            userID = ctobject["bb"].asInt();
-            simpleProperty = ctobject["b"].asInt(); // 飞屏类型
+            m_strMsg = ctobject["c"].asString();
+            
+            m_User.userID = std::to_string(ctobject["bb"].asUInt());
+            m_User.richLevel = ctobject["e"].asInt();
+            m_User.fansLevel = ctobject["a"].asInt();
+            m_User.nickName = ctobject["h"].asString();
+            
+            m_nExtraProperty = ctobject["f"].asDouble();
         }
     }
-
+            //缺少 飞屏id 房间URL 勋章属性
 }

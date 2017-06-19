@@ -7,32 +7,29 @@
 //
 
 #include "PtlBase.hpp"
-#include "ChatRoom.h"
 
-PtlBroadcastMsg::PtlBroadcastMsg(int ret, Json::Value buf):PtlBase(ret, buf) {
-    printf( "chatroom: PtlBroadcastMsg\n");
-    
-    this->type = 1;  // msg
-    this->subType = 3; // 广播
+PtlBroadcastMsg::PtlBroadcastMsg(int ret, Json::Value buf):PtlBase(ret, buf)
+{
+    m_nType = 1;
+    m_nSubType = 4;
     
     Json::Value::iterator itc = buf.begin();
-    std::string typeStr = (*itc)["escape"].asString();
-    
     std::string ct = (*itc)["ct"].asString();
-    
-    
-    if(ct.length() > 0) {
+    if(!ct.empty())
+    {
         ct = unescape((char*)ct.c_str());
-        
         Json::Reader ctreader;
         Json::Value ctobject;
-        std::string strMsg = "";
+        
         if (ctreader.parse(ct.c_str(), ctobject))
         {
-            msg = ctobject["b"].asString();
-            nickName = ctobject["f"].asString();
-            userID = ctobject["bb"].asInt();
-            simpleProperty = ctobject["c"].asUInt(); // room id
+            m_User.userID = std::to_string(ctobject["bb"].asUInt());
+            m_User.nickName = ctobject["f"].asString();
+            
+            m_ReceiveUser.nickName = std::to_string(ctobject["h"].asUInt());
+            
+            m_strMsg = ctobject["b"].asString();
+            m_nExtraProperty = ctobject["c"].asDouble();s
         }
     }
 }

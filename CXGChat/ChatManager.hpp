@@ -10,42 +10,47 @@
 #define ChatManager_hpp
 
 #include "cxgChatRoom.h"
-#include "CXGChat.h"
-
 #import  "MessageControl.h"
 
 
 class ChatManager: ChatRoom::IChatRoomObserver
 {
-private:
-    ChatManager();   //构造函数是私有的
-
-    static ChatManager *m_pInstance;
 public:
-    static ChatManager *GetInstance();
-    
-    
-public:
-    
-    std::string token;
+    ChatManager();
     ~ChatManager();
+    
+    static ChatManager *GetInstance();
     
     virtual void OnMsg(PtlBase* ptl);
     virtual void OnError(int errcode, char* msg);
     
     void setHost(const char *ip, long port);
-    void setUser(const char *uid,const char *rid,const char *token);
+    void setUser(const char *uid,const char *rid);
+    void setToken(const char *token);
     void setController(ChatControl* listener);
     
-    void Enter();
+    void EnterChatRoom();
+    void ExitChatRoom();
+    
     void SendChatMsg(const char *message, const char *uid ,bool isprivate);
     void UserList();
     
-    void ExitChatRoom();
 private:
+    
+    Message* setUserInfo(Message* message, PtlBase* ptl);
+    Message* setReceiveUserInfo(Message* message, PtlBase* ptl);
+    Message* setGiftInfo(Message* message, PtlBase* ptl);
+   
+private:
+    
+    static ChatManager* m_pInstance;
+    
+    std::string m_strToken;
+    ChatControl* m_pController;
+    
     ChatRoom::ChatRoomInfo m_RoomInfo;
-    ChatRoom::IChatRoom*  m_pChatRoom = 0;
-    ChatControl* mController;
+    ChatRoom::IChatRoom*  m_pChatRoom;
+    
 };
 
 #endif /* ChatManager_hpp */

@@ -7,40 +7,48 @@
 //
 
 #include "PtlBase.hpp"
-#include "zlib.h"
-#include "zconf.h"
-#include "ChatRoom.h"
 
-PtlGiftMsg::PtlGiftMsg(int ret,Json::Value  buf):PtlBase(ret, buf) {
-    printf( "chatroom: PtlGiftMsg\n");
-    
-    this->type = 2;  // msg
+PtlGiftMsg::PtlGiftMsg(int ret,Json::Value  buf):PtlBase(ret, buf)
+{
+    m_nType = 2;
+    m_nSubType = 0;
     
     Json::Value::iterator itc = buf.begin();
-    std::string typeStr = (*itc)["escape"].asString();
-    
+    //std::string typeStr = (*itc)["escapeflag"].asString();
     std::string ct = (*itc)["ct"].asString();
-
-    if(ct.length() > 0) {
+    if(!ct.empty())
+    {
         ct = unescape((char*)ct.c_str());
-        
         Json::Reader ctreader;
         Json::Value ctobject;
         if (ctreader.parse(ct.c_str(), ctobject))
         {
-            nickName = ctobject["b9"].asString();
-            userID = ctobject["b2"].asInt();
+            m_User.nickName = ctobject["b9"].asString();
+            m_User.userID = std::to_string(ctobject["bb"].asUInt());
+            m_User.equipScore = ctobject["d"].asInt();
+            m_User.fansLevel = ctobject["e"].asInt();
+            m_User.richLevel = ctobject["b7"].asInt();
+            m_User.userLevel = ctobject["a8"].asInt();
+            m_User.gameRoleType = ctobject["a3"].asInt();
+            m_User.gameVIPLevel = ctobject["b1"].asInt();
+            m_User.gameUid = ctobject["c1"].asString();
+            m_User.userType = ctobject["c2"].asInt();
             
-            juese = ctobject["c2"].asInt();
-            fensi = ctobject["e"].asInt();
-            caifu = ctobject["b7"].asInt();
+            m_ReceiveUser.userID = std::to_string(ctobject["b2"].asUInt());
+            m_ReceiveUser.nickName = ctobject["b9"].asString();
+            m_ReceiveUser.gameZoneName = ctobject["b5"].asString();
             
-            giftName = ctobject["q"].asString();
-            giftCount = ctobject["i"].asInt();
-            giftid = ctobject["n"].asInt();   // giftid
-            
-            msg = "我送了" + giftName;
-            
+            m_Gift.isAutoCombo = ctobject["a"].asBool();
+            m_Gift.comboGroupNum = ctobject["b"].asInt();
+            m_Gift.comboNum = ctobject["c"].asInt();
+            m_Gift.isCombo = ctobject["x"].asBool();
+            m_Gift.count = ctobject["i"].asInt();
+            m_Gift.icon = ctobject["j"].asString();
+            m_Gift.giftID = ctobject["n"].asInt();
+            m_Gift.name = ctobject["q"].asString();
+            m_Gift.type = ctobject["v"].asInt();
+            m_Gift.uniqueID = ctobject["w"].asString();
+            m_Gift.isFree = ctobject["y"].asBool();
         }
     }
 }

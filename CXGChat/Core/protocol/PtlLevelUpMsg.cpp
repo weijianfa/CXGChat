@@ -7,96 +7,74 @@
 //
 
 #include "PtlBase.hpp"
-#include "ChatRoom.h"
 
-PtlLevelUpMsg::PtlLevelUpMsg(int ret, Json::Value buf):PtlBase(ret, buf) {
-    printf( "chatroom: PtlLevelUpMsg\n");
-    
-    this->type = 5;  // msg
+PtlLevelUpMsg::PtlLevelUpMsg(int ret, Json::Value buf):PtlBase(ret, buf)
+{
+    m_nType = 5;
     
     Json::Value::iterator itc = buf.begin();
-    std::string typeStr = (*itc)["escape"].asString();
-    
     std::string ct = (*itc)["ct"].asString();
-    
-    
-    if(ct.length() > 0) {
+    if(!ct.empty())
+    {
         ct = unescape((char*)ct.c_str());
-        
         Json::Reader ctreader;
         Json::Value ctobject;
-        std::string strMsg = "";
+        
         if (ctreader.parse(ct.c_str(), ctobject))
         {
-            long userid = ctobject["bb"].asInt();
-            long level = 0;                    //ctobject["b"].asInt();
-            long type = ctobject["l"].asInt(); // 3 caifu , 2 zubodengji 5 fensi  6 vip 7 ranksum
-            switch(type) {
+            m_User.userID = ctobject["bb"].asInt();
+            m_User.sortNum = ctobject["k"].asDouble();
+            
+            switch(ctobject["l"].asInt())
+            {
                 case 3:
-                    this->subType = 3;
-                    level = ctobject["a"].asInt();
+                {
+                    m_nSubType = 1;
+                    m_User.richLevel = ctobject["a"].asInt();
+                    m_nExtraProperty = ctobject["b"].asInt();
+                }
                     break;
                 case 2:
-                    this->subType = 2;
-                    level = ctobject["c"].asInt();
+                {
+                    m_nSubType = 2;
+                    m_User.userLevel = ctobject["c"].asInt();
+                    m_nExtraProperty = ctobject["e"].asInt();
+                }
                     break;
                 case 5:
-                    this->subType = 5;
-                    level = ctobject["c"].asInt();
+                {
+                    m_nSubType = 3;
+                    m_User.fansLevel = ctobject["c"].asInt();
+                    m_nExtraProperty = ctobject["q"].asInt();
+                    
+                    //这里可能需要一个用户的全量信息
+                }
                     break;
                 default:
                     break;
             }
-            simpleProperty = level;
-            nickName = ctobject["o"].asString();
         }
     }
 }
 
-
-PtlVipLevelUpMsg::PtlVipLevelUpMsg(int ret, Json::Value buf):PtlBase(ret, buf) {
-    printf( "chatroom: PtlvipLevelUpMsg\n");
-    
-    this->type = 5;  // msg
-    this->subType = 6;
+PtlVipLevelUpMsg::PtlVipLevelUpMsg(int ret, Json::Value buf):PtlBase(ret, buf)
+{
+    m_nType = 5;
+    m_nSubType = 4;
     
     Json::Value::iterator itc = buf.begin();
-    //std::string typeStr = (*itc)["escape"].asString();  //or escapeflag
     std::string ct = (*itc)["ct"].asString();
-    
-    if(ct.length() > 0) {
+    if(!ct.empty())
+    {
         ct = unescape((char*)ct.c_str());
-        
         Json::Reader ctreader;
         Json::Value ctobject;
-        std::string strMsg = "";
+        
         if (ctreader.parse(ct.c_str(), ctobject))
         {
-            userID = ctobject["bb"].asInt();
-            simpleProperty = ctobject["c"].asInt();
+            m_User.userID = ctobject["bb"].asInt();
+            m_nExtraProperty = ctobject["c"].asInt();
         }
     }
 }
 
-PtlRankSumMsg::PtlRankSumMsg(int ret, Json::Value buf):PtlBase(ret, buf) {
-    printf( "chatroom: PtlRankSumMsg\n");
-    
-    this->type = 5;  // msg
-    this->subType = 7;
-    
-    Json::Value::iterator itc = buf.begin();
-    //std::string typeStr = (*itc)["escape"].asString();  //or escapeflag
-    std::string ct = (*itc)["ct"].asString();
-    
-    if(ct.length() > 0) {
-        ct = unescape((char*)ct.c_str());
-        
-        Json::Reader ctreader;
-        Json::Value ctobject;
-        std::string strMsg = "";
-        if (ctreader.parse(ct.c_str(), ctobject))
-        {
-            simpleProperty = ctobject["a"].asInt();;
-        }
-    }
-}

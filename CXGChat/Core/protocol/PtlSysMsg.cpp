@@ -10,26 +10,20 @@
 #include "ChatRoom.h"
 
 
-PtlSysMsg::PtlSysMsg(int ret,Json::Value  buf):PtlBase(ret, buf) {
-    printf( "chatroom: PtlSysMsg\n");
-    this->type = 3;  // msg
+PtlSysMsg::PtlSysMsg(int ret,Json::Value  buf):PtlBase(ret, buf)
+{
+    m_nType = 3;
+    m_nSubType = 0;
     
     Json::Value::iterator itc = buf.begin();
-    std::string typeStr = (*itc)["escape"].asString();
-    
     std::string ct = (*itc)["ct"].asString();
-    
-    userID = "SYS";
-    
-    if(ct.length() > 0) {
+    if(!ct.empty())
+    {
         ct = unescape((char*)ct.c_str());
-        
         Json::Reader ctreader;
         Json::Value ctobject;
-        std::string strMsg = "";
+        
         if (ctreader.parse(ct.c_str(), ctobject))
-        {
-            msg = ctobject["mes"].asString();
-        }
+            m_strMsg = buf["ct"].asString();
     }
 }

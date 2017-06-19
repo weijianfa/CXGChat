@@ -7,42 +7,55 @@
 //
 #include "PtlBase.hpp"
 
-PtlUserMsg::PtlUserMsg(int ret,Json::Value  buf):PtlBase(ret, buf) {
-    printf( "chatroom: PtlUserMsg\n");
-    this->type = 1;  // msg
-
+PtlUserMsg::PtlUserMsg(int ret,Json::Value  buf):PtlBase(ret, buf)
+{
+    m_nType = 1;
+    
     Json::Value::iterator itc = buf.begin();
+    m_strMsg = (*itc)["ct"].asString();
     
-    msg = (*itc)["ct"].asString();
+    m_User.userID = (*itc)["e"]["bb"].asString();
+    m_User.nickName = (*itc)["e"]["p"].asString();
+    m_User.gameUid = (*itc)["e"]["a4"].asString();
     
-    userID = (*itc)["e"]["bb"].asString();
-    nickName = (*itc)["e"]["p"].asString();
-    user2ID = "";
-    nickName2 = "";
+    m_User.fansLevel = (*itc)["e"]["b3"].asInt();
+    m_User.richLevel = (*itc)["e"]["h"].asInt();
+    m_User.roomRole = (*itc)["e"]["a1"].asString();
     
-    fensi = (*itc)["e"]["b3"].asInt();
-    caifu = (*itc)["e"]["h"].asInt();
-    jueseStr = (*itc)["e"]["a1"].asString();
-    gameUid = (*itc)["e"]["a4"].asString();
+    m_User.terminal = (*itc)["e"]["c3"].asInt();
+    m_User.roleID = (*itc)["e"]["y"].asInt();
+    m_User.roomRole = (*itc)["e"]["a1"].asString();
+    m_User.userType = (*itc)["e"]["a8"].asInt();
+    m_User.sortNum = (*itc)["e"]["a2"].asDouble();
+    m_User.gameZoneName = (*itc)["e"]["b1"].asString();
     
     std::string typeStr = (*itc)["b"].asString();
-    int nType = atoi(typeStr.c_str());
-    switch (nType)
+    if(typeStr == "0")
     {
-        case 0:
-            this->subType = 0;
-            break;
-        case 1:
-            this->subType = 3;
-            break;
-        case 2:
-            this->subType = 4;
-            user2ID = (*itc)["f"]["bb"].asString();
-            nickName2 = (*itc)["f"]["p"].asString();
-            gameUid2 = (*itc)["f"]["a4"].asString();
-            break;
-        default:
-            break;
+        m_nSubType = 0;
+        return;
     }
+    
+    if(typeStr == "1")
+        m_nSubType = 1;
+    else
+        m_nSubType = 2;
+    
+    m_ReceiveUser.userID = (*itc)["f"]["bb"].asString();
+    m_ReceiveUser.nickName = (*itc)["f"]["p"].asString();
+    m_ReceiveUser.gameUid = (*itc)["f"]["a4"].asString();
+    
+    m_ReceiveUser.fansLevel = (*itc)["f"]["b3"].asInt();
+    m_ReceiveUser.richLevel = (*itc)["f"]["h"].asInt();
+    m_ReceiveUser.roomRole = (*itc)["f"]["a1"].asString();
+    
+    m_ReceiveUser.terminal = (*itc)["f"]["c3"].asInt();
+    m_ReceiveUser.roleID = (*itc)["f"]["y"].asInt();
+    m_ReceiveUser.roomRole = (*itc)["f"]["a1"].asString();
+    m_ReceiveUser.userType = (*itc)["f"]["a8"].asInt();
+    m_ReceiveUser.sortNum = (*itc)["f"]["a2"].asDouble();
+    m_ReceiveUser.gameZoneName = (*itc)["f"]["b1"].asString();
+
 }
+
 

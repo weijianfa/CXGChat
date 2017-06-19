@@ -437,25 +437,25 @@
 		322215201E696C1700937996 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				322215471E696C1700937996 /* third_party */,
+				322215261E696C1700937996 /* Includes */,
+				3222153B1E696C1700937996 /* protocol */,
 				322215211E696C1700937996 /* ChatMsgInfo.h */,
 				322215221E696C1700937996 /* ChatRoom.cpp */,
 				322215231E696C1700937996 /* ChatRoom.h */,
 				322215241E696C1700937996 /* cxgChatRoom.cpp */,
 				322215251E696C1700937996 /* cxgChatRoom.h */,
-				322215261E696C1700937996 /* Includes */,
 				322215351E696C1700937996 /* NetClient.cpp */,
 				322215361E696C1700937996 /* NetClient.h */,
 				322215371E696C1700937996 /* network.cpp */,
 				322215381E696C1700937996 /* network.h */,
 				322215391E696C1700937996 /* Packet.cpp */,
 				3222153A1E696C1700937996 /* Packet.h */,
-				3222153B1E696C1700937996 /* protocol */,
 				322215421E696C1700937996 /* RawLink.cpp */,
 				322215431E696C1700937996 /* RawLink.h */,
 				322215441E696C1700937996 /* ReadMe.txt */,
 				322215451E696C1700937996 /* RefCount.cpp */,
 				322215461E696C1700937996 /* RefCount.h */,
-				322215471E696C1700937996 /* third_party */,
 				322216651E696C1800937996 /* Timer.cpp */,
 				322216661E696C1800937996 /* Timer.h */,
 			);
@@ -1072,14 +1072,14 @@
 		32EB098D1E56C4E000652D2D /* CXGChat */ = {
 			isa = PBXGroup;
 			children = (
+				322216671E696C1800937996 /* CXGChat.h */,
 				3222151D1E696C1700937996 /* ChatInterface.mm */,
 				3222151E1E696C1700937996 /* ChatManager.hpp */,
 				3222151F1E696C1700937996 /* ChatManager.mm */,
-				322215201E696C1700937996 /* Core */,
-				322216671E696C1800937996 /* CXGChat.h */,
-				322216681E696C1800937996 /* Info.plist */,
-				32A5BF251E6C29DD001BAE04 /* MessageControl.m */,
 				99540C241E7BBB9D00A3449D /* MessageControl.h */,
+				32A5BF251E6C29DD001BAE04 /* MessageControl.m */,
+				322215201E696C1700937996 /* Core */,
+				322216681E696C1800937996 /* Info.plist */,
 			);
 			path = CXGChat;
 			sourceTree = "<group>";

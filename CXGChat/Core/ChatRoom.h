@@ -14,7 +14,6 @@
 
 using namespace ChatRoom;
 
-std::string unescape(char* str);
 static CRawLink*	g_pLink = NULL;
 
 class CChatRoom

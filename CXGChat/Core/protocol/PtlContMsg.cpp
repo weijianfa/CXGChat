@@ -7,30 +7,21 @@
 //
 
 #include "PtlBase.hpp"
-#include "ChatRoom.h"
 
-
-PtlContMsg::PtlContMsg(int ret, Json::Value buf):PtlBase(ret, buf) {
-    printf( "chatroom: PtlContMsg\n");
-    this->type = 11;  // msg
+PtlSyncUserContMsg::PtlSyncUserContMsg(int ret, Json::Value buf):PtlBase(ret, buf)
+{
+    m_nType = 7;
+    m_nSubType = 0;
     
     Json::Value::iterator itc = buf.begin();
-    //std::string typeStr = (*itc)["escape"].asString();
-    
     std::string ct = (*itc)["ct"].asString();
-    
-    if(ct.length() > 0) {
+    if(!ct.empty())
+    {
+        ct = unescape((char*)ct.c_str());
         Json::Reader ctreader;
         Json::Value ctobject;
-        std::string strMsg = "";
+        
         if (ctreader.parse(ct.c_str(), ctobject))
-        {
-            int commoncount = ctobject["b"].asInt();
-            int furturncount = ctobject["c"].asInt();
-            printf("chatroom: count, %d,%d", commoncount, furturncount);
-            
-            
-        }
+            m_nExtraProperty = ctobject["c"].asInt() + ctobject["b"].asInt();
     }
-
 }

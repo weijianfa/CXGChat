@@ -32,5 +32,36 @@
 
 #define ERR_ROOMID_INVALID      "无效的房间"
 #define ERR_REPETITION_LOGIN	"重复进入房间"
+#define ERR_TERMINAl_MUTEX      "PC端角色进入直播间"
+
+enum COMMUNICATION_PROTOCOL
+{
+    USER_MSG = (0<<16) + 2,
+    USER_PUB_MSG = (1<<16) + 2, //对某人公开说
+    USER_PRI_MSG = (2<<16) + 2, //对某人私聊
+    
+    SYST_MSG = (24<<16) + 1,
+    GIFT_MSG = (3<<16) + 1,
+    CONT_MSG = (84<<16) + 1,
+    LOGN_RET = 0,
+    
+    FEIPING_MSG = (74<<16) + 1,  // 飞屏
+    BROADCT_MSG = (31<<16) + 1,  // 广播
+    HEADTIP_MSG = (12<<16) + 1,  // 头条
+    SYNC_MSG    = (79<<16) + 1,  // 同步魅力等级
+    LEVLEUP_MSG = (20<<16) + 1,  // 等级提升
+    VIPUP_MSG   = (81<<16) + 1,  // 天龙角色VIP提升
+    COMBOIT_MSG = (82<<16) + 1,  // combo消息
+    NOTIMAN_MSG = (13<<16) + 1,  // 提示用户提升管理员
+    KICK_MSG    = (0<<16)  + 4,  // 踢人消息
+    RESUME_MSG  = (2<<16)  + 4,  // 取消警言
+    URESUME_MSG = (1<<16)  + 4,  // 禁言
+    OPENCHAT_MSG= (11<<16) + 1,  // 开启公聊
+    CLOSE_MSG   = (18<<16) + 1,  // 关闭直播通知
+    OPENI_MSG   = (15<<16) + 1,  // 开启直播通知
+    USERLIST_MSG= (0<<16)  + 6,  // 用户列表
+    USERINTO_MSG= (4<<16)  + 2,  // 用户信息
+    RANKSUM_MSG = (93<<16) + 1,  // 7日排行榜总数
+};
 
 #endif

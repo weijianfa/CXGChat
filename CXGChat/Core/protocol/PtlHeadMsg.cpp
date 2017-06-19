@@ -7,44 +7,42 @@
 //
 
 #include "PtlBase.hpp"
-#include "ChatRoom.h"
 
-PtlHeadTipMsg::PtlHeadTipMsg(int ret, Json::Value buf):PtlBase(ret, buf) {
-    printf( "chatroom: PtlHeadTipMsg\n");
-    
-    this->type = 2;  // msg
-    this->subType = 3; // toutiaoxiaoxi
-    
+PtlHeadTipMsg::PtlHeadTipMsg(int ret, Json::Value buf):PtlBase(ret, buf)
+{
+    m_nType = 2;
+    m_nSubType = 3;
     
     Json::Value::iterator itc = buf.begin();
-    std::string typeStr = (*itc)["escape"].asString();
-    
     std::string ct = (*itc)["ct"].asString();
-    
-    
-    if(ct.length() > 0) {
+    if(!ct.empty())
+    {
         ct = unescape((char*)ct.c_str());
-        
         Json::Reader ctreader;
         Json::Value ctobject;
-        std::string strMsg = "";
+        
         if (ctreader.parse(ct.c_str(), ctobject))
         {
-            nickName = ctobject["t"].asString();
-            // userID = ctobject["b2"].asInt();
+            m_ReceiveUser.fansLevel = ctobject["d"].asInt();
+            m_ReceiveUser.richLevel = ctobject["a"].asInt();
+            m_ReceiveUser.userLevel = ctobject["n"].asInt();
+            m_ReceiveUser.nickName = ctobject["o"].asString();
+            m_ReceiveUser.userID = ctobject["p"].asInt();
+            m_ReceiveUser.gameVIPLevel = ctobject["m"].asInt();
             
+            m_User.richLevel = ctobject["s"].asInt();
+            m_User.gameUid = ctobject["u"].asString();
+            m_User.nickName = ctobject["t"].asString();
             
-            juese = 0;
-            fensi = ctobject["d"].asInt();
-            caifu = ctobject["s"].asInt();
+            m_Gift.giftID = ctobject["h"].asInt();
+            m_Gift.name = ctobject["i"].asString();
+            m_Gift.count = ctobject["f"].asInt();
+            m_Gift.icon = ctobject["g"].asString();
+            m_Gift.isAutoCombo = ctobject["b"].asBool();
+            m_Gift.comboGroupNum = ctobject["c"].asInt();
+            m_Gift.type = ctobject["q"].asInt();
             
-            giftName = ctobject["i"].asString();
-            giftCount = ctobject["f"].asUInt();
-            giftid = ctobject["h"].asUInt();
-            simpleProperty = ctobject["j"].asUInt();
-            
-            
-            msg = "我送了" + giftName;
+            m_nExtraProperty = ctobject["j"].asDouble();
         }
     }
 }
