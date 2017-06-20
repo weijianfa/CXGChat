@@ -10,12 +10,12 @@
 #include "ChatRoom.h"
 
 
-PtlSysMsg::PtlSysMsg(int ret,Json::Value  buf):PtlBase(ret, buf)
+PtlSysMsg::PtlSysMsg(int ret,Json::Value::iterator itc): PtlBase(ret, itc)
 {
     m_nType = 3;
     m_nSubType = 0;
     
-    Json::Value::iterator itc = buf.begin();
+    //Json::Value::iterator itc = buf.begin();
     std::string ct = (*itc)["ct"].asString();
     if(!ct.empty())
     {
@@ -24,6 +24,6 @@ PtlSysMsg::PtlSysMsg(int ret,Json::Value  buf):PtlBase(ret, buf)
         Json::Value ctobject;
         
         if (ctreader.parse(ct.c_str(), ctobject))
-            m_strMsg = buf["ct"].asString();
+            m_strMsg = ctobject["ct"].asString();
     }
 }

@@ -9,12 +9,12 @@
 #include "PtlBase.hpp"
 
 // 飞屏
-PtlFeiPingMsg::PtlFeiPingMsg(int ret, Json::Value buf):PtlBase(ret, buf)
+PtlFeiPingMsg::PtlFeiPingMsg(int ret,Json::Value::iterator itc): PtlBase(ret, itc)
 {
     m_nType = 1;
     m_nSubType = 3;
     
-    Json::Value::iterator itc = buf.begin();
+    //Json::Value::iterator itc = buf.begin();
     std::string ct = (*itc)["ct"].asString();
     if(!ct.empty())
     {
@@ -32,7 +32,8 @@ PtlFeiPingMsg::PtlFeiPingMsg(int ret, Json::Value buf):PtlBase(ret, buf)
             m_User.nickName = ctobject["h"].asString();
             
             m_nExtraProperty = ctobject["f"].asDouble();
+            
+            m_Gift.giftID = ctobject["b"].asInt();
         }
     }
-            //缺少 飞屏id 房间URL 勋章属性
 }

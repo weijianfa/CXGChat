@@ -6,6 +6,7 @@
 //C++ Standard Library
 #include <math.h>
 #include <list>
+#include <queue>
 #include <iostream>
 
 //third party

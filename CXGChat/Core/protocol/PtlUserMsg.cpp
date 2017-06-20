@@ -7,11 +7,11 @@
 //
 #include "PtlBase.hpp"
 
-PtlUserMsg::PtlUserMsg(int ret,Json::Value  buf):PtlBase(ret, buf)
+PtlUserMsg::PtlUserMsg(int ret,Json::Value::iterator itc): PtlBase(ret, itc)
 {
     m_nType = 1;
     
-    Json::Value::iterator itc = buf.begin();
+    //Json::Value::iterator itc = buf.begin();
     m_strMsg = (*itc)["ct"].asString();
     
     m_User.userID = (*itc)["e"]["bb"].asString();

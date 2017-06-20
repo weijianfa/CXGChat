@@ -418,9 +418,7 @@ void* CChatRoom::SendHeartBeat(void *arg)
             pPacket->SetPacketAction(KEEPLIVE);
 			pPacket->SetPacketType(0);
 			if (pCt->m_pLink)
-			{
 				pCt->m_pLink->SendPacket(pPacket);
-			}
 			pCt->m_tLastTime = tStamp;
 		}
 		sleep(TICKER_TIME);
@@ -448,9 +446,9 @@ void CChatRoom::SendChatMsg(std::string strMsg,std::string strMasterid, bool bPr
     jsonChatMsg += "\",\"pub\":\"";
     
     if(strMasterid.empty())
-        jsonChatMsg += "0";
-    else
         jsonChatMsg += "1";
+    else
+        jsonChatMsg += "0";
     
     jsonChatMsg += "\",\"key\":\"\",\"code\":\"\",\"checksum\":\"0\",\"v\":\"0\"}";
     
@@ -468,9 +466,49 @@ void CChatRoom::SendChatMsg(std::string strMsg,std::string strMasterid, bool bPr
     }
     
     if (m_pLink)
-    {
         m_pLink->SendPacket(pPacket);
-    }
+    
+    pthread_mutex_unlock(&m_SynchMutex);
+}
+
+void CChatRoom::RequestUserInfo(std::string strUid, long nVersion)
+{
+    pthread_mutex_lock(&m_SynchMutex);
+    
+    std::string jsonRequest = "{\"bb\":\"";
+    jsonRequest += strUid;
+    jsonRequest += "\",\"v\":\"";
+    jsonRequest += std::to_string(nVersion);
+    jsonRequest += "\"}";
+    
+    CPacket* pPacket = CPacket::CreateFromPayload((char*)jsonRequest.c_str(), (int)jsonRequest.length());
+    pPacket->SetPacketType(2);
+    pPacket->SetPacketAction(4);
+    
+    if (m_pLink)
+        m_pLink->SendPacket(pPacket);
+    
+    pthread_mutex_unlock(&m_SynchMutex);
+}
+
+void CChatRoom::RequestUserList(long nPageNo, long nMax, long nVersion)
+{
+    pthread_mutex_lock(&m_SynchMutex);
+    
+    std::string jsonRequest = "{\"pno\":\"";
+    jsonRequest += std::to_string(nPageNo);
+    jsonRequest += "\",\"rpp\":\"";
+    jsonRequest += std::to_string(nMax);
+    jsonRequest += "\",\"v:\":";
+    jsonRequest += std::to_string(nVersion);
+    jsonRequest += "\"}";
+    
+    CPacket* pPacket = CPacket::CreateFromPayload((char*)jsonRequest.c_str(), (int)jsonRequest.length());
+    pPacket->SetPacketType(6);
+    pPacket->SetPacketAction(0);
+    
+    if (m_pLink)
+        m_pLink->SendPacket(pPacket);
     
     pthread_mutex_unlock(&m_SynchMutex);
 }
@@ -603,13 +641,11 @@ void CChatRoom::OnLinkPacket(CRawLink* pLink, CPacket* pPacket)
             {
                 std::string strMasterId = ctObj["bb"].asString();
                 if(strMasterId == m_nMasterId)
-                {
                     m_bEnter = true;
-                }
             }
         }
 
-        PtlBase* protocol = PtlBase::getProtocol( (nAction << 16 ) + nMsgType , msgObj);
+        PtlBase* protocol = PtlBase::getProtocol( (nAction << 16 ) + nMsgType , itc);
         if(protocol)
             m_pObserver->OnMsg(protocol);
         ++itc;

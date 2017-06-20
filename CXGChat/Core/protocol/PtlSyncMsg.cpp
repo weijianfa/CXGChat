@@ -8,12 +8,12 @@
 
 #include "PtlBase.hpp"
 
-PtlSyncAnchorMsg::PtlSyncAnchorMsg(int ret, Json::Value buf):PtlBase(ret, buf)
+PtlSyncAnchorMsg::PtlSyncAnchorMsg(int ret,Json::Value::iterator itc): PtlBase(ret, itc)
 {
     m_nType = 7;
     m_nSubType = 2;
     
-    Json::Value::iterator itc = buf.begin();
+    //Json::Value::iterator itc = buf.begin();
     m_User.userID = (*itc)["ct"]["bb"].asString();
     m_User.nickName = (*itc)["ct"]["p"].asString();
     m_User.headIcon = (*itc)["ct"]["j"].asString();
@@ -35,24 +35,24 @@ PtlSyncAnchorMsg::PtlSyncAnchorMsg(int ret, Json::Value buf):PtlBase(ret, buf)
     m_User.isAnchor = (*itc)["ct"]["l"].asBool();
 }
 
-PtlSyncCharmMsg::PtlSyncCharmMsg(int ret, Json::Value buf):PtlBase(ret, buf)
+PtlSyncCharmMsg::PtlSyncCharmMsg(int ret,Json::Value::iterator itc): PtlBase(ret, itc)
 {
     m_nType = 7;
     m_nSubType = 3;
     
-    Json::Value::iterator itc = buf.begin();
-    m_User.userID = std::to_string((*itc)["ct"]["bb"].asInt());
+    //Json::Value::iterator itc = buf.begin();
+    m_User.userID = std::to_string((*itc)["ct"]["bb"].asUInt());
     m_User.fansLevel = (*itc)["ct"]["b"].asInt();
     
     m_nExtraProperty = (*itc)["ct"]["a"].asUInt();
 }
 
-PtlRankSumMsg::PtlRankSumMsg(int ret, Json::Value buf):PtlBase(ret, buf)
+PtlRankSumMsg::PtlRankSumMsg(int ret,Json::Value::iterator itc): PtlBase(ret, itc)
 {
     m_nType = 7;
     m_nSubType = 4;
     
-    Json::Value::iterator itc = buf.begin();
+    //Json::Value::iterator itc = buf.begin();
     std::string ct = (*itc)["ct"].asString();
     if(!ct.empty())
     {

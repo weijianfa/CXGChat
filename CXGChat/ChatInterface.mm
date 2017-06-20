@@ -360,17 +360,21 @@
     manager->SendChatMsg([message UTF8String], [uid UTF8String], isprivate);
 }
 
-- (void) userList
+- (void) requestUserInfoWith:(NSString*)uid andVersion:(NSInteger)version
 {
     ChatManager* manager = ChatManager::GetInstance();
-    manager->UserList();
+    manager->RequestUserInfo([uid UTF8String],version);
+}
+
+- (void) requestUserListWith:(NSInteger)pageno andMaxNum:(NSInteger)maxnum andVersion:(NSInteger)version
+{
+    ChatManager* manager = ChatManager::GetInstance();
+    manager->RequestUserList(pageno, maxnum, version);
 }
 
 - (void)setReceiverObject:(id<OnChatDelegate>)delegate
 {
     _Controller.delegate = delegate;
 }
-
-- (void) getUserList{}
 
 @end

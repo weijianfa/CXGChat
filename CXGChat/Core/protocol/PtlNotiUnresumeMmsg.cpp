@@ -8,12 +8,12 @@
 
 #include "PtlBase.hpp"
 
-PtlUnResumeUserMsg::PtlUnResumeUserMsg(int ret, Json::Value buf):PtlBase(ret, buf)
+PtlUnResumeUserMsg::PtlUnResumeUserMsg(int ret,Json::Value::iterator itc): PtlBase(ret, itc)
 {
     m_nType = 6;
     m_nSubType = 7;
     
-    Json::Value::iterator itc = buf.begin();
+    //Json::Value::iterator itc = buf.begin();
     m_strMsg = (*itc)["ct"].asString();
     
     m_User.userID = (*itc)["e"]["bb"].asString();

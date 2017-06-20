@@ -8,12 +8,12 @@
 
 #include "PtlBase.hpp"
 
-PtlRoomCloseMsg::PtlRoomCloseMsg(int ret, Json::Value buf):PtlBase(ret, buf)
+PtlRoomCloseMsg::PtlRoomCloseMsg(int ret,Json::Value::iterator itc): PtlBase(ret, itc)
 {
-    m_nType = 6;  // msg
-    m_nSubType = 5;   //
+    m_nType = 6;
+    m_nSubType = 5;
     
-    Json::Value::iterator itc = buf.begin();
+    //Json::Value::iterator itc = buf.begin();
     std::string ct = (*itc)["ct"].asString();
     if(!ct.empty())
     {

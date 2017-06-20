@@ -98,7 +98,7 @@ std::string unescape(char* str)
     return rt;
 }
 
-PtlBase::PtlBase(int ret,Json::Value buf)
+PtlBase::PtlBase(int ret,Json::Value::iterator itc)
 {
     m_nType = 0;
     m_nSubType = 0;
@@ -111,81 +111,108 @@ PtlBase::~PtlBase()
 {
 }
 
-PtlBase* PtlBase::getProtocol(int nType, Json::Value buff)
+PtlBase* PtlBase::getProtocol(int nType, Json::Value::iterator itc)
 {
-    int ncode = 0;
     switch(nType)
     {
         case USER_MSG:
         case USER_PUB_MSG:
         case USER_PRI_MSG:
-            return new PtlUserMsg(ncode, buff);
+            return new PtlUserMsg(nType, itc);
             break;
         case SYST_MSG:
-            return new PtlSysMsg(ncode, buff);
+            return new PtlSysMsg(nType, itc);
             break;
         case GIFT_MSG:
-            return new PtlGiftMsg(ncode, buff);
+            return new PtlGiftMsg(nType, itc);
             break;
         case LOGN_RET:
-            return new PtlLoginRet(ncode, buff);
+            return new PtlLoginRet(nType, itc);
             break;
         case CONT_MSG:
-            return new PtlSyncUserContMsg(ncode, buff);
+            return new PtlSyncUserContMsg(nType, itc);
             break;
         case FEIPING_MSG:
-            return new PtlFeiPingMsg(ncode, buff);
+            return new PtlFeiPingMsg(nType, itc);
             break;
         case BROADCT_MSG:
-            return new PtlBroadcastMsg(ncode, buff);
+            return new PtlBroadcastMsg(nType, itc);
             break;
         case HEADTIP_MSG:
-            return new PtlHeadTipMsg(ncode, buff);
+            return new PtlHeadTipMsg(nType, itc);
             break;
         case SYNC_MSG:
-            return new PtlSyncAnchorMsg(ncode, buff);
+            return new PtlSyncAnchorMsg(nType, itc);
             break;
         case LEVLEUP_MSG:
-            return new PtlLevelUpMsg(ncode, buff);
+            return new PtlLevelUpMsg(nType, itc);
             break;
         case VIPUP_MSG:
-            return new PtlVipLevelUpMsg(ncode, buff);
+            return new PtlVipLevelUpMsg(nType, itc);
             break;
         case RANKSUM_MSG:
-            return new PtlRankSumMsg(ncode, buff);
+            return new PtlRankSumMsg(nType, itc);
             break;
         case COMBOIT_MSG:
-            return new PtlComboMsg(ncode, buff);
+            return new PtlComboMsg(nType, itc);
             break;
         case NOTIMAN_MSG:
-            return new PtlNotiManagerMsg(ncode, buff);
+            return new PtlNotiManagerMsg(nType, itc);
             break;
         case KICK_MSG:
-            return new PtlNotiKickMsg(ncode, buff);
+            return new PtlNotiKickMsg(nType, itc);
             break;
         case RESUME_MSG:
-            return new PtlResumeUserMsg(ncode, buff);
+            return new PtlResumeUserMsg(nType, itc);
             break;
         case URESUME_MSG:
-            return new PtlUnResumeUserMsg(ncode, buff);
+            return new PtlUnResumeUserMsg(nType, itc);
             break;
         case OPENCHAT_MSG:
-            return new PtlCloseChatMsg(ncode, buff);
+            return new PtlCloseChatMsg(nType, itc);
             break;
         case CLOSE_MSG:
-            return new PtlRoomOpenMsg(ncode, buff);
+            return new PtlRoomOpenMsg(nType, itc);
             break;
         case OPENI_MSG:
-            return new PtlRoomOpenMsg(ncode, buff);
-            break;
-        case USERLIST_MSG:
-            return new PtlUserListMsg(ncode, buff);
+            return new PtlRoomOpenMsg(nType, itc);
             break;
         case USERINTO_MSG:
-            return new PtlUserInfoMsg(ncode, buff);
+            return new PtlUserInfoMsg(nType, itc);
             break;
+        case USERLIST_MSG:
+            return new PtlUserListMsg(nType, itc);
         default:
             return NULL;
             break;
     }
+    
+    return NULL;
+}
+
+bool PtlBase::PushUserList(USER &user)
+{
+    if(user.userID.empty())
+        return false;
+    
+    m_UserList.push(user);
+    return true;
+}
+
+bool PtlBase::PopUserList()
+{
+    if(!m_UserList.empty())
+        m_UserList.pop();
+    
+    return true;
+}
+
+USER PtlBase::getUserFromList()
+{
+    USER user;
+    if(m_UserList.empty())
+        return user;
+    
+    user = m_UserList.front();
+    return user;
 }

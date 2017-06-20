@@ -108,14 +108,23 @@ struct GIFT
     }
 };
 
+typedef std::queue<USER> USER_LIST;
+
 std::string unescape(char* str);
+std::string translateGUID(std::string guid);
 class PtlBase
 {
 public:
-    PtlBase(int ret,Json::Value  buf);
+    PtlBase(int ret,Json::Value::iterator buf);
     ~PtlBase();
     
-    static PtlBase* getProtocol(int nType, Json::Value buff);
+    static PtlBase* getProtocol(int nType, Json::Value::iterator buff);
+    
+    USER getUserFromList();
+    bool PopUserList();
+    
+private:
+    bool PushUserList(USER& user);
     
 public:
     
@@ -127,150 +136,148 @@ public:
     
     USER m_User;
     USER m_ReceiveUser;
-    
     GIFT m_Gift;
-    
-    //UserInfo* user = NULL;
+    USER_LIST m_UserList;
 };
 
 
 class PtlUserMsg: public PtlBase {
 public:
-    PtlUserMsg(int ret, Json::Value  buf);
+    PtlUserMsg(int ret, Json::Value::iterator buf);
 };
 
 class PtlGiftMsg: public PtlBase {
 public:
-    PtlGiftMsg(int ret,Json::Value  buf);
+    PtlGiftMsg(int ret,Json::Value::iterator buf);
 };
 
 class PtlLoginRet: public PtlBase {
 public:
-    PtlLoginRet(int ret,Json::Value  buf);
+    PtlLoginRet(int ret,Json::Value::iterator buf);
 };
 
 class PtLeaveRoom: public PtlBase {
 public:
-    PtLeaveRoom(int ret,Json::Value  buf);
+    PtLeaveRoom(int ret,Json::Value::iterator buf);
 };
 
 class PtlSysMsg: public PtlBase {
 public:
-    PtlSysMsg(int ret,Json::Value  buf);
+    PtlSysMsg(int ret,Json::Value::iterator buf);
 };
 
 class PtlFeiPingMsg: public PtlBase {
 public:
-    PtlFeiPingMsg(int ret, Json::Value buf);
+    PtlFeiPingMsg(int ret, Json::Value::iterator buf);
 };
 
 // 广播
 class PtlBroadcastMsg: public PtlBase {
 public:
-    PtlBroadcastMsg(int ret, Json::Value buf);
+    PtlBroadcastMsg(int ret, Json::Value::iterator buf);
 };
 
 // 头条
 class PtlHeadTipMsg: public PtlBase {
 public:
-    PtlHeadTipMsg(int ret, Json::Value buf);
+    PtlHeadTipMsg(int ret, Json::Value::iterator buf);
 };
 
 // 同步主播信息
 class PtlSyncAnchorMsg: public PtlBase {
 public:
-    PtlSyncAnchorMsg(int ret, Json::Value buf);
+    PtlSyncAnchorMsg(int ret, Json::Value::iterator buf);
 };
 
 //同步主播魅力等级
 class PtlSyncCharmMsg: public PtlBase {
 public:
-    PtlSyncCharmMsg(int ret, Json::Value buf);
+    PtlSyncCharmMsg(int ret, Json::Value::iterator buf);
 };
 
 //同步房间用户数量
 class PtlSyncUserContMsg: public PtlBase {
 public:
-    PtlSyncUserContMsg(int ret,Json::Value buf);
+    PtlSyncUserContMsg(int ret,Json::Value::iterator buf);
 };
 
 // 等级提升
 class PtlLevelUpMsg: public PtlBase {
 public:
-    PtlLevelUpMsg(int ret, Json::Value buf);
+    PtlLevelUpMsg(int ret, Json::Value::iterator buf);
 };
 
 // 天龙VIP等级提升
 class PtlVipLevelUpMsg: public PtlBase {
 public:
-    PtlVipLevelUpMsg(int ret, Json::Value buf);
+    PtlVipLevelUpMsg(int ret, Json::Value::iterator buf);
 };
 
 // 7日排行榜总数
 class PtlRankSumMsg: public PtlBase {
 public:
-    PtlRankSumMsg(int ret, Json::Value buf);
+    PtlRankSumMsg(int ret, Json::Value::iterator buf);
 };
 
 // combo消息
 class PtlComboMsg: public PtlBase {
 public:
-    PtlComboMsg(int ret, Json::Value buf);
+    PtlComboMsg(int ret, Json::Value::iterator buf);
     PtlComboMsg();
 };
 
 // 提升管理员
 class PtlNotiManagerMsg: public PtlBase {
 public:
-    PtlNotiManagerMsg(int ret, Json::Value buf);
+    PtlNotiManagerMsg(int ret, Json::Value::iterator buf);
 };
 
 // 踢人消息
 class PtlNotiKickMsg: public PtlBase {
 public:
-    PtlNotiKickMsg(int ret, Json::Value buf);
+    PtlNotiKickMsg(int ret, Json::Value::iterator buf);
 };
 
 // 取消禁言
 class PtlResumeUserMsg: public PtlBase {
 public:
-    PtlResumeUserMsg(int ret, Json::Value buf);
+    PtlResumeUserMsg(int ret, Json::Value::iterator buf);
 };
 
 // 禁言
 class PtlUnResumeUserMsg: public PtlBase {
 public:
-    PtlUnResumeUserMsg(int ret, Json::Value buf);
+    PtlUnResumeUserMsg(int ret, Json::Value::iterator buf);
 };
 
 // 关闭聊天
 class PtlCloseChatMsg: public PtlBase {
 public:
-    PtlCloseChatMsg(int ret, Json::Value buf);
+    PtlCloseChatMsg(int ret, Json::Value::iterator buf);
 };
 
 // 直播结束
 class PtlRoomCloseMsg: public PtlBase {
 public:
-    PtlRoomCloseMsg(int ret, Json::Value buf);
+    PtlRoomCloseMsg(int ret, Json::Value::iterator buf);
 };
 
 // 直播开始
 class PtlRoomOpenMsg: public PtlBase {
 public:
-    PtlRoomOpenMsg(int ret, Json::Value buf);
-};
-
-// 用户列表
-class PtlUserListMsg: public PtlBase {
-public:
-    PtlUserListMsg(int ret, Json::Value buf);
+    PtlRoomOpenMsg(int ret, Json::Value::iterator buf);
 };
 
 // 用户信息
 class PtlUserInfoMsg: public PtlBase {
 public:
-    PtlUserInfoMsg(int ret, Json::Value buf);
+    PtlUserInfoMsg(int ret, Json::Value::iterator buf);
+};
+
+// 用户列表
+class PtlUserListMsg: public PtlBase {
+public:
+    PtlUserListMsg(int ret, Json::Value::iterator buf);
 };
 
 #endif /* PtlBase_hpp */

@@ -51,6 +51,16 @@ void ChatManager::SendChatMsg(const char *message, const char *uid, bool ispriva
     m_pChatRoom->SendChatMsg(message, uid, isprivate);
 }
 
+void ChatManager::RequestUserInfo(const char *uid, long version)
+{
+    m_pChatRoom->RequestUserInfo(uid, version);
+}
+
+void ChatManager::RequestUserList(long pageNo, long maxNum, long version)
+{
+    m_pChatRoom->RequestUserList(pageNo, maxNum, version);
+}
+
 void ChatManager::UserList()
 {
     m_pChatRoom->UserList();
@@ -99,43 +109,17 @@ void ChatManager::OnMsg(PtlBase* ptl)
     [message setMsgBaseInfoWithType:ptl->m_nType andSubType:ptl->m_nSubType andContent:[NSString stringWithUTF8String:ptl->m_strMsg.c_str()]];
     [message setMsgExtraInfo:ptl->m_nExtraProperty];
     
-    switch (ptl->m_nType)
+    if(ptl->m_nType == 8)
+        message = setUserList(message, ptl);
+    else
     {
-        case 1:   //飞屏 广播
-        {
-            message = setUserInfo(message, ptl);
+        message = setUserInfo(message, ptl);
+        
+        if(!ptl->m_ReceiveUser.userID.empty())
             message = setReceiveUserInfo(message, ptl);
-        }
-            break;
-        case 2:    //送礼
-        {
-            message = setUserInfo(message, ptl);
-            message = setReceiveUserInfo(message, ptl);
+        
+        if(ptl->m_Gift.giftID)
             message = setGiftInfo(message, ptl);
-        }
-            break;
-        case 4:  //进房间
-            message = setUserInfo(message, ptl);
-            break;
-        case 3: // sys
-            break;
-        case 5: // levelup
-        {
-            message = setUserInfo(message, ptl);
-            [message setMsgExtraInfo:ptl->m_nExtraProperty];
-        }
-            break;
-        case 6:
-        {
-            message = setUserInfo(message, ptl);
-            message = setReceiveUserInfo(message, ptl);
-            [message setMsgExtraInfo:ptl->m_nExtraProperty];
-        }
-            break;
-        case 7: // userlist
-            break;
-        default:
-            break;
     }
     
     if(m_pController)
@@ -205,5 +189,34 @@ Message* ChatManager::setGiftInfo(Message* message, PtlBase* ptl)
                                          andGroupNum:ptl->m_Gift.comboGroupNum];
     
     [[message getGift] setGiftVersion:ptl->m_Gift.version];
+    return message;
+}
+
+Message* ChatManager::setUserList(Message* message, PtlBase* ptl)
+{
+    while(!ptl->getUserFromList().userID.empty())
+    {
+        [[message getUser] setUserBaseInfoWithUid:[NSString stringWithUTF8String:ptl->getUserFromList().userID.c_str()]
+                                      andNickName:[NSString stringWithUTF8String:ptl->getUserFromList().nickName.c_str()]
+                                      andHeadIcon:[NSString stringWithUTF8String:ptl->getUserFromList().headIcon.c_str()]
+                                       andGameUid:[NSString stringWithUTF8String:ptl->getUserFromList().gameUid.c_str()]];
+        [[message getUser] setUserLevelInfoWithFans:ptl->getUserFromList().fansLevel
+                                            andRich:ptl->getUserFromList().richLevel
+                                            andUser:ptl->getUserFromList().userLevel];
+        [[message getUser] setUserDetailInfoWithRoomRole: [NSString stringWithUTF8String:ptl->getUserFromList().roomRole.c_str()]
+                                             andUserType:ptl->getUserFromList().userType
+                                               andRoleID:ptl->getUserFromList().roleID
+                                              andSortNum:ptl->getUserFromList().sortNum];
+        [[message getUser] setUserGameInfoWithGameZoneName: [NSString stringWithUTF8String:ptl->getUserFromList().gameZoneName.c_str()]
+                                             andEquipScore:ptl->getUserFromList().equipScore
+                                           andGameRoleType:ptl->getUserFromList().gameRoleType
+                                           andGameVipLevel:ptl->getUserFromList().gameVIPLevel];
+        [[[message getUser] getEntryAnimation] setProPertyWithID:ptl->m_User.AnimationID
+                                                         andPath:[NSString stringWithUTF8String:ptl->getUserFromList().AnimationPath.c_str()]
+                                                      andVersion:[NSString stringWithUTF8String:ptl->getUserFromList().AnimationVer.c_str()]
+                                                          isShow:ptl->getUserFromList().isAnimationShow];
+        [message addUserIntoList:[message getUser]];
+        ptl->PopUserList();
+    }
     return message;
 }

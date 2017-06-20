@@ -8,12 +8,12 @@
 
 #include "PtlBase.hpp"
 
-PtlBroadcastMsg::PtlBroadcastMsg(int ret, Json::Value buf):PtlBase(ret, buf)
+PtlBroadcastMsg::PtlBroadcastMsg(int ret,Json::Value::iterator itc): PtlBase(ret, itc)
 {
     m_nType = 1;
     m_nSubType = 4;
     
-    Json::Value::iterator itc = buf.begin();
+    //Json::Value::iterator itc = buf.begin();
     std::string ct = (*itc)["ct"].asString();
     if(!ct.empty())
     {
@@ -29,7 +29,7 @@ PtlBroadcastMsg::PtlBroadcastMsg(int ret, Json::Value buf):PtlBase(ret, buf)
             m_ReceiveUser.nickName = std::to_string(ctobject["h"].asUInt());
             
             m_strMsg = ctobject["b"].asString();
-            m_nExtraProperty = ctobject["c"].asDouble();s
+            m_nExtraProperty = ctobject["c"].asDouble();
         }
     }
 }

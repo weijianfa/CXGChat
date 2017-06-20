@@ -192,8 +192,9 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
 - (long) enterChatRoom;
 - (void) leaveChatRoom;
 
-- (void) speak:(NSString*)message to:(NSString*)uid andPrivate:(bool)isprivate;     // speak in the room, include
-- (void) getUserList;  //上层还完全没写
+- (void) speak:(NSString*)message to:(NSString*)uid andPrivate:(bool)isprivate;
+- (void) requestUserInfoWith:(NSString*)uid andVersion:(NSInteger)version;
+- (void) requestUserListWith:(NSInteger)pageno andMaxNum:(NSInteger)maxnum andVersion:(NSInteger)version;
 
 - (void) setReceiverObject:(id<OnChatDelegate>)delegate;
 @end

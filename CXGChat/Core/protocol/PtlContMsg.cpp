@@ -8,12 +8,12 @@
 
 #include "PtlBase.hpp"
 
-PtlSyncUserContMsg::PtlSyncUserContMsg(int ret, Json::Value buf):PtlBase(ret, buf)
+PtlSyncUserContMsg::PtlSyncUserContMsg(int ret,Json::Value::iterator itc): PtlBase(ret, itc)
 {
     m_nType = 7;
     m_nSubType = 0;
     
-    Json::Value::iterator itc = buf.begin();
+    //Json::Value::iterator itc = buf.begin();
     std::string ct = (*itc)["ct"].asString();
     if(!ct.empty())
     {

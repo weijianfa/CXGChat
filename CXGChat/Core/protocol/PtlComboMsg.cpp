@@ -8,12 +8,12 @@
 
 #include "PtlBase.hpp"
 
-PtlComboMsg::PtlComboMsg(int ret, Json::Value buf):PtlBase(ret, buf)
+PtlComboMsg::PtlComboMsg(int ret,Json::Value::iterator itc): PtlBase(ret, itc)
 {
     m_nType = 2;
     m_nSubType = 2;
     
-    Json::Value::iterator itc = buf.begin();
+    //Json::Value::iterator itc = buf.begin();
     std::string ct = (*itc)["ct"].asString();
     if(!ct.empty())
     {

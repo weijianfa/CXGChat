@@ -8,11 +8,11 @@
 
 #include "PtlBase.hpp"
 
-PtlLevelUpMsg::PtlLevelUpMsg(int ret, Json::Value buf):PtlBase(ret, buf)
+PtlLevelUpMsg::PtlLevelUpMsg(int ret,Json::Value::iterator itc): PtlBase(ret, itc)
 {
     m_nType = 5;
     
-    Json::Value::iterator itc = buf.begin();
+    //Json::Value::iterator itc = buf.begin();
     std::string ct = (*itc)["ct"].asString();
     if(!ct.empty())
     {
@@ -22,9 +22,6 @@ PtlLevelUpMsg::PtlLevelUpMsg(int ret, Json::Value buf):PtlBase(ret, buf)
         
         if (ctreader.parse(ct.c_str(), ctobject))
         {
-            m_User.userID = ctobject["bb"].asInt();
-            m_User.sortNum = ctobject["k"].asDouble();
-            
             switch(ctobject["l"].asInt())
             {
                 case 3:
@@ -46,23 +43,36 @@ PtlLevelUpMsg::PtlLevelUpMsg(int ret, Json::Value buf):PtlBase(ret, buf)
                     m_nSubType = 3;
                     m_User.fansLevel = ctobject["c"].asInt();
                     m_nExtraProperty = ctobject["q"].asInt();
-                    
-                    //这里可能需要一个用户的全量信息
                 }
                     break;
                 default:
                     break;
             }
+            
+            m_User.userID = ctobject["n"]["bb"].asString();
+            m_User.nickName = ctobject["n"]["p"].asString();
+            m_User.gameUid = ctobject["n"]["a4"].asString();
+            
+            m_User.fansLevel = ctobject["n"]["b3"].asInt();
+            m_User.richLevel = ctobject["n"]["h"].asInt();
+            m_User.roomRole = ctobject["n"]["a1"].asString();
+            
+            m_User.terminal = ctobject["n"]["c3"].asInt();
+            m_User.roleID = ctobject["n"]["y"].asInt();
+            m_User.roomRole = ctobject["n"]["a1"].asString();
+            m_User.userType = ctobject["n"]["a8"].asInt();
+            m_User.sortNum = ctobject["n"]["a2"].asDouble();
+            m_User.gameZoneName = ctobject["n"]["b1"].asString();
         }
     }
 }
 
-PtlVipLevelUpMsg::PtlVipLevelUpMsg(int ret, Json::Value buf):PtlBase(ret, buf)
+PtlVipLevelUpMsg::PtlVipLevelUpMsg(int ret,Json::Value::iterator itc): PtlBase(ret, itc)
 {
     m_nType = 5;
     m_nSubType = 4;
     
-    Json::Value::iterator itc = buf.begin();
+    //Json::Value::iterator itc = buf.begin();
     std::string ct = (*itc)["ct"].asString();
     if(!ct.empty())
     {

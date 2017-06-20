@@ -8,12 +8,12 @@
 
 #include "PtlBase.hpp"
 
-PtlLoginRet::PtlLoginRet(int ret,Json::Value  buf):PtlBase(ret, buf)
+PtlLoginRet::PtlLoginRet(int ret,Json::Value::iterator itc): PtlBase(ret, itc)
 {
     m_nType = 4;
     m_nSubType = 0;
     
-    Json::Value::iterator itc = buf.begin();
+    //Json::Value::iterator itc = buf.begin();
     m_User.userID = (*itc)["ct"]["bb"].asString();
     m_User.nickName = (*itc)["ct"]["p"].asString();
     m_User.headIcon = (*itc)["ct"]["j"].asString();
@@ -50,11 +50,11 @@ PtlLoginRet::PtlLoginRet(int ret,Json::Value  buf):PtlBase(ret, buf)
     }
 }
 
-PtLeaveRoom::PtLeaveRoom(int ret,Json::Value  buf):PtlBase(ret, buf)
+PtLeaveRoom::PtLeaveRoom(int ret,Json::Value::iterator itc): PtlBase(ret, itc)
 {
     m_nType = 4;
     m_nSubType = 1;
     
-    Json::Value::iterator itc = buf.begin();
+    //Json::Value::iterator itc = buf.begin();
     m_User.userID = (*itc)["ct"].asString();
 }

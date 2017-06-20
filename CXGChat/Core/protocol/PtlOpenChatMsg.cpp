@@ -9,12 +9,12 @@
 #include "PtlBase.hpp"
 
 // 开启关闭公聊
-PtlCloseChatMsg::PtlCloseChatMsg(int ret, Json::Value buf):PtlBase(ret, buf)
+PtlCloseChatMsg::PtlCloseChatMsg(int ret,Json::Value::iterator itc): PtlBase(ret, itc)
 {
     m_nType = 6;
     m_nSubType = 1;
     
-    Json::Value::iterator itc = buf.begin();
+    //Json::Value::iterator itc = buf.begin();
     std::string ct = (*itc)["ct"].asString();
     if(!ct.empty())
     {
@@ -25,10 +25,10 @@ PtlCloseChatMsg::PtlCloseChatMsg(int ret, Json::Value buf):PtlBase(ret, buf)
         if (ctreader.parse(ct.c_str(), ctobject))
         {
             m_User.nickName = ctobject["userName"].asString();
-            m_User.userID = ctobject["userId"].asUInt();
+            m_User.userID = std::to_string(ctobject["userId"].asUInt());
             
-            m_nExtraProperty = ctobject["flag"].asInt();  // 1 开启  0 关闭
-            m_strMsg = std::to_string(ctobject["roomeId"].asDouble());
+            m_strMsg = std::to_string(ctobject["flag"].asInt());  // 1 开启  0 关闭
+            m_nExtraProperty = ctobject["roomId"].asDouble();
         }
     }
 }
