@@ -594,21 +594,85 @@ void CChatRoom::OnLinkPacket(CRawLink* pLink, CPacket* pPacket)
     if(retcode != "000000")
     {
         int ncode = atoi(retcode.c_str());
-        switch (ncode)
+        switch(ncode)
         {
+            case 401001:
+                m_pObserver->OnError(ncode, ERR_INVALID_RARAM);
+                break;
+            case 401002:
+                m_pObserver->OnError(ncode, ERR_COOKIE_INVALID);
+                break;
             case 401005:
-                m_pObserver->OnError(401005, (char*)ERR_ROOMID_INVALID);
+                m_pObserver->OnError(ncode, ERR_ROOMID_INVALID);
+                break;
+            case 401007:
+                m_pObserver->OnError(ncode, ERR_UNPERMISSION);
+                break;
+            case 401011:
+                m_pObserver->OnError(ncode, ERR_ROOMFULL);
+                break;
+            case 401014:
+                m_pObserver->OnError(ncode, ERR_UNKNOW_CHATROOM);
                 break;
             case 409004:
-                m_pObserver->OnError(401005, (char*)ERR_REPETITION_LOGIN);
+                m_pObserver->OnError(ncode, ERR_ENTER_KICKOUT);
                 break;
-            case 409007:
-                m_pObserver->OnError(401005, (char*)ERR_TERMINAl_MUTEX);
+            case 409005:
+                m_pObserver->OnError(ncode, ERR_KICKOUT);
                 break;
-                
+            case 409006:
+                m_pObserver->OnError(ncode, ERR_KICKOUT);
+                break;
+            case 402001:
+                m_pObserver->OnError(ncode, ERR_USER_UNSPEAK);
+                break;
+            case 402003:
+                m_pObserver->OnError(ncode, ERR_SPEAK_1);
+                break;
+            case 402013:
+                m_pObserver->OnError(ncode, ERR_SPEAk_2);
+                break;
+            case 402004:
+                m_pObserver->OnError(ncode, ERR_SPEAK_NULL);
+                break;
+            case 402005:
+                m_pObserver->OnError(ncode, ERR_SPEAK_3);
+                break;
+            case 402006:
+                m_pObserver->OnError(ncode, ERR_FORBID_SPEAK);
+                break;
+            case 402007:
+                m_pObserver->OnError(ncode, ERR_CHATUSER_NULL);
+                break;
+            case 402009:
+                m_pObserver->OnError(ncode, ERR_CHATUSER_LEAVE);
+                break;
+            case 402010:
+                m_pObserver->OnError(ncode, ERR_SPEAK_4);
+                break;
+            case 402011:
+                m_pObserver->OnError(ncode, ERR_ROOM_FORBIDCHAT);
+                break;
+            case 402012:
+                m_pObserver->OnError(ncode, ERR_USER_FORBIDSPEAK);
+                break;
+            case 402014:
+                m_pObserver->OnError(ncode, ERR_PUBSPEAK);
+                break;
+            case 402015:
+                m_pObserver->OnError(ncode, ERR_SPEAK_5);
+                break;
+            case 402016:
+                m_pObserver->OnError(ncode, ERR_GAME_FORBIDSPEAK);
+                break;
             default:
+            {
+                std::string retmsg = object["retnsg"].asString();
+                m_pObserver->OnError(ncode, retmsg);
+            }
                 break;
         }
+        
         if (dbuf){ free(dbuf); }
         return;
     }
@@ -641,7 +705,12 @@ void CChatRoom::OnLinkPacket(CRawLink* pLink, CPacket* pPacket)
             {
                 std::string strMasterId = ctObj["bb"].asString();
                 if(strMasterId == m_nMasterId)
+                {
                     m_bEnter = true;
+                    m_pObserver->OnMsg(PtlBase::getProtocol( (99 << 16 ) + 99 , itc));
+                }
+                else
+                    m_pObserver->OnError(999999, ERR_ENTER_FAILD);
             }
         }
 
@@ -654,81 +723,6 @@ void CChatRoom::OnLinkPacket(CRawLink* pLink, CPacket* pPacket)
     if (dbuf){ free(dbuf); }
     return;
 }
-    /*
-    switch(protocol->getRetCode()){
-        case 0: // ok
-//            printf("****** ok \n");
-            if(protocol->isMsg()) {
-                m_pObserver->OnMsg(protocol);
-            }
-            break;
-        case 1: // error
-            break;
-        case 2:
-            break;
-        case 401001:
-            break;
-        case 401002:
-            break;
-        case 401005:  // invalid roomid
-            m_pObserver->OnError(401005, ERR_REPETITION_LOGIN);
-            break;
-        case 401007:
-            break;
-        case 401011:
-            break;
-        case 401014:
-            break;
-        case 402001:
-            break;
-        case 402003:
-            break;
-        case 402004:
-            break;
-        case 402005:
-            break;
-        case 402007:
-            break;
-        case 402008:
-            break;
-        case 402009:
-            break;
-        case 402010:
-            break;
-        case 402012:
-            break;
-        case 402013:
-            break;
-        case 402014:
-            break;
-        case 402015:
-            break;
-        case 402016:
-            break;
-        case 402017:
-            break;
-        case 403001:
-            break;
-        case 403002:
-            break;
-        case 404001:
-            break;
-        case 404002:
-            break;
-        case 409004:
-            if (m_pObserver)
-            {
-                m_eMsgType = CR_ERROR;
-                m_strChatMsg = ERR_REPETITION_LOGIN;
-                m_pObserver->OnError(1,"");
-                ExitChatRoom();
-            }
-            return;
-        case 409005:
-            break;
-            
-    }
-     */
 
 long CChatRoom::AddRef()
 {

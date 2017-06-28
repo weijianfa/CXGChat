@@ -156,6 +156,11 @@ public:
     PtlLoginRet(int ret,Json::Value::iterator buf);
 };
 
+class PtlLoginSeccess: public PtlBase {
+public:
+    PtlLoginSeccess(int ret,Json::Value::iterator buf);
+};
+
 class PtLeaveRoom: public PtlBase {
 public:
     PtLeaveRoom(int ret,Json::Value::iterator buf);

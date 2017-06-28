@@ -129,6 +129,9 @@ PtlBase* PtlBase::getProtocol(int nType, Json::Value::iterator itc)
         case LOGN_RET:
             return new PtlLoginRet(nType, itc);
             break;
+        case LOGIN_SEC_MSG:
+            return new PtlLoginSeccess(nType, itc);
+            break;
         case CONT_MSG:
             return new PtlSyncUserContMsg(nType, itc);
             break;
@@ -143,6 +146,9 @@ PtlBase* PtlBase::getProtocol(int nType, Json::Value::iterator itc)
             break;
         case SYNC_MSG:
             return new PtlSyncAnchorMsg(nType, itc);
+            break;
+        case CHARM_MSG:
+            return new PtlSyncCharmMsg(nType, itc);
             break;
         case LEVLEUP_MSG:
             return new PtlLevelUpMsg(nType, itc);
@@ -172,7 +178,7 @@ PtlBase* PtlBase::getProtocol(int nType, Json::Value::iterator itc)
             return new PtlCloseChatMsg(nType, itc);
             break;
         case CLOSE_MSG:
-            return new PtlRoomOpenMsg(nType, itc);
+            return new PtlRoomCloseMsg(nType, itc);
             break;
         case OPENI_MSG:
             return new PtlRoomOpenMsg(nType, itc);

@@ -50,7 +50,13 @@ PtlLoginRet::PtlLoginRet(int ret,Json::Value::iterator itc): PtlBase(ret, itc)
     }
 }
 
-PtLeaveRoom::PtLeaveRoom(int ret,Json::Value::iterator itc): PtlBase(ret, itc)
+PtlLoginSeccess::PtlLoginSeccess(int ret,Json::Value::iterator itc): PtlBase(ret, itc)
+{
+    m_nType = 99;
+    m_nSubType = 99;
+}
+
+PtLeaveRoom::PtLeaveRoom(int ret,Json::Value::iterator itc) : PtlBase(ret, itc)
 {
     m_nType = 4;
     m_nSubType = 1;

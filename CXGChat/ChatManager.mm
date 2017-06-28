@@ -97,10 +97,10 @@ void ChatManager::setController(ChatControl* listener)
     m_pController = listener;
 }
 
-void ChatManager::OnError(int errcode, char* msg)
+void ChatManager::OnError(int errcode, std::string msg)
 {
     if(m_pController)
-        [m_pController doOnError:errcode Msg:[NSString stringWithUTF8String:msg]];
+        [m_pController doOnError:errcode Msg:[NSString stringWithUTF8String:msg.c_str()]];
 }
 
 void ChatManager::OnMsg(PtlBase* ptl)

@@ -14,25 +14,36 @@ PtlSyncAnchorMsg::PtlSyncAnchorMsg(int ret,Json::Value::iterator itc): PtlBase(r
     m_nSubType = 2;
     
     //Json::Value::iterator itc = buf.begin();
-    m_User.userID = (*itc)["ct"]["bb"].asString();
-    m_User.nickName = (*itc)["ct"]["p"].asString();
-    m_User.headIcon = (*itc)["ct"]["j"].asString();
-    m_User.gameUid = (*itc)["ct"]["a4"].asString();
-    
-    m_User.userLevel = (*itc)["ct"]["o"].asInt();
-    m_User.fansLevel = (*itc)["ct"]["b3"].asInt();
-    m_User.richLevel = (*itc)["ct"]["h"].asInt();
-    
-    m_User.terminal = (*itc)["ct"]["c3"].asInt();
-    m_User.roleID = (*itc)["ct"]["y"].asInt();
-    m_User.roomRole = (*itc)["ct"]["a1"].asString();
-    m_User.userType = (*itc)["ct"]["a8"].asInt();
-    m_User.sortNum = (*itc)["ct"]["a2"].asDouble();
-    m_User.gameZoneName = (*itc)["ct"]["b1"].asString();
-    
-    m_User.isAllowPrivateChat = (*itc)["ct"]["x"].asBool();
-    m_User.isReconnect = (*itc)["ct"]["m"].asBool();
-    m_User.isAnchor = (*itc)["ct"]["l"].asBool();
+    std::string ct = (*itc)["ct"].asString();
+    if(!ct.empty())
+    {
+        ct = unescape((char*)ct.c_str());
+        Json::Reader ctreader;
+        Json::Value ctobject;
+        
+        if (ctreader.parse(ct.c_str(), ctobject))
+        {
+            m_User.userID = ctobject["bb"].asString();
+            m_User.nickName = ctobject["p"].asString();
+            m_User.headIcon = ctobject["j"].asString();
+            m_User.gameUid = ctobject["a4"].asString();
+            
+            m_User.userLevel = ctobject["o"].asInt();
+            m_User.fansLevel = ctobject["b3"].asInt();
+            m_User.richLevel = ctobject["h"].asInt();
+            
+            m_User.terminal = ctobject["c3"].asInt();
+            m_User.roleID = ctobject["y"].asInt();
+            m_User.roomRole = ctobject["a1"].asString();
+            m_User.userType = ctobject["a8"].asInt();
+            m_User.sortNum = ctobject["a2"].asDouble();
+            m_User.gameZoneName = ctobject["b1"].asString();
+            
+            m_User.isAllowPrivateChat = ctobject["x"].asBool();
+            m_User.isReconnect = ctobject["m"].asBool();
+            m_User.isAnchor = ctobject["l"].asBool();
+        }
+    }
 }
 
 PtlSyncCharmMsg::PtlSyncCharmMsg(int ret,Json::Value::iterator itc): PtlBase(ret, itc)
@@ -41,10 +52,19 @@ PtlSyncCharmMsg::PtlSyncCharmMsg(int ret,Json::Value::iterator itc): PtlBase(ret
     m_nSubType = 3;
     
     //Json::Value::iterator itc = buf.begin();
-    m_User.userID = std::to_string((*itc)["ct"]["bb"].asUInt());
-    m_User.fansLevel = (*itc)["ct"]["b"].asInt();
+    std::string ct = (*itc)["ct"].asString();
     
-    m_nExtraProperty = (*itc)["ct"]["a"].asUInt();
+    ct = unescape((char*)ct.c_str());
+    Json::Reader ctreader;
+    Json::Value ctobject;
+    
+    if (ctreader.parse(ct.c_str(), ctobject))
+    {
+        m_User.userID = std::to_string(ctobject["bb"].asUInt());
+        m_User.fansLevel = ctobject["b"].asInt();
+        
+        m_nExtraProperty = ctobject["a"].asUInt();
+    }
 }
 
 PtlRankSumMsg::PtlRankSumMsg(int ret,Json::Value::iterator itc): PtlBase(ret, itc)

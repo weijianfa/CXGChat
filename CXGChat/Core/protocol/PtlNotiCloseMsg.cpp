@@ -23,7 +23,8 @@ PtlRoomCloseMsg::PtlRoomCloseMsg(int ret,Json::Value::iterator itc): PtlBase(ret
         
         if (ctreader.parse(ct.c_str(), ctobject))
         {
-            m_User.userID = ctobject["bb"].asInt();
+            m_User.userID = std::to_string(ctobject["bb"].asUInt());
+            m_User.nickName = ctobject["g"].asString();
             m_nExtraProperty = ctobject["b"].asInt();
         }
     }

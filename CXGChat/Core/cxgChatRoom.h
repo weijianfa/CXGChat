@@ -75,7 +75,7 @@ namespace ChatRoom
 		virtual void __stdcall OnChatRoom(ChatRoomMsg crMsg, const char* strMsg) = 0;
 #else
         virtual void OnMsg(PtlBase* ptl) = 0;
-        virtual void OnError(int errcode, char* msg) = 0;
+        virtual void OnError(int errcode, std::string msg) = 0;
 #endif
 	};
 

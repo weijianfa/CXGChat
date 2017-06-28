@@ -22,7 +22,7 @@ public:
     static ChatManager *GetInstance();
     
     virtual void OnMsg(PtlBase* ptl);
-    virtual void OnError(int errcode, char* msg);
+    virtual void OnError(int errcode, std::string msg);
     
     void setHost(const char *ip, long port);
     void setUser(const char *uid,const char *rid);
