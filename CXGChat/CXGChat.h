@@ -42,6 +42,7 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
     NSString* nickName;
     NSString* headIcon;
     NSString* gameUid;
+    NSString* specialNo;
     
     NSString* roomRole;
     NSString* gameZoneName;
@@ -62,6 +63,8 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
     bool isAnchor;
     bool isReconnect;
     bool isAllowPrivateChat;
+    
+    NSString* medel;
 }
 
 @property EntryAnimation* entryAnimation;
@@ -73,6 +76,7 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
 - (NSString*) getNickName;
 - (NSString*) getHeadIcon;
 - (NSString*) getGameUid;
+- (NSString*) getSpecialNo;
 
 - (NSString*) getRoomRole;
 - (NSString*) getGameZoneName;
@@ -90,6 +94,8 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
 - (NSInteger) getGameRoleType;
 - (NSInteger) getGameVIPLevel;
 
+- (NSString*) getMedal;
+
 //- (bool) isAnchor;
 - (bool) getReconnectStatus;
 - (bool) getPrivateChatStatus;
@@ -103,6 +109,9 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
 - (void) setTerminal:(NSInteger) term;
 - (void) setPrivateChatStatus:(bool) isallow;
 - (void) setReconnectStatus:(bool) isreconnect;
+
+- (void) setAnchorSpecialNoWith:(NSString*) number;
+- (void) setMedalInfoWith:(NSString*) usermedal;
 @end
 
 

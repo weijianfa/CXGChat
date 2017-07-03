@@ -148,6 +148,9 @@ Message* ChatManager::setUserInfo(Message* message, PtlBase* ptl)
                                                      andPath:[NSString stringWithUTF8String:ptl->m_User.AnimationPath.c_str()]
                                                   andVersion:[NSString stringWithUTF8String:ptl->m_User.AnimationVer.c_str()]
                                                       isShow:ptl->m_User.isAnimationShow];
+    [[message getUser] setMedalInfoWith:[NSString stringWithUTF8String:ptl->m_User.medal.c_str()]];
+    [[message getReceiveUser] setAnchorSpecialNoWith:[NSString stringWithUTF8String:ptl->m_User.specialNo.c_str()]];
+    
     return message;
 }
 
@@ -169,6 +172,7 @@ Message* ChatManager::setReceiveUserInfo(Message* message, PtlBase* ptl)
                                                 andEquipScore: ptl->m_ReceiveUser.equipScore
                                               andGameRoleType: ptl->m_ReceiveUser.gameRoleType
                                               andGameVipLevel:ptl->m_ReceiveUser.gameVIPLevel];
+    [[message getReceiveUser] setAnchorSpecialNoWith:[NSString stringWithUTF8String:ptl->m_ReceiveUser.specialNo.c_str()]];
     return message;
 }
 

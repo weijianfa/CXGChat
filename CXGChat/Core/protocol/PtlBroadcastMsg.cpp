@@ -25,6 +25,7 @@ PtlBroadcastMsg::PtlBroadcastMsg(int ret,Json::Value::iterator itc): PtlBase(ret
         {
             m_User.userID = std::to_string(ctobject["bb"].asUInt());
             m_User.nickName = ctobject["f"].asString();
+            m_User.specialNo = std::to_string(ctobject["g"].asUInt());
             
             m_ReceiveUser.nickName = ctobject["h"].asString();
             

@@ -89,6 +89,7 @@ enum COMMUNICATION_PROTOCOL
     USERLIST_MSG= (0<<16)  + 6,  // 用户列表
     USERINTO_MSG= (4<<16)  + 2,  // 用户信息
     RANKSUM_MSG = (93<<16) + 1,  // 7日排行榜总数
+    ATTENTION_MSG = (66<<16) + 1,// 关注、取消关注
     
     LOGIN_SEC_MSG = (99 << 16) + 99, //登录成功消息
 };

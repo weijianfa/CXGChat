@@ -49,6 +49,9 @@
 - (NSString *)getGameUid{
     return gameUid;
 }
+- (NSString*) getSpecialNo{
+    return specialNo;
+}
 
 - (NSString*) getRoomRole{
     return roomRole;
@@ -56,7 +59,9 @@
 - (NSString*) getGameZoneName{
     return gameZoneName;
 }
-
+- (NSString*) getMedal{
+    return medel;
+}
 
 - (NSInteger) getTerminal{
     return terminal;
@@ -142,6 +147,16 @@
     equipScore = score;
     gameRoleType = gameroletype;
     gameVIPLevel = viplevel;
+}
+
+- (void) setAnchorSpecialNoWith:(NSString *)number
+{
+    specialNo = number;
+}
+
+- (void) setMedalInfoWith:(NSString *)usermedal
+{
+    medel = usermedal;
 }
 
 - (void) setTerminal:(NSInteger)term

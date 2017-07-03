@@ -34,3 +34,4 @@ PtlUserInfoMsg::PtlUserInfoMsg(int ret,Json::Value::iterator itc): PtlBase(ret, 
     m_User.isReconnect = (*itc)["ct"]["m"].asBool();
     m_User.isAnchor = (*itc)["ct"]["l"].asBool();
 }
+

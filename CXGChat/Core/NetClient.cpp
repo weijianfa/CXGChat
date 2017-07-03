@@ -110,8 +110,14 @@ bool CNetPeer::Open()
 void CNetPeer::Close()
 {
 	pthread_detach(m_Connect);
+    m_nRetCode = 0;
+    m_nNeedCopySize = 0;
+    
+    m_bRet = false;
     m_bOnLoop = false;
+    
     m_RawLink = NULL;
+    memset(m_cLastRecv, 0, RECV_BUF_SIZE);
 
 #if(CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
         closesocket(m_socket);

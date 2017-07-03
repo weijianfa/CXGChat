@@ -188,6 +188,10 @@ PtlBase* PtlBase::getProtocol(int nType, Json::Value::iterator itc)
             break;
         case USERLIST_MSG:
             return new PtlUserListMsg(nType, itc);
+            break;
+        case ATTENTION_MSG:
+            return new PtlSetAttentionMsg(nType, itc);
+            break;
         default:
             return NULL;
             break;

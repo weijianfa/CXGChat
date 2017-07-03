@@ -19,6 +19,7 @@ struct USER
     std::string gameUid;
     std::string roomRole;
     std::string gameZoneName;
+    std::string specialNo;
     
     int terminal;
     int userType;
@@ -41,6 +42,8 @@ struct USER
     std::string AnimationVer;
     bool isAnimationShow;
     
+    std::string medal;
+    
     USER()
     {
         userID   = "";
@@ -49,6 +52,7 @@ struct USER
         gameUid  = "";
         roomRole = "";
         gameZoneName= "";
+        specialNo = "";
         
         terminal = 0;
         userType = 0;
@@ -69,6 +73,8 @@ struct USER
         AnimationPath = "";
         AnimationVer = "";
         isAnimationShow = true;
+        
+        medal = "";
     }
 };
 
@@ -283,6 +289,12 @@ public:
 class PtlUserListMsg: public PtlBase {
 public:
     PtlUserListMsg(int ret, Json::Value::iterator buf);
+};
+
+//设置、取消关注
+class PtlSetAttentionMsg: public PtlBase {
+public:
+    PtlSetAttentionMsg(int ret, Json::Value::iterator buf);
 };
 
 #endif /* PtlBase_hpp */
