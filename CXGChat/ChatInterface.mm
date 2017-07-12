@@ -59,9 +59,6 @@
 - (NSString*) getGameZoneName{
     return gameZoneName;
 }
-- (NSString*) getMedal{
-    return medel;
-}
 
 - (NSInteger) getTerminal{
     return terminal;
@@ -95,6 +92,10 @@
 }
 - (NSInteger) getGameVIPLevel{
     return gameVIPLevel;
+}
+
+- (NSInteger) getMedal{
+    return medel;
 }
 
 - (bool) getPrivateChatStatus{
@@ -154,7 +155,7 @@
     specialNo = number;
 }
 
-- (void) setMedalInfoWith:(NSString *)usermedal
+- (void) setMedalInfoWith:(NSInteger)usermedal
 {
     medel = usermedal;
 }
@@ -229,6 +230,7 @@
     giftUniqueID = uniqueid;
     giftCount = count;
     giftType = type;
+    _isFree = isfree;
 }
 
 - (void) setGiftComboInfoWithAutoCombo:(bool)isauto andCombo:(bool)iscombo andComboNum:(NSInteger)num andGroupNum:(NSInteger)groupnum

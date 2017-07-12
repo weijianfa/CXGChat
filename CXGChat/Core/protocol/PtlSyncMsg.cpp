@@ -39,8 +39,8 @@ PtlSyncAnchorMsg::PtlSyncAnchorMsg(int ret,Json::Value::iterator itc): PtlBase(r
             m_User.sortNum = ctobject["a2"].asDouble();
             m_User.gameZoneName = ctobject["b1"].asString();
             
-            m_User.isAllowPrivateChat = ctobject["x"].asBool();
-            m_User.isReconnect = ctobject["m"].asBool();
+            m_User.isAllowPrivateChat = ctobject["x"].asInt();
+            m_User.isReconnect = ctobject["m"].asInt();
             m_User.isAnchor = ctobject["l"].asBool();
         }
     }

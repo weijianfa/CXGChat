@@ -30,8 +30,8 @@ PtlUserInfoMsg::PtlUserInfoMsg(int ret,Json::Value::iterator itc): PtlBase(ret, 
     m_User.sortNum = (*itc)["ct"]["a2"].asDouble();
     m_User.gameZoneName = (*itc)["ct"]["b1"].asString();
     
-    m_User.isAllowPrivateChat = (*itc)["ct"]["x"].asBool();
-    m_User.isReconnect = (*itc)["ct"]["m"].asBool();
+    m_User.isAllowPrivateChat = (*itc)["ct"]["x"].asInt();
+    m_User.isReconnect = (*itc)["ct"]["m"].asInt();
     m_User.isAnchor = (*itc)["ct"]["l"].asBool();
 }
 

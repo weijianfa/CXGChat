@@ -34,7 +34,7 @@ PtlHeadTipMsg::PtlHeadTipMsg(int ret,Json::Value::iterator itc): PtlBase(ret, it
             m_User.richLevel = ctobject["s"].asInt();
             m_User.gameUid = ctobject["u"].asString();
             m_User.nickName = ctobject["t"].asString();
-            m_User.medal = ctobject["v"].asString();
+            m_User.medal = ctobject["v"].asInt();
             
             m_Gift.giftID = ctobject["h"].asInt();
             m_Gift.name = ctobject["i"].asString();

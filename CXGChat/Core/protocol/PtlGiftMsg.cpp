@@ -48,7 +48,7 @@ PtlGiftMsg::PtlGiftMsg(int ret,Json::Value::iterator itc): PtlBase(ret, itc)
             m_Gift.name = ctobject["q"].asString();
             m_Gift.type = ctobject["v"].asInt();
             m_Gift.uniqueID = ctobject["w"].asString();
-            m_Gift.isFree = ctobject["y"].asBool();
+            m_Gift.isFree = ctobject["y"].asInt();
         }
     }
 }

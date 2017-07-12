@@ -30,6 +30,7 @@ struct USER
     int equipScore;
     int gameRoleType;
     int gameVIPLevel;
+    int medal;
     
     long sortNum;
     
@@ -42,7 +43,6 @@ struct USER
     std::string AnimationVer;
     bool isAnimationShow;
     
-    std::string medal;
     
     USER()
     {
@@ -57,13 +57,15 @@ struct USER
         terminal = 0;
         userType = 0;
         roleID   = 0;
-        sortNum  = 0;
         fansLevel = 0;
         richLevel = 0;
         userLevel = 0;
         equipScore= 0;
         gameRoleType = 0;
         gameVIPLevel = 0;
+        medal = 0;
+        
+        sortNum  = 0;
         
         isAnchor = false;
         isReconnect = false;
@@ -73,8 +75,6 @@ struct USER
         AnimationPath = "";
         AnimationVer = "";
         isAnimationShow = true;
-        
-        medal = "";
     }
 };
 
