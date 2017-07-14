@@ -69,7 +69,7 @@ struct USER
         
         isAnchor = false;
         isReconnect = false;
-        isAllowPrivateChat = true;
+        isAllowPrivateChat = false;
         
         AnimationID = 0;
         AnimationPath = "";

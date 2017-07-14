@@ -30,7 +30,7 @@ PtlFeiPingMsg::PtlFeiPingMsg(int ret,Json::Value::iterator itc): PtlBase(ret, it
             m_User.richLevel = ctobject["e"].asInt();
             m_User.fansLevel = ctobject["a"].asInt();
             m_User.nickName = ctobject["h"].asString();
-            m_User.medal = ctobject["i"].asInt();
+            m_User.medal = std::atoi(ctobject["i"].asString().c_str());
             
             m_nExtraProperty = ctobject["f"].asDouble();
             
