@@ -110,7 +110,7 @@ struct GIFT
         
         isAutoCombo = false;
         isCombo = false;
-        isFree = true;
+        isFree = false;
     }
 };
 

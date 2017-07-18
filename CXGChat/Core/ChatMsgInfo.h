@@ -86,7 +86,7 @@ enum COMMUNICATION_PROTOCOL
     OPENCHAT_MSG= (11<<16) + 1,  // 开启公聊
     CLOSE_MSG   = (18<<16) + 1,  // 关闭直播通知
     OPENI_MSG   = (15<<16) + 1,  // 开启直播通知
-    USERLIST_MSG= (0<<16)  + 6,  // 用户列表
+    USERLIST_MSG= (1<<16)  + 6,  // 用户列表
     USERINTO_MSG= (4<<16)  + 2,  // 用户信息
     RANKSUM_MSG = (93<<16) + 1,  // 7日排行榜总数
     ATTENTION_MSG = (66<<16) + 1,// 关注、取消关注

@@ -14,55 +14,29 @@ PtlUserListMsg::PtlUserListMsg(int ret,Json::Value::iterator itc): PtlBase(ret, 
     m_nSubType = 0;
     
     Json::Value::iterator ctitc = (*itc)["ct"].begin();
-    int richTotalNum = (*ctitc)["b"].asInt();
+    m_nExtraProperty = (*ctitc)["c"].asInt();
     
     ctitc++;
-    
     Json::Value::iterator user = (*ctitc)["h"].begin();
-    if(richTotalNum >= 40)
+    while(user != (*ctitc)["h"].end())
     {
-        for(int i = 0; i < 40; i++)
-        {
-            m_User.userID = (*user)["bb"].asString();
-            m_User.nickName = (*user)["p"].asString();
-            m_User.gameUid = (*user)["a4"].asString();
-            
-            m_User.fansLevel = (*user)["b3"].asInt();
-            m_User.richLevel = (*user)["h"].asInt();
-            m_User.roomRole = (*user)["a1"].asString();
-            
-            m_User.terminal = (*user)["c3"].asInt();
-            m_User.roleID = (*user)["y"].asInt();
-            m_User.roomRole = (*user)["a1"].asString();
-            m_User.userType = (*user)["a8"].asInt();
-            m_User.sortNum = (*user)["a2"].asDouble();
-            m_User.gameZoneName = (*user)["b1"].asString();
-            user++;
-            
-            m_UserList.push(m_User);
-        }
+        m_User.userID = (*user)["bb"].asString();
+        m_User.nickName = (*user)["p"].asString();
+        m_User.gameUid = (*user)["a4"].asString();
+        
+        m_User.fansLevel = (*user)["b3"].asInt();
+        m_User.richLevel = (*user)["h"].asInt();
+        m_User.roomRole = (*user)["a1"].asString();
+        
+        m_User.terminal = (*user)["c3"].asInt();
+        m_User.roleID = (*user)["y"].asInt();
+        m_User.roomRole = (*user)["a1"].asString();
+        m_User.userType = (*user)["a8"].asInt();
+        m_User.sortNum = (*user)["a2"].asDouble();
+        m_User.gameZoneName = (*user)["b1"].asString();
+        user++;
+        
+        m_UserList.push(m_User);
     }
-    else
-    {
-        while(user != (*ctitc)["h"].end())
-        {
-            m_User.userID = (*user)["bb"].asString();
-            m_User.nickName = (*user)["p"].asString();
-            m_User.gameUid = (*user)["a4"].asString();
-            
-            m_User.fansLevel = (*user)["b3"].asInt();
-            m_User.richLevel = (*user)["h"].asInt();
-            m_User.roomRole = (*user)["a1"].asString();
-            
-            m_User.terminal = (*user)["c3"].asInt();
-            m_User.roleID = (*user)["y"].asInt();
-            m_User.roomRole = (*user)["a1"].asString();
-            m_User.userType = (*user)["a8"].asInt();
-            m_User.sortNum = (*user)["a2"].asDouble();
-            m_User.gameZoneName = (*user)["b1"].asString();
-            user++;
-            
-            m_UserList.push(m_User);
-        }
-    }
+
 }
