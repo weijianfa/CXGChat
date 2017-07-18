@@ -491,7 +491,7 @@ void CChatRoom::RequestUserInfo(std::string strUid, long nVersion)
     pthread_mutex_unlock(&m_SynchMutex);
 }
 
-void CChatRoom::RequestUserList(long nPageNo, long nMax, long nVersion)
+void CChatRoom::RequestUserList(long nPageNo, long nMax, long nType, long nVersion)
 {
     pthread_mutex_lock(&m_SynchMutex);
     
@@ -505,7 +505,7 @@ void CChatRoom::RequestUserList(long nPageNo, long nMax, long nVersion)
     
     CPacket* pPacket = CPacket::CreateFromPayload((char*)jsonRequest.c_str(), (int)jsonRequest.length());
     pPacket->SetPacketType(6);
-    pPacket->SetPacketAction(0);
+    pPacket->SetPacketAction(1);
     
     if (m_pLink)
         m_pLink->SendPacket(pPacket);

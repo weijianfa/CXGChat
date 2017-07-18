@@ -34,7 +34,7 @@ public:
     
     void SendChatMsg(const char *message, const char *uid ,bool isprivate);
     void RequestUserInfo(const char *uid, long version);
-    void RequestUserList(long pageNo, long maxNum, long version);
+    void RequestUserList(long pageNo, long maxNum, long userType, long version);
     void UserList();
     
 private:

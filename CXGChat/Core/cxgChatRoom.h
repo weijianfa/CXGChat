@@ -113,7 +113,7 @@ namespace ChatRoom
 		virtual void SetChatRoomInfo(ChatRoomInfo RoomInfo) = 0;
         virtual void SendChatMsg(std::string strMsg,std::string strMasterid, bool bPrivate) = 0;
         virtual void RequestUserInfo(std::string strUid,long nVersion) = 0;
-        virtual void RequestUserList(long nOageNo, long nMax ,long nVersion) = 0;
+        virtual void RequestUserList(long nOageNo, long nMax, long nType, long nVersion) = 0;
 
 		virtual std::string GetErrMsg(void) = 0;
 #endif

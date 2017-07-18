@@ -61,7 +61,7 @@ public:
 	virtual void SetChatRoomInfo(ChatRoomInfo RoomInfo);
     virtual void SendChatMsg(std::string strMsg,std::string strMasterid, bool bPrivate);
     virtual void RequestUserInfo(std::string strUid,long nVersion);
-    virtual void RequestUserList(long nOageNo,long nMax,long nVersion);
+    virtual void RequestUserList(long nOageNo,long nMax, long nType, long nVersion);
     virtual std::string GetErrMsg(void);
 #endif
 

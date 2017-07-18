@@ -56,9 +56,9 @@ void ChatManager::RequestUserInfo(const char *uid, long version)
     m_pChatRoom->RequestUserInfo(uid, version);
 }
 
-void ChatManager::RequestUserList(long pageNo, long maxNum, long version)
+void ChatManager::RequestUserList(long pageNo, long maxNum, long userType, long version)
 {
-    m_pChatRoom->RequestUserList(pageNo, maxNum, version);
+    m_pChatRoom->RequestUserList(pageNo, maxNum, userType, version);
 }
 
 void ChatManager::UserList()

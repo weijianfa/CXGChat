@@ -203,7 +203,7 @@ FOUNDATION_EXPORT const unsigned char CXGChatVersionString[];
 
 - (void) speak:(NSString*)message to:(NSString*)uid andPrivate:(bool)isprivate;
 - (void) requestUserInfoWith:(NSString*)uid andVersion:(NSInteger)version;
-- (void) requestUserListWith:(NSInteger)pageno andMaxNum:(NSInteger)maxnum andVersion:(NSInteger)version;
+- (void) requestUserListWith:(NSInteger)pageno andMaxNum:(NSInteger)maxnum andUserType:(NSInteger)usertype andVersion:(NSInteger)version;
 
 - (void) setReceiverObject:(id<OnChatDelegate>)delegate;
 @end

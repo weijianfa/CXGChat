@@ -383,10 +383,10 @@
     manager->RequestUserInfo([uid UTF8String],version);
 }
 
-- (void) requestUserListWith:(NSInteger)pageno andMaxNum:(NSInteger)maxnum andVersion:(NSInteger)version
+- (void) requestUserListWith:(NSInteger)pageno andMaxNum:(NSInteger)maxnum andUserType:(NSInteger)usertype andVersion:(NSInteger)version
 {
     ChatManager* manager = ChatManager::GetInstance();
-    manager->RequestUserList(pageno, maxnum, version);
+    manager->RequestUserList(pageno, maxnum, usertype, version);
 }
 
 - (void)setReceiverObject:(id<OnChatDelegate>)delegate
