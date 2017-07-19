@@ -36,9 +36,9 @@ public:
 
     
     int GetPacketType() const;
-	int GetPacketSize() const;
-	int GetPayloadSize() const;
-	int GetTotalSize() const;
+	long GetPacketSize() const;
+	long GetPayloadSize() const;
+	long GetTotalSize() const;
     
     char*   GetTotal() const;
     char*   GetPayload() const;
@@ -51,8 +51,8 @@ protected:
 	CPacket();
 	virtual ~CPacket();
     
-	bool InitPayload(char* pPayload, int nPayload);
-	bool InitTotal(char* pTotal, int nTotal);
+	bool InitPayload(char* pPayload, long nPayload);
+	bool InitTotal(char* pTotal, long nTotal);
 
 private:
     
@@ -61,8 +61,8 @@ private:
 	char*            m_pTotal;
     char*            m_pPayload;
     
-	int             m_nTotal;
-	int             m_nPayload;
+	long             m_nTotal;
+	long             m_nPayload;
 };
 
 #endif

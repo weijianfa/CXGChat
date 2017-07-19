@@ -63,7 +63,7 @@ int CPacket::GetPacketType() const
     return (m_pHeader->packetAction<<16) + m_pHeader->packetType;
 }
 
-int CPacket::GetPacketSize() const
+long CPacket::GetPacketSize() const
 {
 	int nPacketSize = 0;
 	char* pPacketSize = (char*)&nPacketSize;
@@ -78,7 +78,7 @@ char* CPacket::GetPayload() const
 	return m_pPayload;
 }
 
-int CPacket::GetPayloadSize() const
+long CPacket::GetPayloadSize() const
 {
 	return m_nPayload;
 }
@@ -88,12 +88,12 @@ char* CPacket::GetTotal() const
 	return m_pTotal;
 }
 
-int CPacket::GetTotalSize() const
+long CPacket::GetTotalSize() const
 {
 	return m_nTotal;
 }
 
-bool CPacket::InitPayload(char* pPayload, int nPayload)
+bool CPacket::InitPayload(char* pPayload, long nPayload)
 {
 	m_nTotal = sizeof(PACKET_HADER) + nPayload;
 	m_pTotal = new char[m_nTotal];
@@ -110,7 +110,7 @@ bool CPacket::InitPayload(char* pPayload, int nPayload)
 	return true;
 }
 
-bool CPacket::InitTotal(char* pTotal, int nTotal)
+bool CPacket::InitTotal(char* pTotal, long nTotal)
 {
 	if (nTotal <= sizeof(PACKET_HADER))
 	{
