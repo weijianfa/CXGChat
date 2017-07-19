@@ -32,10 +32,10 @@ class CPacket
 public:
     
 	static CPacket* CreateFromPayload(char* pPayload, int nPayload);
-	static CPacket* CreateFromTotal(char* pTotal, int nTotal);
+	static CPacket* CreateFromTotal(char* pTotal, long nTotal);
 
     
-    int GetPacketType() const;
+    int  GetPacketType() const;
 	long GetPacketSize() const;
 	long GetPayloadSize() const;
 	long GetTotalSize() const;
@@ -51,7 +51,7 @@ protected:
 	CPacket();
 	virtual ~CPacket();
     
-	bool InitPayload(char* pPayload, long nPayload);
+	bool InitPayload(char* pPayload, int nPayload);
 	bool InitTotal(char* pTotal, long nTotal);
 
 private:
@@ -62,7 +62,7 @@ private:
     char*            m_pPayload;
     
 	long             m_nTotal;
-	long             m_nPayload;
+	int              m_nPayload;
 };
 
 #endif

@@ -16,7 +16,7 @@ CPacket* CPacket::CreateFromPayload(char* pPayload, int nPayload)
 	}
 }
 
-CPacket* CPacket::CreateFromTotal(char* pTotal, int nTotal)
+CPacket* CPacket::CreateFromTotal(char* pTotal, long nTotal)
 {
 	CPacket* pPacket = new CPacket();
 
@@ -93,7 +93,7 @@ long CPacket::GetTotalSize() const
 	return m_nTotal;
 }
 
-bool CPacket::InitPayload(char* pPayload, long nPayload)
+bool CPacket::InitPayload(char* pPayload, int nPayload)
 {
 	m_nTotal = sizeof(PACKET_HADER) + nPayload;
 	m_pTotal = new char[m_nTotal];
