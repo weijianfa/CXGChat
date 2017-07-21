@@ -85,15 +85,15 @@ namespace NetWork
 		virtual bool __stdcall SendData(const char* pData, int nLen) = 0;
 	#else
 
-		virtual long __attribute__((__stdcall__)) AddRef() = 0;
-		virtual long __attribute__((__stdcall__)) Release() = 0;
+		virtual long AddRef() = 0;
+		virtual long Release() = 0;
 
-		virtual void __attribute__((__stdcall__)) GetConfig(PEER_CONFIG& config) = 0;
-		virtual void __attribute__((__stdcall__)) UpdateConfig(const PEER_CONFIG& config) = 0;
-		virtual bool __attribute__((__stdcall__)) Connect() = 0;
-		virtual bool __attribute__((__stdcall__)) Open() = 0;
-		virtual void __attribute__((__stdcall__)) Close() = 0;
-		virtual bool __attribute__((__stdcall__)) SendData(const char* pData, int nLen) = 0;
+		virtual void GetConfig(PEER_CONFIG& config) = 0;
+		virtual void UpdateConfig(const PEER_CONFIG& config) = 0;
+		virtual bool Connect() = 0;
+		virtual bool Open() = 0;
+		virtual void Close() = 0;
+		virtual bool SendData(const char* pData, int nLen) = 0;
 	#endif
 	};
 
@@ -103,16 +103,16 @@ namespace NetWork
 
 	#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 
-		virtual void __stdcall OnRecvData(char* pData, int nLen) = 0;
+		virtual void __stdcall OnRecvData(char* pData, long nLen) = 0;
 		virtual void __stdcall OnSendOver() = 0;
 		virtual void __stdcall OnNetErr(long nErr) = 0;
 		virtual void __stdcall OnConnect(bool bSuc) = 0;
 	#else
 
-		virtual void __attribute__((__stdcall__)) OnRecvData(char* pData, int nLen) = 0;
-		virtual void __attribute__((__stdcall__)) OnSendOver() = 0;
-		virtual void __attribute__((__stdcall__)) OnNetErr(long nErr) = 0;
-		virtual void __attribute__((__stdcall__)) OnConnect(bool bSuc) = 0;
+		virtual void OnRecvData(char* pData, long nLen) = 0;
+		virtual void OnSendOver() = 0;
+		virtual void OnNetErr(long nErr) = 0;
+		virtual void OnConnect(bool bSuc) = 0;
 	#endif
 	};
 

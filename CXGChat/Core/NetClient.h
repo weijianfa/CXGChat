@@ -29,17 +29,17 @@ public:
 	virtual void __stdcall Close();
 #else
 
-	virtual long __attribute__((__stdcall__)) AddRef();
-	virtual long __attribute__((__stdcall__)) Release();
+	virtual long AddRef();
+	virtual long Release();
 
-	virtual void __attribute__((__stdcall__)) GetConfig(PEER_CONFIG& config);
-	virtual void __attribute__((__stdcall__)) UpdateConfig(const PEER_CONFIG& config);
-	virtual bool __attribute__((__stdcall__)) SendData(const char* pData, int nLen);
-	virtual bool __attribute__((__stdcall__)) RecvData(char* pData, int nLen);
+	virtual void GetConfig(PEER_CONFIG& config);
+	virtual void UpdateConfig(const PEER_CONFIG& config);
+	virtual bool SendData(const char* pData, int nLen);
+	virtual bool RecvData(char* pData, int nLen);
 
-	virtual bool __attribute__((__stdcall__)) Connect();
-	virtual bool __attribute__((__stdcall__)) Open();
-	virtual void __attribute__((__stdcall__)) Close();
+	virtual bool Connect();
+	virtual bool Open();
+	virtual void Close();
 #endif
 
 private:

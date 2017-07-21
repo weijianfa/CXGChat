@@ -539,6 +539,7 @@ void CChatRoom::OnLinkErr(CRawLink* pLink)
 	m_strChatMsg = MSG_RECONNECT_CHAT;
 	m_eMsgType = CR_RECONNECT;
 	//m_pObserver->OnError(m_eMsgType,m_strChatMsg);
+    m_pObserver->OnError(999999, ERR_SPEAK_1);
 
 	pthread_mutex_unlock(&m_SynchMutex);
 }

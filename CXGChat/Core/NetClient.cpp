@@ -112,6 +112,7 @@ void CNetPeer::Close()
 	pthread_detach(m_Connect);
     m_nRetCode = 0;
     m_nNeedCopySize = 0;
+    m_nRefCount = 1;
     
     m_bRet = false;
     m_bOnLoop = false;
@@ -136,6 +137,7 @@ int CNetPeer::GetPacketHeadLenth(char* sData)
 
 	if (nPacketSize > RECV_BUF_SIZE)
 	{
+        m_nRetCode = CON_DISONCECONN;
         m_RawLink->OnNetErr(m_nRetCode);
 		Close();
 	}
@@ -145,7 +147,7 @@ int CNetPeer::GetPacketHeadLenth(char* sData)
 
 bool CNetPeer::SendData(const char* pData, int nLen)
 {
-    int ret = 0;
+    long ret = 0;
 #if(CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	ret = send(m_socket, pData, nLen, 0);
 #elif(CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
@@ -165,6 +167,7 @@ bool CNetPeer::SendData(const char* pData, int nLen)
 
 bool CNetPeer::RecvData(char* pData, int nLen)
 {
+    if(!m_RawLink) { return false; }
     int	nPacketSize = 0;
     int nValidSize = 0;
     int nLeftSize = 0;
@@ -318,9 +321,10 @@ void* CNetPeer::ConnectBengin(void *arg)
         }
 	}
 
-    if(pNp->m_RawLink != NULL)
-        pNp->m_RawLink->OnNetErr(pNp->m_nRetCode);
-    
-    //pNp->Close();
+//    if(pNp->m_RawLink != NULL)
+//    {
+//        pNp->m_nRetCode = CON_DISONCECONN;
+//        pNp->m_RawLink->OnNetErr(pNp->m_nRetCode);
+//    }
 	return 0;
 }

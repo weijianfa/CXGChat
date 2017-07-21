@@ -214,7 +214,7 @@ bool CRawLink::SendPacket(CPacket* pPacket)
 	pPacket->AddRef();
 	m_PacketList.push_back(pPacket);
 	CPacket* pFirstPacket = m_PacketList.front();
-	bool bResult = m_pNetPeer->SendData(pFirstPacket->GetTotal(), pFirstPacket->GetTotalSize());
+	bool bResult = m_pNetPeer->SendData(pFirstPacket->GetTotal(), (int)pFirstPacket->GetTotalSize());
 
 	if (bResult)
 	{
@@ -226,7 +226,7 @@ bool CRawLink::SendPacket(CPacket* pPacket)
 	return bResult;
 }
 
-void CRawLink::OnRecvData(char* pData, int nLen)
+void CRawLink::OnRecvData(char* pData, long nLen)
 {
 	ILinkSink* pSink = GetSink();
 
@@ -249,7 +249,7 @@ void CRawLink::OnRecvData(char* pData, int nLen)
 		int nPacketSize = 0;
 		char* pPacketSize = (char*)&nPacketSize;
 		memcpy(pPacketSize, &pPacketHeader->packetSize, 4);
-		int nSize = ntohl(nPacketSize);
+		long nSize = ntohl(nPacketSize);
 
 		if (nLen < nSize)
 		{
@@ -293,7 +293,7 @@ void CRawLink::OnSendOver()
 	while (bResult && m_PacketList.size() > 0)
 	{
 		CPacket* pFirstPacket = m_PacketList.front();
-		bResult = m_pNetPeer->SendData(pFirstPacket->GetTotal(), pFirstPacket->GetTotalSize());
+		bResult = m_pNetPeer->SendData(pFirstPacket->GetTotal(), (int)pFirstPacket->GetTotalSize());
 
 		if (bResult)
 		{

@@ -77,10 +77,10 @@ private:
 	bool OnTimer(int nTimeId);
 #else
 
-	virtual long __attribute__((__stdcall__))  AddRef();
-	virtual long __attribute__((__stdcall__))  Release();
-	virtual void __attribute__((__stdcall__))  OnLinkPacket(CRawLink* pLink, CPacket* pPacket);
-	virtual void __attribute__((__stdcall__))  OnLinkErr(CRawLink* pLink);
+	virtual long AddRef();
+	virtual long Release();
+	virtual void OnLinkPacket(CRawLink* pLink, CPacket* pPacket);
+	virtual void OnLinkErr(CRawLink* pLink);
 
     void KeepLive();
     bool IsEnterChatRoom(time_t current);

@@ -23,10 +23,10 @@ public:
 	virtual void __stdcall OnLinkErr(CRawLink* pLink) = 0;
 #else
 
-	virtual long __attribute__((__stdcall__)) AddRef() = 0;
-	virtual long __attribute__((__stdcall__)) Release() = 0;
-	virtual void __attribute__((__stdcall__)) OnLinkPacket(CRawLink* pLink, CPacket* pPacket) = 0;
-	virtual void __attribute__((__stdcall__)) OnLinkErr(CRawLink* pLink) = 0;
+	virtual long AddRef() = 0;
+	virtual long Release() = 0;
+	virtual void OnLinkPacket(CRawLink* pLink, CPacket* pPacket) = 0;
+	virtual void OnLinkErr(CRawLink* pLink) = 0;
 #endif
 };
 
@@ -52,24 +52,24 @@ public:
     virtual long __stdcall AddRef();
     virtual long __stdcall Release();
 #else
-	virtual long __attribute__((__stdcall__)) AddRef();
-	virtual long __attribute__((__stdcall__)) Release();
+	virtual long AddRef();
+	virtual long Release();
 #endif
 
 protected:
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 
-	virtual void __stdcall OnRecvData(char* pData, int nLen);
+	virtual void __stdcall OnRecvData(char* pData, long nLen);
 	virtual void __stdcall OnSendOver();
 	virtual void __stdcall OnNetErr(long nErr);
 	virtual void __stdcall OnConnect(bool bSuc);
 #else
 
-	virtual void __attribute__((__stdcall__)) OnRecvData(char* pData, int nLen);
-	virtual void __attribute__((__stdcall__)) OnSendOver();
-	virtual void __attribute__((__stdcall__)) OnNetErr(long nErr);
-	virtual void __attribute__((__stdcall__)) OnConnect(bool bSuc);
+	virtual void OnRecvData(char* pData, long nLen);
+	virtual void OnSendOver();
+	virtual void OnNetErr(long nErr);
+	virtual void OnConnect(bool bSuc);
 #endif
 
 private:
