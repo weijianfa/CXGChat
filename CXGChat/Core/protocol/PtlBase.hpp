@@ -157,6 +157,11 @@ public:
     PtlGiftMsg(int ret,Json::Value::iterator buf);
 };
 
+class PtlGiftFailedMsg: public PtlBase {
+public:
+    PtlGiftFailedMsg(int ret,Json::Value::iterator buf);
+};
+
 class PtlLoginRet: public PtlBase {
 public:
     PtlLoginRet(int ret,Json::Value::iterator buf);

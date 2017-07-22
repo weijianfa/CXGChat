@@ -52,3 +52,24 @@ PtlGiftMsg::PtlGiftMsg(int ret,Json::Value::iterator itc): PtlBase(ret, itc)
         }
     }
 }
+
+PtlGiftFailedMsg::PtlGiftFailedMsg(int ret,Json::Value::iterator itc): PtlBase(ret, itc)
+{
+    m_nType = 2;
+    m_nSubType = 1;
+    
+    std::string ct = (*itc)["ct"].asString();
+    if(!ct.empty())
+    {
+        ct = unescape((char*)ct.c_str());
+        Json::Reader ctreader;
+        Json::Value ctobject;
+        if (ctreader.parse(ct.c_str(), ctobject))
+        {
+            m_strMsg = ctobject["msg"].asString();
+            
+            m_User.userID = std::to_string(ctobject["masterId"].asUInt());
+            m_Gift.uniqueID = ctobject["giftUID"].asString();
+        }
+    }
+}

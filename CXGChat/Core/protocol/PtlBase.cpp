@@ -126,6 +126,9 @@ PtlBase* PtlBase::getProtocol(int nType, Json::Value::iterator itc)
         case GIFT_MSG:
             return new PtlGiftMsg(nType, itc);
             break;
+        case GIFTFAILED_MSG:
+            return new PtlGiftFailedMsg(nType, itc);
+            break;
         case LOGN_RET:
             return new PtlLoginRet(nType, itc);
             break;
