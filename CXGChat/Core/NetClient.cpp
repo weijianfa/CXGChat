@@ -147,6 +147,7 @@ int CNetPeer::GetPacketHeadLenth(char* sData)
 
 bool CNetPeer::SendData(const char* pData, int nLen)
 {
+    pthread_mutex_lock(&m_Mutex);
     long ret = 0;
 #if(CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	ret = send(m_socket, pData, nLen, 0);
@@ -159,9 +160,11 @@ bool CNetPeer::SendData(const char* pData, int nLen)
     if (ret < 0)
     {
         m_nRetCode = CON_WRITEDERROR;
+        pthread_mutex_unlock(&m_Mutex);
 		return false;
     }
     
+    pthread_mutex_unlock(&m_Mutex);
     return true;
 }
 
@@ -283,11 +286,6 @@ void* CNetPeer::ConnectBengin(void *arg)
 		FD_SET(pNp->m_socket, &rFds);
 		FD_SET(pNp->m_socket, &eFds);
 
-#if(CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-		Sleep(1000);
-#else
-		sleep(1);
-#endif
 		nRet = select(FD_SETSIZE, &rFds, &wFds, &eFds, &tvTimeval);
 		if (nRet > 0)
 		{
@@ -319,6 +317,12 @@ void* CNetPeer::ConnectBengin(void *arg)
             pNp->m_nRetCode = CON_DISONCECONN;
             break;
         }
+        
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+        Sleep(1000);
+#else
+        sleep(1);
+#endif
 	}
 
 //    if(pNp->m_RawLink != NULL)
