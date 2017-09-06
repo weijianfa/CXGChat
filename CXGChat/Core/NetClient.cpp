@@ -14,11 +14,18 @@ CNetPeer::CNetPeer(INetPeerSink* pNb)
 	m_bOnLoop = true;
 
 	memset(m_cLastRecv, 0, RECV_BUF_SIZE);
+    pthread_mutex_init(&m_tMutex,NULL);
 	m_Mutex = PTHREAD_MUTEX_INITIALIZER;
 }
 
 CNetPeer::~CNetPeer()
 {
+    m_bOnLoop = true;
+    //wait for itself'workthread normal exit
+    pthread_mutex_lock(&m_tMutex);
+    pthread_mutex_unlock(&m_tMutex);
+    pthread_mutex_destroy(&m_tMutex);
+
 }
 
 void CNetPeer::GetConfig(PEER_CONFIG& config)
@@ -207,7 +214,8 @@ bool CNetPeer::RecvData(char* pData, int nLen)
 		char cData[RECV_BUF_SIZE] = "";
 		for (int n = 0; n < nLeftSize; n++)
 		{
-			cData[n] = cTempData[n + nValidSize];
+            if(n<RECV_BUF_SIZE && n + nValidSize < MAX_BUF_SIZE)
+                cData[n] = cTempData[n + nValidSize];
 		}
 		nPacketSize = GetPacketHeadLenth(cData);
 		nLeftSize -= nPacketSize;
@@ -226,7 +234,8 @@ bool CNetPeer::RecvData(char* pData, int nLen)
 	m_nNeedCopySize = nLen - nValidSize;
 	for (int n = 0; n < m_nNeedCopySize; n++)
 	{
-		m_cLastRecv[n] = cTempData[n + nValidSize];
+        if(n<RECV_BUF_SIZE && n + nValidSize < MAX_BUF_SIZE)
+            m_cLastRecv[n] = cTempData[n + nValidSize];
 	}
 
 	return true;
@@ -267,26 +276,30 @@ void* CNetPeer::ConnectBengin(void *arg)
 
     int  nRecvSize = 0;
 	int  nRet = 0;
-    bool bRet = false;
-	char buf[SEND_BUF_SIZE] = "";
+    //bool bRet = false;
+	//char buf[SEND_BUF_SIZE] = "";
 	char Recvbuf[RECV_BUF_SIZE] = "";
 	
 	fd_set  wFds, rFds, eFds;
 	timeval tvTimeval;
-	tvTimeval.tv_sec = 0;
+	tvTimeval.tv_sec = 1;
 	tvTimeval.tv_usec = 100;
+    
+    FD_ZERO(&wFds);
+    FD_ZERO(&rFds);
+    FD_ZERO(&eFds);
+    
+    FD_SET(pNp->m_socket, &wFds);
+    FD_SET(pNp->m_socket, &rFds);
+    FD_SET(pNp->m_socket, &eFds);
+    
+    //lock the m_tMutex object
+    pthread_mutex_lock(&pNp->m_tMutex);
     
 	while (pNp->m_bOnLoop)
 	{
-		FD_ZERO(&wFds);
-		FD_ZERO(&rFds);
-		FD_ZERO(&eFds);
-
-		FD_SET(pNp->m_socket, &wFds);
-		FD_SET(pNp->m_socket, &rFds);
-		FD_SET(pNp->m_socket, &eFds);
-
-		nRet = select(FD_SETSIZE, &rFds, &wFds, &eFds, &tvTimeval);
+        //wait for read & error signal ,timeout 1.1s
+		nRet = select(FD_SETSIZE, &rFds, NULL, &eFds, &tvTimeval);
 		if (nRet > 0)
 		{
 			if (FD_ISSET(pNp->m_socket, &rFds) > 0) 
@@ -299,6 +312,7 @@ void* CNetPeer::ConnectBengin(void *arg)
                     break;
                 }
 			}
+            /*
 			if (FD_ISSET(pNp->m_socket, &wFds) > 0)
 			{
                 bRet = pNp->SendData(buf, (int)strlen(buf));
@@ -306,7 +320,7 @@ void* CNetPeer::ConnectBengin(void *arg)
                     pNp->m_nRetCode = CON_WRITEDERROR;
                     break;
                 }
-			}
+			}*/
             
 			if (FD_ISSET(pNp->m_socket, &eFds) > 0){
                 pNp->m_nRetCode = CON_SELECTERROR;
@@ -317,12 +331,6 @@ void* CNetPeer::ConnectBengin(void *arg)
             pNp->m_nRetCode = CON_DISONCECONN;
             break;
         }
-        
-#if(CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-        Sleep(1000);
-#else
-        sleep(1);
-#endif
 	}
 
 //    if(pNp->m_RawLink != NULL)
@@ -330,5 +338,7 @@ void* CNetPeer::ConnectBengin(void *arg)
 //        pNp->m_nRetCode = CON_DISONCECONN;
 //        pNp->m_RawLink->OnNetErr(pNp->m_nRetCode);
 //    }
+    //unlock the m_tMutex object
+    pthread_mutex_unlock(&pNp->m_tMutex);
 	return 0;
 }

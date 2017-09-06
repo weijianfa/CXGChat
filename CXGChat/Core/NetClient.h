@@ -55,7 +55,7 @@ private:
 	int	m_nNeedCopySize;
 	
 	bool	m_bRet;
-	bool	m_bOnLoop;
+	volatile bool	m_bOnLoop;
 
 	long    m_nRefCount;
 	char	m_cLastRecv[RECV_BUF_SIZE];
@@ -65,6 +65,7 @@ private:
 
 	pthread_t	m_Connect;
 	pthread_mutex_t	m_Mutex;
+    pthread_mutex_t	m_tMutex;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	SOCKET		m_socket;
